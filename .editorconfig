@@ -1,2 +1,8 @@
 # tab indentation
 indent_style = tab;
+
+#file must end with newline
+insert_final_newline = true;
+
+#no trailing spaces
+trim_trailing_whitespace = true;
