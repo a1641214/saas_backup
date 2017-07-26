@@ -56,7 +56,36 @@ group :development, :test do
   # Unit testing framework
   gem 'rspec-rails'
   gem 'autotest'
+
+  # Rails Generators for Cucumber with special support for Capybara and DatabaseCleaner
+  gem 'cucumber-rails', require: false
+  gem 'cucumber-rails-training-wheels'
+
+  # Clean up the database throughout the testing suite
+  gem 'database_cleaner'
+
+  # Acceptance test framework for web applications http://teamcapybara.github.io/capybara/
+  gem 'capybara'
+
+  # A helper for launching cross-platform applications in a fire and forget manner.
+  gem 'launchy'
+  # Testing suite generators
+  gem 'ZenTest'
+
+  # Rename the app
+  gem "rename"
 end
+
+
+group :development, :test do
+end
+
+group :test do
+  gem 'cucumber-rails', :require => false
+  gem 'cucumber-rails-training-wheels'
+  gem 'simplecov', :require => false
+end
+
 
 group :test do
   # Code coverage for Ruby
@@ -66,6 +95,8 @@ end
 group :development do
   # Run Rspec when files have changed
   gem 'guard-rspec', require: false
+  # Run Cucumber when files have changed
+  gem 'guard-cucumber', require: false
   # This gem implements the rspec command for Spring
   gem 'spring-commands-rspec'
   # Automatically bundle when the Gemfile has been changed
@@ -84,3 +115,6 @@ gem 'andand', '~> 1.3', '>= 1.3.3'
 
 # Enables pretty console (ap)
 gem 'awesome_print', '~> 1.6', '>= 1.6.1', require:'ap'
+
+# Bootstrap
+gem 'twitter-bootstrap-rails'
