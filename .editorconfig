@@ -1,12 +1,12 @@
-root = true;
+root = true
 
 #for every file
 [*]
 # tab indentation
-indent_style = tab;
+indent_style = tab
 
 #file must end with newline
-insert_final_newline = true;
+insert_final_newline = true
 
 #no trailing spaces
-trim_trailing_whitespace = true;
+trim_trailing_whitespace = true
