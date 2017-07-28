@@ -1,0 +1,27 @@
+# Ignore all
+AllCops:
+  Exclude:
+    - '/lib'
+
+# Grouped dependencies
+Bundler/DuplicatedGem:
+  Exclude:
+    - 'Gemfile'
+
+Layout/IndentationWidth:
+    Width: 4
+
+Metrics/LineLength:
+    Max: 120
+
+Metrics/BlockLength:
+    Enabled: false
+
+Style/Documentation:
+    Enabled: false
+
+Metrics/CyclomaticComplexity:
+    Enabled: false
+
+Metrics/MethodLength:
+    Enabled: false

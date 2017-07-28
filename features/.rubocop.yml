@@ -1,0 +1,11 @@
+inherit_from:
+    - ../.rubocop.yml
+
+Lint/AmbiguousRegexpLiteral:
+    Enabled: false
+
+Lint/Debugger:
+    Enabled: false
+
+Style/RegexpLiteral:
+    Enabled: false
