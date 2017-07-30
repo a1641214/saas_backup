@@ -24,6 +24,14 @@ Given /^(?:|I )am on (.+)$/ do |page_name|
     visit path_to(page_name)
 end
 
+Given /^(?:|I )am logged in$/ do
+    # TODO: Implement when authentication is completed (#21)
+end
+
+Given /^there is a clash request in the database$/ do
+    create(:clash_request)
+end
+
 When /^(?:|I )go to (.+)$/ do |page_name|
     visit path_to(page_name)
 end

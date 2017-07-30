@@ -5,6 +5,12 @@ module NavigationHelpers
         when /^the home\s?page$/
             '/'
 
+        when /^the clash requests list page$/
+            '/requests'
+
+        when /^the clash request create page$/
+            '/requests/create'
+
         else
             begin
                 page_name =~ /^the (.*) page$/

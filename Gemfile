@@ -74,6 +74,12 @@ group :development, :test do
 
     # Rename the app
     gem 'rename'
+
+    # Create models
+    gem 'factory_girl_rails'
+
+    # Fake data
+    gem 'faker'
 end
 
 group :development, :test do
