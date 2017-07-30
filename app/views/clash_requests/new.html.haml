@@ -1,0 +1,13 @@
+%h1 Create a new clash request
+.row
+    .col-md-4
+        = form_tag clash_requests_path do
+            %h3 Student's ID
+            = text_field :clash_request, :studentId, {:class => "form-control"}
+
+            %h3 Comments
+            = text_field :clash_request, :comments, {:class => "form-control"}
+
+            %br
+            = submit_tag 'Create', class: "btn btn-primary"
+            = link_to 'Cancel', clash_requests_path, class: "btn btn-default"

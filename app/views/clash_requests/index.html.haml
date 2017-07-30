@@ -1,0 +1,13 @@
+%h1 Clash Requests
+= link_to 'Create' , new_clash_request_path, class: 'btn btn-primary'
+
+%table.table.table-hover#clash-requests
+    %thead
+        %tr
+            %th Student ID
+            %th Comments
+    %tbody
+        - @requests.each do |request|
+            %tr
+                %td= request.studentId
+                %td= request.comments

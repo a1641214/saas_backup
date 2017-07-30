@@ -6,10 +6,10 @@ module NavigationHelpers
             '/'
 
         when /^the clash requests list page$/
-            '/requests'
+            '/clash_requests'
 
-        when /^the clash request create page$/
-            '/requests/create'
+        when /^the new clash request page$/
+            '/clash_requests/new'
 
         else
             begin
