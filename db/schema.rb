@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_170_730_101_117) do
+ActiveRecord::Schema.define(version: 20_170_731_051_748) do
     create_table 'clash_requests', force: :cascade do |t|
         t.string   'studentId'
         t.text     'comments'
@@ -26,6 +26,11 @@ ActiveRecord::Schema.define(version: 20_170_730_101_117) do
         t.datetime 'updated_at', null: false
     end
 
+    create_table 'components_courses', id: false, force: :cascade do |t|
+        t.integer 'course_id', null: false
+        t.integer 'component_id', null: false
+    end
+
     create_table 'courses', force: :cascade do |t|
         t.string   'name'
         t.string   'catalogue_number'
@@ -37,9 +42,12 @@ ActiveRecord::Schema.define(version: 20_170_730_101_117) do
         t.time     'time'
         t.string   'day'
         t.text     'weeks'
-        t.datetime 'created_at', null: false
-        t.datetime 'updated_at', null: false
+        t.datetime 'created_at',   null: false
+        t.datetime 'updated_at',   null: false
+        t.integer  'component_id'
     end
+
+    add_index 'sessions', ['component_id'], name: 'index_sessions_on_component_id'
 
     create_table 'students', force: :cascade do |t|
         t.text     'enrolments'
