@@ -1,3 +1,4 @@
 class Student < ActiveRecord::Base
-    serialize :enrolments
+    has_and_belongs_to_many :courses
+    has_and_belongs_to_many :sessions
 end
