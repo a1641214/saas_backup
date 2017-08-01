@@ -12,10 +12,55 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_170_730_101_117) do
+ActiveRecord::Schema.define(version: 20_170_731_094_532) do
     create_table 'clash_requests', force: :cascade do |t|
-        t.string 'studentId'
+        t.string   'studentId'
         t.text     'comments'
+        t.datetime 'created_at', null: false
+        t.datetime 'updated_at', null: false
+    end
+
+    create_table 'components', force: :cascade do |t|
+        t.string   'class_type'
+        t.datetime 'created_at', null: false
+        t.datetime 'updated_at', null: false
+    end
+
+    create_table 'components_courses', id: false, force: :cascade do |t|
+        t.integer 'course_id', null: false
+        t.integer 'component_id', null: false
+    end
+
+    create_table 'courses', force: :cascade do |t|
+        t.string 'name'
+        t.string   'catalogue_number'
+        t.datetime 'created_at',       null: false
+        t.datetime 'updated_at',       null: false
+    end
+
+    create_table 'courses_students', id: false, force: :cascade do |t|
+        t.integer 'student_id', null: false
+        t.integer 'course_id', null: false
+    end
+
+    create_table 'sessions', force: :cascade do |t|
+        t.time 'time'
+        t.string   'day'
+        t.text     'weeks'
+        t.datetime 'created_at',     null: false
+        t.datetime 'updated_at',     null: false
+        t.integer  'component_id'
+        t.string   'component_code'
+    end
+
+    add_index 'sessions', ['component_id'], name: 'index_sessions_on_component_id'
+
+    create_table 'sessions_students', id: false, force: :cascade do |t|
+        t.integer 'student_id', null: false
+        t.integer 'session_id', null: false
+    end
+
+    create_table 'students', force: :cascade do |t|
         t.datetime 'created_at', null: false
         t.datetime 'updated_at', null: false
     end
