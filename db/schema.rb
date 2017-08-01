@@ -14,35 +14,8 @@
 
 ActiveRecord::Schema.define(version: 20_170_730_101_117) do
     create_table 'clash_requests', force: :cascade do |t|
-        t.string   'studentId'
+        t.string 'studentId'
         t.text     'comments'
-        t.datetime 'created_at', null: false
-        t.datetime 'updated_at', null: false
-    end
-
-    create_table 'components', force: :cascade do |t|
-        t.string   'class_type'
-        t.datetime 'created_at', null: false
-        t.datetime 'updated_at', null: false
-    end
-
-    create_table 'courses', force: :cascade do |t|
-        t.string   'name'
-        t.string   'catalogue_number'
-        t.datetime 'created_at',       null: false
-        t.datetime 'updated_at',       null: false
-    end
-
-    create_table 'sessions', force: :cascade do |t|
-        t.time     'time'
-        t.string   'day'
-        t.text     'weeks'
-        t.datetime 'created_at', null: false
-        t.datetime 'updated_at', null: false
-    end
-
-    create_table 'students', force: :cascade do |t|
-        t.text     'enrolments'
         t.datetime 'created_at', null: false
         t.datetime 'updated_at', null: false
     end
