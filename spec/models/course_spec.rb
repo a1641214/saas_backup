@@ -20,8 +20,4 @@ RSpec.describe Course, type: :model do
         t = described_class.reflect_on_association(:components)
         expect(t.macro).to eq(:has_and_belongs_to_many)
     end
-    it 'should have many students' do
-        t = described_class.reflect_on_association(:students)
-        expect(t.macro).to eq(:has_and_belongs_to_many)
-    end
 end
