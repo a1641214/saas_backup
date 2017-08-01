@@ -32,6 +32,11 @@ Given /^there is a clash request in the database$/ do
     create(:clash_request)
 end
 
+Given /^there is a clash request with the following:$/ do |fields|
+    request = create(:clash_request)
+    request.update!(fields.rows_hash)
+end
+
 When /^(?:|I )go to (.+)$/ do |page_name|
     visit path_to(page_name)
 end

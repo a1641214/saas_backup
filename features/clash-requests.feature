@@ -13,3 +13,12 @@ Feature: Clash Requests (#16)
         When I press "Create"
         Then I should be on the clash requests list page
         Then I should see "Clash request from student a0000000 was created"
+
+    Scenario: View a request (#15)
+        Given there is a clash request with the following:
+            | id        | 5        |
+            | studentId | a1680000 |
+            | faculty   | ECMS     |
+        Given I am on the view clash request page for id "5"
+        Then I should see "a1680000"
+        Then I should see "ECMS"
