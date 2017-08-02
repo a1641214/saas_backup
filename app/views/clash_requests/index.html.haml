@@ -4,10 +4,18 @@
 %table.table.table-hover#clash-requests
     %thead
         %tr
+            %th Enrolment Request ID
             %th Student ID
+            %th Date Submitted
+            %th Faculty
             %th Comments
+            %th
     %tbody
         - @requests.each do |request|
             %tr
+                %td= request.enrolment_request_id
                 %td= request.studentId
+                %td= request.date_submitted
+                %td= request.faculty
                 %td= request.comments
+                %td= link_to 'View', clash_request_path(request), class: 'btn btn-default'

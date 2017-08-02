@@ -12,12 +12,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_170_731_094_532) do
+ActiveRecord::Schema.define(version: 20_170_801_123_546) do
     create_table 'clash_requests', force: :cascade do |t|
         t.string   'studentId'
         t.text     'comments'
-        t.datetime 'created_at', null: false
-        t.datetime 'updated_at', null: false
+        t.datetime 'created_at',           null: false
+        t.datetime 'updated_at',           null: false
+        t.integer  'enrolment_request_id'
+        t.date     'date_submitted'
+        t.string   'faculty'
+        t.boolean  'inactive'
+        t.boolean  'resolved'
     end
 
     create_table 'components', force: :cascade do |t|

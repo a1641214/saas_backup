@@ -11,6 +11,9 @@ module NavigationHelpers
         when /^the new clash request page$/
             '/clash_requests/new'
 
+        when /^the view clash request page for id "([^"]*)"$/
+            clash_request_path(page_name[/^the view clash request page for id "([^"]*)"$/, 1])
+
         else
             begin
                 page_name =~ /^the (.*) page$/
