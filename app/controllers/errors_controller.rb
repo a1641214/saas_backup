@@ -3,8 +3,8 @@ class ErrorsController < ApplicationController
         render(status: :internal_server_error)
     end
 
-    def change_rejected
-        render(status: :change_rejected)
+    def unprocessable_entity
+        render(status: :unprocessable_entity)
     end
 
     def not_found

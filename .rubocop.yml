@@ -25,3 +25,6 @@ Metrics/CyclomaticComplexity:
 
 Metrics/MethodLength:
     Enabled: false
+
+Style/NumericLiterals:
+    Enabled: false
