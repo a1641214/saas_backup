@@ -112,7 +112,7 @@ when 'development', 'test'
     )
 
     # create students
-    stud1 = Student.create(id: 1_111_111)
+    stud1 = Student.create(id: 1111111)
     stud1.courses.push(c1)
     stud1.courses.push(c3)
     stud1.sessions.push(s1)
@@ -123,7 +123,7 @@ when 'development', 'test'
     stud1.sessions.push(s9)
     stud1.sessions.push(s10)
 
-    stud2 = Student.create(id: 1_111_112)
+    stud2 = Student.create(id: 1111112)
     stud2.courses.push(c2)
     stud2.sessions.push(s5)
     stud2.sessions.push(s6)
