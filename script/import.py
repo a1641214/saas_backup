@@ -25,7 +25,8 @@ class Course:
     def __eq__(self, other):
         return self.id == other.id
 
-
+# component links courses and sessions
+# e.g. LEC, TUT, etc
 class Component:
     def __init__(self, id, type):
         self.id = id
@@ -42,6 +43,7 @@ def importCourses(filename):
     courses = {}
     with open(filename) as f:
         reader = csv.reader(f)
+        # each row is a new course
         for row in reader:
             id = row[1]
             name = row[4]
