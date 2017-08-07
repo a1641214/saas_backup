@@ -8,7 +8,7 @@ class ClashRequestsController < ApplicationController
             :comments
         )
     end
-
+    
     def new; end
 
     def create
@@ -32,5 +32,24 @@ class ClashRequestsController < ApplicationController
 
         flash[:notice] = "Clash Request from student #{@request.studentId} was made inactive"
         redirect_to clash_requests_path
+    end
+    
+    def edit
+        @request = ClashRequest.find params[:id]
+        @student = Student.find(@request.studentId.to_i)
+    end
+    
+    def update
+        @request = ClashRequest.find params[:id]
+        @student = Student.find(@request.studentId.to_i)
+        @student.sessions.clear
+        @student.courses.each do |course|
+            course_cat = course.catalogue_number
+            course_param = params[course_cat]
+            puts "Got here"
+            @student.add_new_sessions(course,course_param)
+        end
+        
+        redirect_to clash_request_path
     end
 end

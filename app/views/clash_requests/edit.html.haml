@@ -1,0 +1,10 @@
+%h1 Update Enrolment for #{@request.studentId}
+
+= form_tag clash_request_path(@request), :method => :put do
+  - @student.courses.each do |course|
+    = label :clash_request, :course, "#{course.catalogue_number}"
+    - course.components.each do |component|
+      = label :"#{course.catalogue_number}", :"#{component.class_type}", "#{component.class_type}"
+      = select :"#{course.catalogue_number}", :"#{component.class_type}", course.alternate_sessions(@student,component)
+        
+  = submit_tag 'Update Enrolment'

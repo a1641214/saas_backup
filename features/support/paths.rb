@@ -13,6 +13,9 @@ module NavigationHelpers
 
         when /^the view clash request page for id "([^"]*)"$/
             clash_request_path(page_name[/^the view clash request page for id "([^"]*)"$/, 1])
+            
+        when /^the edit clash request page for id "([^"]*)"$/
+            edit_clash_request_path(page_name[/^the edit clash request page for id "([^"]*)"$/, 1])
 
         else
             begin

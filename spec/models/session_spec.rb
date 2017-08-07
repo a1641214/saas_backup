@@ -37,3 +37,4 @@ RSpec.describe Session, type: :model do
         expect(t.macro).to eq(:has_and_belongs_to_many)
     end
 end
+

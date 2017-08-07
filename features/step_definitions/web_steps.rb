@@ -28,6 +28,59 @@ Given /^(?:|I )am logged in$/ do
     # TODO: Implement when authentication is completed (#21)
 end
 
+Given(/^student "([^"]*)" is enrolled in courses "([^"]*)" and "([^"]*)"$/) do |in_id, course1, course2|
+    courseOne = FactoryGirl.create(:course, catalogue_number: course1)
+    courseTwo = FactoryGirl.create(:course, catalogue_number: course2)
+    studentOne = FactoryGirl.create(:student, id: in_id)
+    comp1 = FactoryGirl.create(:component,class_type: 'Lecture')
+    comp2 = FactoryGirl.create(:component,class_type: 'Tutorial')
+    courseOne.components << comp1
+    courseOne.components << comp2
+    
+    s1 = FactoryGirl.create(:session, component_code: "LE01", component: comp1)
+    s2 = FactoryGirl.create(:session, component_code: "LE01", day: 'Wednesday', component: comp1)
+    s3 = FactoryGirl.create(:session, component_code: "TU01", component: comp2)
+    s4 = FactoryGirl.create(:session, component_code: "TU02", component: comp2)
+    studentOne.courses << courseOne
+    studentOne.courses << courseTwo
+    studentOne.sessions << s1 << s2 << s4
+end
+
+Given(/^student "([^"]*)" is enrolled in sessions "([^"]*)" of type "([^"]*)" and "([^"]*)" of type "([^"]*)" for "([^"]*)"$/) do |in_id, session1,type1, session2, type2, course|
+    courseOne = FactoryGirl.create(:course, catalogue_number: course)
+    studentOne = FactoryGirl.create(:student, id: in_id)
+    comp1 = FactoryGirl.create(:component,class_type: type1)
+    comp2 = FactoryGirl.create(:component,class_type: type2)
+    courseOne.components << comp1
+    courseOne.components << comp2
+    
+    s1 = FactoryGirl.create(:session, component_code: session1, component: comp1)
+    
+    s3 = FactoryGirl.create(:session, component_code: session2, component: comp2)
+    session2[-1] = (session2[-1].to_i + 1).to_s
+    s4 = FactoryGirl.create(:session, component_code: session2, component: comp2)
+    
+    studentOne.courses << courseOne
+    studentOne.sessions << s1 << s3 << s4
+end
+
+Given(/^student "([^"]*)" is enrolled in sessions "([^"]*)" of type "([^"]*)" and "([^"]*)" of type "([^"]*)", with "([^"]*)" also offered for "([^"]*)"$/) do |in_id, session1,type1, session2, type2, extra_session, course|
+    courseOne = FactoryGirl.create(:course, catalogue_number: course)
+    studentOne = FactoryGirl.create(:student, id: in_id)
+    comp1 = FactoryGirl.create(:component,class_type: type1)
+    comp2 = FactoryGirl.create(:component,class_type: type2)
+    courseOne.components << comp1
+    courseOne.components << comp2
+    
+    s1 = FactoryGirl.create(:session, component_code: session1, component: comp1)
+    
+    s3 = FactoryGirl.create(:session, component_code: session2, component: comp2)
+    s4 = FactoryGirl.create(:session, component_code: extra_session, component: comp2)
+    
+    studentOne.courses << courseOne
+    studentOne.sessions << s1 << s3 << s4
+end
+
 Given /^there is a clash request in the database$/ do
     create(:clash_request)
 end

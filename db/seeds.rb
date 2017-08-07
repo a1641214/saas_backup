@@ -42,8 +42,8 @@ when 'development', 'test'
     s8 = Session.create(time: Time.new(2017, 1, 1, 15, 0, 0, '+09:30'), length: 1, day: 'Wednesday', weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], component_code: "LE01", component: comp5)
     s9 = Session.create(time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 2, day: 'Friday', weeks: [2,4,6,8,10,12], component_code: "WR01", component: comp6)
     s10 = Session.create(time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 2, day: 'Thursday', weeks: [1,3,5,7,9,11], component_code: "WR02", component: comp6)
-    s9 = Session.create(time: Time.new(2017, 1, 1, 9, 0, 0, '+09:30'), length: 2, day: 'Wednesday', weeks: [2,4,6,8,10,12], component_code: "PR01", component: comp7)
-    s10 = Session.create(time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 2, day: 'Wednesday', weeks: [2,4,6,8,10,12], component_code: "PR02", component: comp7)
+    s11 = Session.create(time: Time.new(2017, 1, 1, 9, 0, 0, '+09:30'), length: 2, day: 'Wednesday', weeks: [2,4,6,8,10,12], component_code: "PR01", component: comp7)
+    s12 = Session.create(time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 2, day: 'Wednesday', weeks: [2,4,6,8,10,12], component_code: "PR02", component: comp7)
 
     # create students
     stud1 = Student.create(id: 1111111)
@@ -54,8 +54,8 @@ when 'development', 'test'
     stud1.sessions.push(s3)
     stud1.sessions.push(s7)
     stud1.sessions.push(s8)
-    stud1.sessions.push(s9)
     stud1.sessions.push(s10)
+    stud1.sessions.push(s12)
 
     stud2 = Student.create(id: 1111112)
     stud2.courses.push(c2)
@@ -63,8 +63,10 @@ when 'development', 'test'
     stud2.sessions.push(s6)
     stud1.sessions.push(s7)
     stud1.sessions.push(s8)
-    stud1.sessions.push(s9)
-    stud1.sessions.push(s10)
+    stud1.sessions.push(s11)
+    
+    clash1 = ClashRequest.create(studentId: 1111111, faculty: "Engineering")
+    clash1 = ClashRequest.create(studentId: 1111112, faculty: "Engineering")
 
 when 'production'
     puts 'No seed data'
