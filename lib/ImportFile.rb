@@ -1,15 +1,15 @@
-# Use python2
-# Data
 # Use this class to collect all the scattered csv file data into
 # a format with can use later tht matches our database
 #
 # Authors:
 # Jacob Gonzalez
+# Zetong Wang
 # .
 
 require 'csv'
 
 module ImportFile
+    
     class Course
         def initialize(id, name, catalog_number)
             @id = id
