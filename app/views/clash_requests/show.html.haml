@@ -1,4 +1,4 @@
-%h1 Enrolment request ##{@request.enrolment_request_id} #{@request.inactive and '(inactive)'}
+%h1 Enrolment request ##{@request.enrolment_request_id} #{@request.inactive ? '(inactive)' : ''}
 
 .row
     .col-md-4
