@@ -98,7 +98,7 @@ module ImportFile
             @status
         end  
         def courses
-            @courses
+            @courses = Array.new
         end    
     end
     
@@ -127,25 +127,17 @@ module ImportFile
             term = row[1]
             class_nbr = row[2]
             status = row[3]
-            student = Student.new(id,term,class_nbr,status)
+            courses = Array.new
+            student = Student.new(id,term,class_nbr,status, courses)
             students.append(student)
         end    
         return students
     end
     
-    def self.fillStudentsWithCourses(courses_file, students)
-        courses = Array.new
-        CSV.foreach(courses_file, headers:true) do |row|
-            if (student.class_nbr)
-            end    
-        end    
-    end        
-    
-    
     #import classes
     def self.importClasses(filename)
         classes = Array.new
-        CSV.foreach(filenam, headers:true) do |row|
+        CSV.foreach(filename, headers:true) do |row|
             term = row[0]
             course_id = row[1]
             class_nbr = row[3]
@@ -166,6 +158,37 @@ module ImportFile
         end
         return courses
     end
+    
+    def self.fillStudentsWithCourses(students_file, classes_file, courses_file, students)
+        students = Array.new
+        CSV.foreach(students_file, headers:true) do |row|
+            id = row[0]
+            stud_term = row[1]
+            stud_class_nbr = row[2]
+            status = row[3]
+            courses = Array.new
+            CSV.foreach(classes_file, headers:true) do |class_row|
+                term = row[0]
+                class_course_id = row[1]
+                class_nbr = row[3]
+                #if (class_nbr == stud_class_nbr && stud_term == term)
+                    CSV.foreach(courses_file, headers:true, encoding: 'iso-8859-1:utf-8') do |course_row|
+                        course_id = row[1]
+                        course_name = row[4]
+                        if (course_id == class_course_id)
+                            course = Course.new(course_id, course_name,nil)
+                            courses.append(course)
+                            break
+                        end
+                    end
+                #end    
+            end
+            student = Student.new(id,stud_term,stud_class_nbr,status,courses)
+            students.append(student)
+        end    
+        return students
+    end
+  
         
     # fill offering cataglog numbers from the offerings csv
     def self.fillCourseOfferings(filename, courses)

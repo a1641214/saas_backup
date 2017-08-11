@@ -4,6 +4,7 @@
             %th Student ID
             %th Term
             %th Class Number
+            %th Courses
             %th Status
     %tbody
     - @students.each do |student|
@@ -15,3 +16,4 @@
                 - courses = student.courses
                 - courses.each do |course|
                     %p= course.name
+            %th= student.status        
