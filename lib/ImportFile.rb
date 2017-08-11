@@ -4,6 +4,7 @@
 # Authors:
 # Jacob Gonzalez
 # Zetong Wang
+# Huey Min Gan
 # .
 
 require 'csv'
@@ -75,6 +76,84 @@ module ImportFile
             @type = value
         end
     end
+    
+    class Student
+        def initialize(id, term, class_nbr,status,courses)
+            @id = id
+            @term = term
+            @class_nbr = class_nbr
+            @status = status
+            @courses = courses
+        end
+        def id 
+            @id
+        end
+        def term
+            @term
+        end
+        def class_nbr
+            @class_nbr
+        end
+        def status
+            @status
+        end  
+        def courses
+            @courses
+        end    
+    end
+    
+    class Class
+        def initialize(term, course_id, class_nbr)
+            @term = term
+            @course_id = course_id
+            @class_nbr = class_nbr
+        end
+        def term
+            @term
+        end
+        def course_id
+            @course_id
+        end    
+        def class_nbr
+            @class_nbr
+        end
+    end    
+    
+    #import students 
+    def self.importStudents(filename)
+        students = Array.new 
+        CSV.foreach(filename, headers: true) do |row|
+            id = row[0]
+            term = row[1]
+            class_nbr = row[2]
+            status = row[3]
+            student = Student.new(id,term,class_nbr,status)
+            students.append(student)
+        end    
+        return students
+    end
+    
+    def self.fillStudentsWithCourses(courses_file, students)
+        courses = Array.new
+        CSV.foreach(courses_file, headers:true) do |row|
+            if (student.class_nbr)
+            end    
+        end    
+    end        
+    
+    
+    #import classes
+    def self.importClasses(filename)
+        classes = Array.new
+        CSV.foreach(filenam, headers:true) do |row|
+            term = row[0]
+            course_id = row[1]
+            class_nbr = row[3]
+            class1 = Class.new(term, course_id,class_nbr)
+            classes.append(class1)
+        end
+        return classes
+    end    
     
     # import courses from the course catalog
     def self.importCourses(filename)
