@@ -16,7 +16,8 @@ class DemoController < ApplicationController
         @classes = ImportFile.importClasses(@path + 'CLS_CMBND_SECT_FULL-6385825.csv')
         ImportFile.fillCourseOfferings(@path + 'CM_CRSE_CAT_ECMS_OFFERINGS-6383075.csv',@courses)
         ImportFile.importComponentsAndLink(@path + 'CM_CRSE_CAT_ECMS_COMPONENTS-6383069.csv',@courses)
-        ImportFile.fillStudentsWithCourses(@path + 'EN_BY_CLASS_ECMS-6384857.csv', @path + 'CLS_CMBND_SECT_FULL-6385825.csv',@path + "CM_CRSE_CAT_ECMS-6383074.csv", @students)
+        ImportFile.fillStudentsWithCourses(@students,@classes,@courses)
+        #ImportFile.fillStudentsWithCourses(@path + 'EN_BY_CLASS_ECMS-6384857.csv', @path + 'CLS_CMBND_SECT_FULL-6385825.csv',@path + "CM_CRSE_CAT_ECMS-6383074.csv")
     end    
         
 end

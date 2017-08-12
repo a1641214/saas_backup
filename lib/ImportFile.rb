@@ -98,7 +98,7 @@ module ImportFile
             @status
         end  
         def courses
-            @courses = Array.new
+            @courses
         end    
     end
     
@@ -159,36 +159,21 @@ module ImportFile
         return courses
     end
     
-    def self.fillStudentsWithCourses(students_file, classes_file, courses_file, students)
-        students = Array.new
-        CSV.foreach(students_file, headers:true) do |row|
-            id = row[0]
-            stud_term = row[1]
-            stud_class_nbr = row[2]
-            status = row[3]
-            courses = Array.new
-            CSV.foreach(classes_file, headers:true) do |class_row|
-                term = row[0]
-                class_course_id = row[1]
-                class_nbr = row[3]
-                #if (class_nbr == stud_class_nbr && stud_term == term)
-                    CSV.foreach(courses_file, headers:true, encoding: 'iso-8859-1:utf-8') do |course_row|
-                        course_id = row[1]
-                        course_name = row[4]
-                        if (course_id == class_course_id)
-                            course = Course.new(course_id, course_name,nil)
-                            courses.append(course)
+    #fill student.courses array 
+    def self.fillStudentsWithCourses(students, classes, courses)
+        students.each do |student_row|
+            classes.each do |class_row|
+                if (student_row.class_nbr == class_row.class_nbr && student_row.term == class_row.term)
+                    courses.each do |course_row|
+                        if (course_row.id == class_row.course_id)
+                            student_row.courses.append(course_row)
                             break
-                        end
+                        end    
                     end
-                #end    
+                end    
             end
-            student = Student.new(id,stud_term,stud_class_nbr,status,courses)
-            students.append(student)
         end    
-        return students
-    end
-  
+    end        
         
     # fill offering cataglog numbers from the offerings csv
     def self.fillCourseOfferings(filename, courses)
