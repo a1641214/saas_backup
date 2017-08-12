@@ -128,8 +128,11 @@ module ImportFile
             class_nbr = row[2]
             status = row[3]
             courses = Array.new
-            student = Student.new(id,term,class_nbr,status, courses)
-            students.append(student)
+            #append to array only if the student is enrolled
+            if (status != 'D')
+                student = Student.new(id,term,class_nbr,status, courses)
+                students.append(student)
+            end    
         end    
         return students
     end
