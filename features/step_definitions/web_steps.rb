@@ -173,6 +173,10 @@ Then /^(?:|I )should not see "([^"]*)"$/ do |text|
     end
 end
 
+Then(/^I should see "([^"]*)" selected for "([^"]*)" for the "([^"]*)"$/) do |comp_code, course, class_type|
+    expect(page).to have_select(course+'_'+class_type, selected: comp_code)
+end
+
 Then /^(?:|I )should not see \/([^\/]*)\/$/ do |regexp|
     regexp = Regexp.new(regexp)
 

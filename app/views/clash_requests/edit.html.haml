@@ -1,10 +1,14 @@
-%h1 Update Enrolment for #{@request.studentId}
-
-= form_tag clash_request_path(@request), :method => :put do
-  - @student.courses.each do |course|
-    = label :clash_request, :course, "#{course.catalogue_number}"
-    - course.components.each do |component|
-      = label :"#{course.catalogue_number}", :"#{component.class_type}", "#{component.class_type}"
-      = select :"#{course.catalogue_number}", :"#{component.class_type}", course.alternate_sessions(@student,component)
-        
-  = submit_tag 'Update Enrolment'
+%h1 Update Enrolment for #{@clash_request.studentId}
+= form_tag clash_request_path(@clash_request), :method => :put do
+    =label :clash_request, :course, "#{@clash_request.course.catalogue_number}"
+    - @clash_request.course.components.each do |component|
+        = label :"#{@clash_request.course.catalogue_number}", :"#{component.class_type}", "#{component.class_type}"
+        = select :"#{@clash_request.course.catalogue_number}", :"#{component.class_type}", @clash_request.course.alternate_sessions_clash_course(@clash_request, component)
+      
+    - @student.courses.each do |course|
+        = label :clash_request, :course, "#{course.catalogue_number}"
+        - course.components.each do |component|
+            = label :"#{course.catalogue_number}", :"#{component.class_type}", "#{component.class_type}"
+            = select :"#{course.catalogue_number}", :"#{component.class_type}", course.alternate_sessions(@student,component)
+    
+    = submit_tag 'Update Enrolment'

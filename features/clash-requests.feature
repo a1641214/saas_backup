@@ -60,9 +60,11 @@ Feature: Clash Requests (#16)
             | id        | 5        |
             | studentId | 1680000 |
             | faculty   | ECMS     |
+        
+        And there is a course "COMP SCI 3003" with "Lectures" and "Tutorials" and the following sessions:
         And student "1680000" is enrolled in sessions "LE01" of type "Lecture" and "TU02" of type "Tutorial", with "TU03" also offered for "COMP SCI 3003"
         And I am on the edit clash request page for id "5"
         When I select "TU03" from "Tutorial"
         And I press "Update"
         And I follow "Edit"
-        Then I should see "TU03"
+        Then I should see "TU03" selected for "COMP SCI 3003" for the "Tutorial"

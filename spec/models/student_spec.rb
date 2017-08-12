@@ -14,6 +14,11 @@ RSpec.describe Student, type: :model do
         expect(t.macro).to eq(:has_and_belongs_to_many)
     end
     
+    it 'should have many clash requests' do
+        t = described_class.reflect_on_association(:clash_requests)
+        expect(t.macro).to eq(:has_many)
+    end
+    
     describe 'current_session' do
         it 'finds the current session a student is enrolled in' do
             courseOne = FactoryGirl.create(:course)
@@ -59,7 +64,7 @@ RSpec.describe Student, type: :model do
             s2 = FactoryGirl.create(:session, component_code: "LE01", day: 'Wednesday', component: comp1)
             s3 = FactoryGirl.create(:session, component_code: "TU01", component: comp2)
             s4 = FactoryGirl.create(:session, component_code: "TU02", component: comp2)
-            code_hash = grades = { "Lecture" => "LE01", "Tutorial" => "TU02"}
+            code_hash = { "Lecture" => "LE01", "Tutorial" => "TU02"}
             studentOne.courses << courseOne
             studentOne.add_new_sessions(courseOne, code_hash)
             array = Array.new
