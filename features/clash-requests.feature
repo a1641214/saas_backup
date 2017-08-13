@@ -22,3 +22,23 @@ Feature: Clash Requests (#16)
         Given I am on the view clash request page for id "5"
         Then I should see "a1680000"
         Then I should see "ECMS"
+
+    Scenario: Make a request inactive (#64)
+        Given there is a clash request with the following:
+            | id        | 1        |
+            | studentId | a1680000 |
+            | faculty   | ECMS     |
+            | inactive  | false    |
+        Given I am on the view clash request page for id "1"
+        Then I follow "Make inactive"
+        Then I should see "Clash Request from student a1680000 was made inactive"
+
+    Scenario: Make a request active (#64)
+        Given there is a clash request with the following:
+            | id        | 1        |
+            | studentId | a1680000 |
+            | faculty   | ECMS     |
+            | inactive  | true    |
+        Given I am on the view clash request page for id "1"
+        Then I follow "Make active"
+        Then I should see "Clash Request from student a1680000 was made active"
