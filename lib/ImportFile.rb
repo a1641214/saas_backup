@@ -1,11 +1,10 @@
-# Use python2
-# Data
 # Use this class to collect all the scattered csv file data into
-# a format with can use later tht matches our database
+# a format with can use later that matches our database
 #
 # Authors:
 # Jacob Gonzalez
-# .
+# Markus Andersons
+# Zetong Wang
 
 require 'csv'
 
@@ -77,13 +76,14 @@ module ImportFile
     end
 
     class Session
-        def initialize(time, day, weeks, length, component_code, course_id)
+        def initialize(time, day, weeks, length, component_code, course_id, capacity)
             @time = time
             @day = day
             @weeks = weeks
             @length = length
             @component_code = component_code
             @course_id = course_id
+            @capacity = capacity
         end
 
         # get values
@@ -98,6 +98,8 @@ module ImportFile
         attr_reader :component_code
 
         attr_reader :course_id
+
+        attr_reader :capacity
     end
 
 
@@ -169,7 +171,7 @@ module ImportFile
             length = row[12] # duration of class in minutes
             component_code = row[1][-8..-1]
             component_code = component_code[0, 2] + component_code[-2, 2]
-
+            capacity = row[5].to_i
             # determine time
             start_hours = -1
             start_minutes = -30
@@ -183,7 +185,7 @@ module ImportFile
             # determine day
             days_array.each_with_index do |val, index|
                 if val == 1
-                    sessions.push(Session.new(time, CONST_DAYS_ARRAY[index], weeks_array, length, component_code, course_id))
+                    sessions.push(Session.new(time, CONST_DAYS_ARRAY[index], weeks_array, length, component_code, course_id, capacity))
                 end
             end
         end
