@@ -15,6 +15,10 @@ When /^(.*) within (.*[^:])$/ do |step, parent|
     with_scope(parent) { When step }
 end
 
+Given(/^there is a student with id "([^"]*)"$/) do |student_id|
+    create(:student, id: student_id)
+end
+
 # Multi-line step scoper
 When /^(.*) within (.*[^:]):$/ do |step, parent, table_or_string|
     with_scope(parent) { When "#{step}:", table_or_string }
@@ -31,42 +35,24 @@ end
 Given(/^student "([^"]*)" is enrolled in courses "([^"]*)" and "([^"]*)"$/) do |in_id, course1, course2|
     course_one = FactoryGirl.create(:course, catalogue_number: course1)
     course_two = FactoryGirl.create(:course, catalogue_number: course2)
-    student_one = FactoryGirl.create(:student, id: in_id)
     comp1 = FactoryGirl.create(:component, class_type: 'Lecture')
     comp2 = FactoryGirl.create(:component, class_type: 'Tutorial')
     course_one.components << comp1
     course_one.components << comp2
-
     s1 = FactoryGirl.create(:session, component_code: 'LE01', component: comp1)
     s2 = FactoryGirl.create(:session, component_code: 'LE01', day: 'Wednesday', component: comp1)
     FactoryGirl.create(:session, component_code: 'TU01', component: comp2)
     s4 = FactoryGirl.create(:session, component_code: 'TU02', component: comp2)
+    student_one = Student.find in_id
+    student_one = create(:student, id: in_id) unless student_one
     student_one.courses << course_one
     student_one.courses << course_two
     student_one.sessions << s1 << s2 << s4
-end
-
-Given(/^student "([^"]*)" is enrolled in sessions "([^"]*)" of type "([^"]*)" and "([^"]*)" of type "([^"]*)" for "([^"]*)"$/) do |in_id, session1, type1, session2, type2, course|
-    course_one = FactoryGirl.create(:course, catalogue_number: course)
-    student_one = FactoryGirl.create(:student, id: in_id)
-    comp1 = FactoryGirl.create(:component, class_type: type1)
-    comp2 = FactoryGirl.create(:component, class_type: type2)
-    course_one.components << comp1
-    course_one.components << comp2
-
-    s1 = FactoryGirl.create(:session, component_code: session1, component: comp1)
-
-    s3 = FactoryGirl.create(:session, component_code: session2, component: comp2)
-    session2[-1] = (session2[-1].to_i + 1).to_s
-    s4 = FactoryGirl.create(:session, component_code: session2, component: comp2)
-
-    student_one.courses << course_one
-    student_one.sessions << s1 << s3 << s4
+    student_one.save!
 end
 
 Given(/^student "([^"]*)" is enrolled in sessions "([^"]*)" of type "([^"]*)" and "([^"]*)" of type "([^"]*)", with "([^"]*)" also offered for "([^"]*)"$/) do |in_id, session1, type1, session2, type2, extra_session, course|
     course_one = FactoryGirl.create(:course, catalogue_number: course)
-    student_one = FactoryGirl.create(:student, id: in_id)
     comp1 = FactoryGirl.create(:component, class_type: type1)
     comp2 = FactoryGirl.create(:component, class_type: type2)
     course_one.components << comp1
@@ -77,8 +63,11 @@ Given(/^student "([^"]*)" is enrolled in sessions "([^"]*)" of type "([^"]*)" an
     s3 = FactoryGirl.create(:session, component_code: session2, component: comp2)
     s4 = FactoryGirl.create(:session, component_code: extra_session, component: comp2)
 
+    student_one = Student.find(in_id)
+    student_one = create(:student, id: in_id) unless student_one
     student_one.courses << course_one
     student_one.sessions << s1 << s3 << s4
+    student_one.save!
 end
 
 Given /^there is a clash request in the database$/ do
@@ -88,6 +77,29 @@ end
 Given /^there is a clash request with the following:$/ do |fields|
     clash_request = create(:clash_request)
     clash_request.update!(fields.rows_hash)
+end
+
+Given(/^clash request "([^"]*)" is resolving the course "([^"]*)"$/) do |clash_id, course_code|
+    clash_request = ClashRequest.find(clash_id)
+    clash_course = create(:course, catalogue_number: course_code)
+    clash_request.course = clash_course
+    clash_request.save!
+end
+
+Given(/^clash request "([^"]*)" is resolving the course "([^"]*)" with default sessions and components$/) do |clash_id, course_code|
+    clash_request = ClashRequest.find(clash_id)
+    clash_course = create(:course, catalogue_number: course_code)
+    clash_request.course = clash_course
+    comp1 = FactoryGirl.create(:component, class_type: 'Lecture')
+    comp2 = FactoryGirl.create(:component, class_type: 'Practical')
+    clash_course.components << comp1
+    clash_course.components << comp2
+
+    s1 = FactoryGirl.create(:session, component_code: 'LE01', component: comp1)
+    FactoryGirl.create(:session, component_code: 'PR01', component: comp2)
+    s3 = FactoryGirl.create(:session, component_code: 'PR02', component: comp2)
+    clash_request.sessions << s1 << s3
+    clash_request.save!
 end
 
 Given /^student "([^"]*)" is enrolled in the following course:$/ do |student_id, table|
@@ -191,7 +203,17 @@ Then /^(?:|I )should not see "([^"]*)"$/ do |text|
 end
 
 Then(/^I should see "([^"]*)" selected for the course "([^"]*)" for the "([^"]*)"$/) do |comp_code, course, class_type|
-    expect(page).to have_select(course + '_' + class_type, selected: comp_code)
+    under_course = course.downcase.tr(' ', '_')
+    under_course = under_course.upcase
+    under_course.tr!('&', '_')
+    expect(find(:css, 'select#' + under_course + '_' + class_type).value).to eq(comp_code)
+end
+
+When(/^I select "([^"]*)" for the course "([^"]*)" for the "([^"]*)"$/) do |comp_code, course, class_type|
+    under_course = course.downcase.tr(' ', '_')
+    under_course = under_course.upcase
+    under_course.tr!('&', '_')
+    select comp_code, from: under_course + '_' + class_type
 end
 
 Then /^(?:|I )should not see \/([^\/]*)\/$/ do |regexp|

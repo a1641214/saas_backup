@@ -1,17 +1,25 @@
 class ClashRequestsController < ApplicationController
+    def request_params
+        params.require(:clash_request).permit(
+            :enrolment_request_id,
+            :studentId,
+            :date_submitted,
+            :faculty,
+            :comments,
+            :student_id
+        )
+    end
+
     def new; end
 
     def create
         @clash_request = ClashRequest.create!(request_params)
-        flash[:notice] = "Clash request from student #{@request.studentId} was created"
+        flash[:notice] = "Clash request from student #{@clash_request.student_id} was created"
         redirect_to clash_requests_path
     end
 
     def index
         @clash_requests = ClashRequest.all
-        @clash_requests.each do |in_request|
-            puts(in_request.student_id)
-        end
     end
 
     def show
@@ -23,7 +31,7 @@ class ClashRequestsController < ApplicationController
 
         @clash_request.update!(inactive: true)
 
-        flash[:notice] = "Clash Request from student #{@request.studentId} was made inactive"
+        flash[:notice] = "Clash Request from student #{@clash_request.studentId} was made inactive"
         redirect_to clash_requests_path
     end
 
@@ -31,10 +39,6 @@ class ClashRequestsController < ApplicationController
     def edit
         puts params[:id]
         @clash_request = ClashRequest.find params[:id]
-        all = ClashRequest.all
-        all.each do |a|
-            puts a
-        end
         puts @clash_request
         @student = @clash_request.student
     end
