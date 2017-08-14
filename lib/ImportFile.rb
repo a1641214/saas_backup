@@ -1,11 +1,10 @@
-# Use python2
-# Data
 # Use this class to collect all the scattered csv file data into
-# a format with can use later tht matches our database
+# a format with can use later that matches our database
 #
 # Authors:
 # Jacob Gonzalez
-# .
+# Markus Andersons
+# Zetong Wang
 
 require 'csv'
 
@@ -15,115 +14,178 @@ module ImportFile
             @id = id
             @name = name
             @catalog_number = catalog_number
-            @components = Array.new
+            @components = []
         end
+
         # print as a csv row
-        def __repr__()
-            return @id + "," + @name + "," + @catalog_number
+        def __repr__
+            @id + ',' + @name + ',' + @catalog_number
         end
+
         # test equality against another course
         def __eq__(other)
-            return @id == other.id
+            @id == other.id
         end
+
         # get and assign value
-        def id
-            @id
-        end
-        def name
-            @name
-        end
-        def catalog_number
-            @catalog_number
-        end
-        def components
-            @components
-        end
+        attr_reader :id
+
+        attr_reader :name
+
+        attr_reader :catalog_number
+
+        attr_reader :components
+
         def assign_id(value)
-           @id = value
+            @id = value
         end
+
         def assign_name(value)
             @name = value
         end
+
         def assign_catalog_number(value)
             @catalog_number = value
         end
     end
-    
+
     class Component
         def initialize(id, type)
             @id = id
             @type = type
         end
-        def __repr__()
-            return @type
+
+        def __repr__
+            @type
         end
+
         def __eq__(other)
-            return @type == other.type
+            @type == other.type
         end
-        
+
         # get and assign value
-        def id
-            return @id
-        end
-        def type
-            return @type
-        end
+        attr_reader :id
+
+        attr_reader :type
+
         def assign_id(value)
             @id = value
         end
+
         def assign_type(value)
             @type = value
         end
     end
-    
+
+    class Session
+        def initialize(time, day, weeks, length, component_code, course_id, capacity)
+            @time = time
+            @day = day
+            @weeks = weeks
+            @length = length
+            @component_code = component_code
+            @course_id = course_id
+            @capacity = capacity
+        end
+
+        # get values
+        attr_reader :time
+
+        attr_reader :day
+
+        attr_reader :weeks
+
+        attr_reader :length
+
+        attr_reader :component_code
+
+        attr_reader :course_id
+
+        attr_reader :capacity
+    end
+
     # import courses from the course catalog
     def self.importCourses(filename)
-        courses = Array.new
-        CSV.foreach(filename,headers: true, encoding: 'iso-8859-1:utf-8') do |row|
+        courses = []
+        CSV.foreach(filename, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
             id = row[1]
             name = row[4]
-            course = Course.new(id,name,nil)
+            course = Course.new(id, name, nil)
             courses.append(course)
         end
-        return courses
+        courses
     end
-        
+
     # fill offering cataglog numbers from the offerings csv
     def self.fillCourseOfferings(filename, courses)
-        CSV.foreach(filename,headers: true, encoding: 'iso-8859-1:utf-8') do |row|
+        CSV.foreach(filename, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
             id = row[1]
             courses.each do |course|
-                if (course.id == id)
+                if course.id == id
                     # COMPSCI 3005
-                    course.assign_catalog_number(row[4] + " " + row[5])
+                    course.assign_catalog_number(row[4] + ' ' + row[5])
                 end
             end
         end
     end
-    
+
     # read in all the components and link them to their courses
     def self.importComponentsAndLink(filename, courses)
         components = nil
-        CSV.foreach(filename, :headers => true) do |row|
+        CSV.foreach(filename, headers: true) do |row|
             id = row[1]
             type = row[9]
             component = Component.new(id, type)
             # link component and course
             courses.each do |course|
-                if (course.id == id)
-                    components = course.components
-                    has_components = false
-                    components.each do |component1|
-                        if( component.__eq__(component1) )
-                            has_components = true
-                        end
-                    end
-                    if(! has_components)
-                        components.append(component)
-                    end
+                next unless course.id == id
+                components = course.components
+                has_components = false
+                components.each do |component1|
+                    has_components = true if component.__eq__(component1)
                 end
+                components.append(component) unless has_components
             end
         end
-        return components
+        components
+    end
+
+    CONST_DAYS_ARRAY = %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday].freeze
+    # Import the session activity data
+    def self.import_sessions(filename)
+        sessions = []
+        CSV.foreach(filename, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
+            weeks_bin = row[13].to_i
+            scheduled_time = row[16]
+            break if scheduled_time == '' || scheduled_time.nil?
+            days_bin = scheduled_time.scan(/[$]\d+[$]/)[1][1..-2].to_i
+            time_bin = scheduled_time.scan(/[$]\d+[$]/)[2][1..-2].to_i
+            days_array = (0...days_bin.bit_length).map { |n| days_bin[n] }
+            time_array = (0...time_bin.bit_length).map { |n| time_bin[n] }
+            weeks_array = (0...weeks_bin.bit_length).map { |n| weeks_bin[n] }.reverse
+            course_id = row[6][2, 6]
+            length = row[12] # duration of class in minutes
+            component_code = row[1][-8..-1]
+            component_code = component_code[0, 2] + component_code[-2, 2]
+            capacity = row[5].to_i
+            # determine time
+            start_hours = -1
+            start_minutes = -30
+            time_array.each_with_index do |val, index|
+                start_hours += 1 if index.even?
+                start_minutes = (start_minutes + 30) % 60
+                break if val == 1
+            end
+            time = Time.new(2017, 1, 1, start_hours, start_minutes, 0, '+09:30')
+
+            # determine day
+            days_array.each_with_index do |val, index|
+                next unless val == 1
+                sessions.push(Session.new(time, CONST_DAYS_ARRAY[index],
+                                          weeks_array, length, component_code,
+                                          course_id, capacity))
+            end
+        end
+        sessions
     end
 end
