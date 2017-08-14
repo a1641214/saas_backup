@@ -152,7 +152,7 @@ module ImportFile
 
     CONST_DAYS_ARRAY = %w[Monday Tuesday Wednesday Thursday Friday Saturday Sunday].freeze
     # Import the session activity data
-    def self.importSessions(filename)
+    def self.import_sessions(filename)
         sessions = []
         CSV.foreach(filename, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
             weeks_bin = row[13].to_i
@@ -180,9 +180,10 @@ module ImportFile
 
             # determine day
             days_array.each_with_index do |val, index|
-                if val == 1
-                    sessions.push(Session.new(time, CONST_DAYS_ARRAY[index], weeks_array, length, component_code, course_id, capacity))
-                end
+                next unless val == 1
+                sessions.push(Session.new(time, CONST_DAYS_ARRAY[index],
+                                          weeks_array, length, component_code,
+                                          course_id, capacity))
             end
         end
         sessions
