@@ -20,11 +20,11 @@ RSpec.describe ClashRequestsController, type: :controller do
             studentOne = FactoryGirl.create(:student)
             clashOne = FactoryGirl.create(:clash_request)
             clashOne.student= studentOne
-            clashOne.save
-            studentOne.save
+            clashOne.save!
+            studentOne.save!
             expect(ClashRequest).to receive(:where)
             expect(Student).to receive(:where)
-            get :edit, {:id => 1}
+            get :edit, {:id => "1"}
         end
     end
     

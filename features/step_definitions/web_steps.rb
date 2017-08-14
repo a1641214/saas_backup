@@ -86,9 +86,27 @@ Given /^there is a clash request in the database$/ do
 end
 
 Given /^there is a clash request with the following:$/ do |fields|
-    request = create(:clash_request)
-    request.update!(fields.rows_hash)
+    clash_request = create(:clash_request)
+    clash_request.update!(fields.rows_hash)
 end
+
+Given(/^student "([^"]*)" is enrolled in the following course:$/) do |studentId, table|
+    student = Student.find(studentId)
+    course = create(:course)
+    course = update!(table.rows_hash)
+    student.courses << course
+    student.save!
+    course.save!
+end
+
+Given(/^there is a clash request for the student "([^"]*)" with the following:$/) do |studentId, table|
+    studentOne = create(:student, id: studentId)
+    clash_request = create(:clash_request, student: studentOne)
+    clash_request.update!(table.rows_hash)
+    clash_request.save!
+    student.save!
+end
+
 
 When /^(?:|I )go to (.+)$/ do |page_name|
     visit path_to(page_name)
@@ -173,7 +191,7 @@ Then /^(?:|I )should not see "([^"]*)"$/ do |text|
     end
 end
 
-Then(/^I should see "([^"]*)" selected for "([^"]*)" for the "([^"]*)"$/) do |comp_code, course, class_type|
+Then(/^I should see "([^"]*)" selected for the course "([^"]*)" for the "([^"]*)"$/) do |comp_code, course, class_type|
     expect(page).to have_select(course+'_'+class_type, selected: comp_code)
 end
 
