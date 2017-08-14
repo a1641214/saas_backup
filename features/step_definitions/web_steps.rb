@@ -29,56 +29,56 @@ Given /^(?:|I )am logged in$/ do
 end
 
 Given(/^student "([^"]*)" is enrolled in courses "([^"]*)" and "([^"]*)"$/) do |in_id, course1, course2|
-    courseOne = FactoryGirl.create(:course, catalogue_number: course1)
-    courseTwo = FactoryGirl.create(:course, catalogue_number: course2)
-    studentOne = FactoryGirl.create(:student, id: in_id)
-    comp1 = FactoryGirl.create(:component,class_type: 'Lecture')
-    comp2 = FactoryGirl.create(:component,class_type: 'Tutorial')
-    courseOne.components << comp1
-    courseOne.components << comp2
-    
-    s1 = FactoryGirl.create(:session, component_code: "LE01", component: comp1)
-    s2 = FactoryGirl.create(:session, component_code: "LE01", day: 'Wednesday', component: comp1)
-    s3 = FactoryGirl.create(:session, component_code: "TU01", component: comp2)
-    s4 = FactoryGirl.create(:session, component_code: "TU02", component: comp2)
-    studentOne.courses << courseOne
-    studentOne.courses << courseTwo
-    studentOne.sessions << s1 << s2 << s4
+    course_one = FactoryGirl.create(:course, catalogue_number: course1)
+    course_two = FactoryGirl.create(:course, catalogue_number: course2)
+    student_one = FactoryGirl.create(:student, id: in_id)
+    comp1 = FactoryGirl.create(:component, class_type: 'Lecture')
+    comp2 = FactoryGirl.create(:component, class_type: 'Tutorial')
+    course_one.components << comp1
+    course_one.components << comp2
+
+    s1 = FactoryGirl.create(:session, component_code: 'LE01', component: comp1)
+    s2 = FactoryGirl.create(:session, component_code: 'LE01', day: 'Wednesday', component: comp1)
+    FactoryGirl.create(:session, component_code: 'TU01', component: comp2)
+    s4 = FactoryGirl.create(:session, component_code: 'TU02', component: comp2)
+    student_one.courses << course_one
+    student_one.courses << course_two
+    student_one.sessions << s1 << s2 << s4
 end
 
-Given(/^student "([^"]*)" is enrolled in sessions "([^"]*)" of type "([^"]*)" and "([^"]*)" of type "([^"]*)" for "([^"]*)"$/) do |in_id, session1,type1, session2, type2, course|
-    courseOne = FactoryGirl.create(:course, catalogue_number: course)
-    studentOne = FactoryGirl.create(:student, id: in_id)
-    comp1 = FactoryGirl.create(:component,class_type: type1)
-    comp2 = FactoryGirl.create(:component,class_type: type2)
-    courseOne.components << comp1
-    courseOne.components << comp2
-    
+Given(/^student "([^"]*)" is enrolled in sessions "([^"]*)" of type "([^"]*)" and "([^"]*)" of type "([^"]*)" for "([^"]*)"$/) do |in_id, session1, type1, session2, type2, course|
+    course_one = FactoryGirl.create(:course, catalogue_number: course)
+    student_one = FactoryGirl.create(:student, id: in_id)
+    comp1 = FactoryGirl.create(:component, class_type: type1)
+    comp2 = FactoryGirl.create(:component, class_type: type2)
+    course_one.components << comp1
+    course_one.components << comp2
+
     s1 = FactoryGirl.create(:session, component_code: session1, component: comp1)
-    
+
     s3 = FactoryGirl.create(:session, component_code: session2, component: comp2)
     session2[-1] = (session2[-1].to_i + 1).to_s
     s4 = FactoryGirl.create(:session, component_code: session2, component: comp2)
-    
-    studentOne.courses << courseOne
-    studentOne.sessions << s1 << s3 << s4
+
+    student_one.courses << course_one
+    student_one.sessions << s1 << s3 << s4
 end
 
-Given(/^student "([^"]*)" is enrolled in sessions "([^"]*)" of type "([^"]*)" and "([^"]*)" of type "([^"]*)", with "([^"]*)" also offered for "([^"]*)"$/) do |in_id, session1,type1, session2, type2, extra_session, course|
-    courseOne = FactoryGirl.create(:course, catalogue_number: course)
-    studentOne = FactoryGirl.create(:student, id: in_id)
-    comp1 = FactoryGirl.create(:component,class_type: type1)
-    comp2 = FactoryGirl.create(:component,class_type: type2)
-    courseOne.components << comp1
-    courseOne.components << comp2
-    
+Given(/^student "([^"]*)" is enrolled in sessions "([^"]*)" of type "([^"]*)" and "([^"]*)" of type "([^"]*)", with "([^"]*)" also offered for "([^"]*)"$/) do |in_id, session1, type1, session2, type2, extra_session, course|
+    course_one = FactoryGirl.create(:course, catalogue_number: course)
+    student_one = FactoryGirl.create(:student, id: in_id)
+    comp1 = FactoryGirl.create(:component, class_type: type1)
+    comp2 = FactoryGirl.create(:component, class_type: type2)
+    course_one.components << comp1
+    course_one.components << comp2
+
     s1 = FactoryGirl.create(:session, component_code: session1, component: comp1)
-    
+
     s3 = FactoryGirl.create(:session, component_code: session2, component: comp2)
     s4 = FactoryGirl.create(:session, component_code: extra_session, component: comp2)
-    
-    studentOne.courses << courseOne
-    studentOne.sessions << s1 << s3 << s4
+
+    student_one.courses << course_one
+    student_one.sessions << s1 << s3 << s4
 end
 
 Given /^there is a clash request in the database$/ do
@@ -90,23 +90,22 @@ Given /^there is a clash request with the following:$/ do |fields|
     clash_request.update!(fields.rows_hash)
 end
 
-Given(/^student "([^"]*)" is enrolled in the following course:$/) do |studentId, table|
-    student = Student.find(studentId)
-    course = create(:course)
+Given /^student "([^"]*)" is enrolled in the following course:$/ do |student_id, table|
+    student = Student.find(student_id)
+    create(:course)
     course = update!(table.rows_hash)
     student.courses << course
     student.save!
     course.save!
 end
 
-Given(/^there is a clash request for the student "([^"]*)" with the following:$/) do |studentId, table|
-    studentOne = create(:student, id: studentId)
-    clash_request = create(:clash_request, student: studentOne)
+Given /^there is a clash request for the student "([^"]*)" with the following:$/ do |student_id, table|
+    student_one = create(:student, id: student_id)
+    clash_request = create(:clash_request, student: student_one)
     clash_request.update!(table.rows_hash)
     clash_request.save!
     student.save!
 end
-
 
 When /^(?:|I )go to (.+)$/ do |page_name|
     visit path_to(page_name)
@@ -192,7 +191,7 @@ Then /^(?:|I )should not see "([^"]*)"$/ do |text|
 end
 
 Then(/^I should see "([^"]*)" selected for the course "([^"]*)" for the "([^"]*)"$/) do |comp_code, course, class_type|
-    expect(page).to have_select(course+'_'+class_type, selected: comp_code)
+    expect(page).to have_select(course + '_' + class_type, selected: comp_code)
 end
 
 Then /^(?:|I )should not see \/([^\/]*)\/$/ do |regexp|

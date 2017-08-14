@@ -25,3 +25,12 @@ Metrics/CyclomaticComplexity:
 
 Metrics/MethodLength:
     Enabled: false
+
+Metrics/AbcSize:
+    Enabled: false
+
+Style/NumericLiterals:
+    Enabled: false
+
+Metrics/LineLength:
+    Enabled: false

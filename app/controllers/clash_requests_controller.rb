@@ -26,8 +26,8 @@ class ClashRequestsController < ApplicationController
         flash[:notice] = "Clash Request from student #{@request.studentId} was made inactive"
         redirect_to clash_requests_path
     end
-    
-    #Rspec errors
+
+    # Rspec errors
     def edit
         puts params[:id]
         @clash_request = ClashRequest.find params[:id]
@@ -38,7 +38,7 @@ class ClashRequestsController < ApplicationController
         puts @clash_request
         @student = @clash_request.student
     end
-    
+
     def update
         @clash_request = ClashRequest.find params[:id]
         @student = @clash_request.student
@@ -46,17 +46,16 @@ class ClashRequestsController < ApplicationController
         @student.courses.each do |course|
             course_cat = course.catalogue_number
             course_param = params[course_cat]
-            @student.add_new_sessions(course,course_param)
+            @student.add_new_sessions(course, course_param)
         end
         @student.update_attributes!(sessions: @student.sessions)
-        
-        
+
         request_course_cat = @clash_request.course.catalogue_number
         request_course_param = params[request_course_cat]
         @clash_request.sessions.clear
         @clash_request.add_new_request_sessions(@clash_request.course, request_course_param)
         @clash_request.update_attributes!(sessions: @clash_request.sessions)
-        
+
         redirect_to clash_request_path
     end
 end
