@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170802020535) do
+ActiveRecord::Schema.define(version: 20170814100916) do
 
   create_table "clash_requests", force: :cascade do |t|
     t.string   "studentId"
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 20170802020535) do
     t.integer  "component_id"
     t.string   "component_code"
     t.integer  "length"
+    t.integer  "capacity"
   end
 
   add_index "sessions", ["component_id"], name: "index_sessions_on_component_id"
