@@ -3,6 +3,13 @@ class ClashRequest < ActiveRecord::Base
     belongs_to :course
     belongs_to :student
 
+    after_create :preserve_initial
+
+    # Serialize to use as integer array
+    serialize :preserve_clash_sessions
+    serialize :preserve_student_sessions
+    serialize :preserve_student_courses
+
     def current_clash_session(taking_component)
         offered_session = sessions.where(component: taking_component).first
         offered_session.component_code
@@ -20,5 +27,23 @@ class ClashRequest < ActiveRecord::Base
                 end
             end
         end
+    end
+
+    def preserve_initial()
+        if sessions
+            update_attribute(:preserve_clash_sessions, sessions.ids)
+        end
+
+        if course
+            update_attribute(:preserve_clash_course, course.id)
+        end
+
+        if student
+            update_attribute(:preserve_student_sessions, student.sessions.ids)
+            update_attribute(:preserve_student_courses, student.courses.ids)
+        end
+
+        self.save
+
     end
 end
