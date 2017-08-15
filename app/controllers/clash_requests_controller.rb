@@ -37,9 +37,7 @@ class ClashRequestsController < ApplicationController
 
     # Rspec errors
     def edit
-        puts params[:id]
         @clash_request = ClashRequest.find params[:id]
-        puts @clash_request
         @student = @clash_request.student
     end
 
