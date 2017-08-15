@@ -36,4 +36,8 @@ RSpec.describe Session, type: :model do
         t = described_class.reflect_on_association(:students)
         expect(t.macro).to eq(:has_and_belongs_to_many)
     end
+    it 'should have many clash requests' do
+        t = described_class.reflect_on_association(:clash_requests)
+        expect(t.macro).to eq(:has_and_belongs_to_many)
+    end
 end

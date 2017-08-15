@@ -9,3 +9,6 @@ Lint/Debugger:
 
 Style/RegexpLiteral:
     Enabled: false
+
+Metrics/ParameterLists:
+    Enabled: false

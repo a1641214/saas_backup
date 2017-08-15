@@ -24,4 +24,48 @@ RSpec.describe Course, type: :model do
         t = described_class.reflect_on_association(:students)
         expect(t.macro).to eq(:has_and_belongs_to_many)
     end
+    it 'should have many clash requests' do
+        t = described_class.reflect_on_association(:clash_requests)
+        expect(t.macro).to eq(:has_many)
+    end
+
+    describe 'alternateSessions method' do
+        it 'should return all the sessions for a course component as an array. Current enrollment first' do
+            course_one = FactoryGirl.create(:course)
+            student_one = FactoryGirl.create(:student)
+            comp1 = FactoryGirl.create(:component, class_type: 'Lecture')
+            comp2 = FactoryGirl.create(:component, class_type: 'Tutorial')
+            course_one.components << comp1
+            course_one.components << comp2
+
+            s1 = FactoryGirl.create(:session, component_code: 'LE01', component: comp1)
+            s2 = FactoryGirl.create(:session, component_code: 'LE01', day: 'Wednesday', component: comp1)
+            FactoryGirl.create(:session, component_code: 'TU01', component: comp2)
+            s4 = FactoryGirl.create(:session, component_code: 'TU02', component: comp2)
+            student_one.courses << course_one
+            student_one.sessions << s1 << s2 << s4
+
+            expect(course_one.alternate_sessions(student_one, comp1)).to eq(['LE01'])
+            expect(course_one.alternate_sessions(student_one, comp2)).to eq(%w[TU02 TU01])
+        end
+    end
+
+    describe 'alternate_sessions_clash_course' do
+        it 'should return all the sessions of the course requested in the clash course. Desired enrollment first' do
+            clash_one = FactoryGirl.create(:clash_request, studentId: 1)
+            course_one = FactoryGirl.create(:course, name: 'Soils and Landscapes I', catalogue_number: 'SOIL&WAT 1000WT')
+            comp1 = FactoryGirl.create(:component, class_type: 'Lecture')
+            comp2 = FactoryGirl.create(:component, class_type: 'Practical')
+            course_one.components << comp1 << comp2
+            s1 = FactoryGirl.create(:session, component_code: 'LE01', component: comp1)
+            s2 = FactoryGirl.create(:session, component_code: 'LE01', day: 'Wednesday', component: comp1)
+            FactoryGirl.create(:session, component_code: 'PR01', component: comp2)
+            s4 = FactoryGirl.create(:session, component_code: 'PR02', component: comp2)
+            clash_one.course = course_one
+            clash_one.sessions << s1 << s2 << s4
+
+            expect(course_one.alternate_sessions_clash_course(clash_one, comp1)).to eq(['LE01'])
+            expect(course_one.alternate_sessions_clash_course(clash_one, comp2)).to eq(%w[PR02 PR01])
+        end
+    end
 end
