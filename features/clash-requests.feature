@@ -81,4 +81,3 @@ Feature: Clash Requests (#16)
         Then I should see "LE01" selected for the course "COMP SCI 3003" for the "Lecture"
         Then I should see "LE01" selected for the course "SOIL&WAT 1000WT" for the "Lecture"
         Then I should see "PR01" selected for the course "SOIL&WAT 1000WT" for the "Practical"
-

@@ -2,6 +2,7 @@
 AllCops:
   Exclude:
     - '/lib'
+    - '/db/*.rb'
 
 # Grouped dependencies
 Bundler/DuplicatedGem:
@@ -28,6 +29,7 @@ Metrics/MethodLength:
 
 Metrics/AbcSize:
     Enabled: false
+
 
 Style/NumericLiterals:
     Enabled: false

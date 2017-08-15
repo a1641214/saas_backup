@@ -28,10 +28,8 @@ class ClashRequestsController < ApplicationController
 
     def destroy
         @clash_request = ClashRequest.find(params[:id])
-
-        @clash_request.update!(inactive: true)
-
-        flash[:notice] = "Clash Request from student #{@clash_request.studentId} was made inactive"
+        @request.update!(inactive: !@request.inactive)
+        flash[:notice] = "Clash Request from student #{@request.studentId} was made #{@request.inactive ? 'inactive' : 'active'}"
         redirect_to clash_requests_path
     end
 
