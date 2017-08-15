@@ -29,21 +29,19 @@ class ClashRequest < ActiveRecord::Base
         end
     end
 
-    def preserve_initial()
-        if sessions
-            update_attribute(:preserve_clash_sessions, sessions.ids)
-        end
+    def preserve_initial
+        # For each preserved state, only update if there is something to update
+        # There should almost always be something, but mainly useful in development
 
-        if course
-            update_attribute(:preserve_clash_course, course.id)
-        end
+        update_attribute(:preserve_clash_sessions, sessions.ids) if sessions
+        update_attribute(:preserve_clash_course, course.id) if course
 
         if student
             update_attribute(:preserve_student_sessions, student.sessions.ids)
             update_attribute(:preserve_student_courses, student.courses.ids)
         end
 
-        self.save
-
+        # Commit the changes
+        save
     end
 end

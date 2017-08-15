@@ -177,8 +177,8 @@ when 'development', 'test'
     stud1.sessions.push(s8)
     stud1.sessions.push(s11)
 
-    clash1 = ClashRequest.create(faculty: 'Engineering', student: stud1, course: c4, sessions: [s13,s15])
-    clash2 = ClashRequest.create(faculty: 'Engineering', student: stud2, course: c4, sessions: [s13,s15])
+    ClashRequest.create(faculty: 'Engineering', student: stud1, course: c4, sessions: [s13, s15])
+    ClashRequest.create(faculty: 'Engineering', student: stud2, course: c4, sessions: [s13, s15])
 
 when 'production'
     puts 'No seed data'
