@@ -5,10 +5,12 @@
 # Jacob Gonzalez
 # Markus Andersons
 # Zetong Wang
+# Huey Min Gan
 
 require 'csv'
 
 module ImportFile
+    
     class Course
         def initialize(id, name, catalog_number)
             @id = id
@@ -76,7 +78,80 @@ module ImportFile
             @type = value
         end
     end
-
+    
+    class Student
+        def initialize(id, term, class_nbr,status,courses)
+            @id = id
+            @term = term
+            @class_nbr = class_nbr
+            @status = status
+            @courses = courses
+        end
+        def id 
+            @id
+        end
+        def term
+            @term
+        end
+        def class_nbr
+            @class_nbr
+        end
+        def status
+            @status
+        end  
+        def courses
+            @courses
+        end    
+    end
+    
+    class Class
+        def initialize(term, course_id, class_nbr)
+            @term = term
+            @course_id = course_id
+            @class_nbr = class_nbr
+        end
+        def term
+            @term
+        end
+        def course_id
+            @course_id
+        end    
+        def class_nbr
+            @class_nbr
+        end
+    end    
+    
+    #import students 
+    def self.importStudents(filename)
+        students = Array.new 
+        CSV.foreach(filename, headers: true) do |row|
+            id = row[0]
+            term = row[1]
+            class_nbr = row[2]
+            status = row[3]
+            courses = Array.new
+            #append to array only if the student is enrolled
+            if (status != 'D')
+                student = Student.new(id,term,class_nbr,status, courses)
+                students.append(student)
+            end    
+        end    
+        return students
+    end
+    
+    #import classes
+    def self.importClasses(filename)
+        classes = Array.new
+        CSV.foreach(filename, headers:true) do |row|
+            term = row[0]
+            course_id = row[1]
+            class_nbr = row[3]
+            class1 = Class.new(term, course_id,class_nbr)
+            classes.append(class1)
+        end
+        return classes
+    end    
+ 
     class Session
         def initialize(time, day, weeks, length, component_code, course_id, capacity)
             @time = time
@@ -115,7 +190,23 @@ module ImportFile
         end
         courses
     end
-
+    
+    #fill student.courses array 
+    def self.fillStudentsWithCourses(students, classes, courses)
+        students.each do |student_row|
+            classes.each do |class_row|
+                if (student_row.class_nbr == class_row.class_nbr && student_row.term == class_row.term)
+                    courses.each do |course_row|
+                        if (course_row.id == class_row.course_id)
+                            student_row.courses.append(course_row)
+                            break
+                        end    
+                    end
+                end    
+            end
+        end    
+    end        
+  
     # fill offering cataglog numbers from the offerings csv
     def self.fillCourseOfferings(filename, courses)
         CSV.foreach(filename, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
