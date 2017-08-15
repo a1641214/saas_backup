@@ -33,7 +33,6 @@ class ClashRequestsController < ApplicationController
         redirect_to clash_requests_path
     end
 
-    # Rspec errors
     def edit
         @clash_request = ClashRequest.find params[:id]
         @student = @clash_request.student
