@@ -1,9 +1,3 @@
-# Ignore all
-AllCops:
-  Exclude:
-    - '/lib'
-    - '/db/*.rb'
-
 # Grouped dependencies
 Bundler/DuplicatedGem:
   Exclude:
@@ -13,7 +7,7 @@ Layout/IndentationWidth:
     Width: 4
 
 Metrics/LineLength:
-    Max: 120
+    Enabled: false
 
 Metrics/BlockLength:
     Enabled: false
@@ -30,9 +24,11 @@ Metrics/MethodLength:
 Metrics/AbcSize:
     Enabled: false
 
-
 Style/NumericLiterals:
     Enabled: false
 
-Metrics/LineLength:
-    Enabled: false
+# Ignore all
+AllCops:
+  Exclude:
+    - lib
+    - db/schema.rb
