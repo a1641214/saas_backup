@@ -1,16 +1,40 @@
 require 'ImportFile'
 class DemoController < ApplicationController
     def index
+        # TODO: convert this to load from the database directly
         @path = 'db/csv/'
         @courses = ImportFile.importCourses(@path + 'CM_CRSE_CAT_ECMS-6383074.csv')
         ImportFile.fillCourseOfferings(@path + 'CM_CRSE_CAT_ECMS_OFFERINGS-6383075.csv', @courses)
         ImportFile.importComponentsAndLink(@path + 'CM_CRSE_CAT_ECMS_COMPONENTS-6383069.csv', @courses)
+
+        # TODO: do a better way of not updatng the database each render
+        if Course.count > 0
+            return
+        end
+
+        # push courses into database objects
+        @courses.each do |course|
+            # create a course entry
+            c = Course.create(id: course.id,
+                              name: course.name,
+                              atalogue_number: course.catalog_number)
+
+            # create components and link to the courses
+            course.components.each do |component|
+                comp = Component.create(class_type: component.type)
+                c.components.push(comp)
+            end
+
+            # TODO: connect components to courses
+        end
+
+        # push sessions into database objects
         sessions = ImportFile.import_sessions(@path + 'SPActivity_2017.csv')
         sessions.each do |session|
             begin
                 course = Course.find(session.course_id)
                 course.components.each do |component|
-                    next unless component.type[0, 2] == session.component_code[0, 2]
+                    next unless component.class_type[0, 2] == session.component_code[0, 2]
                     Session.create(component: component,
                                    time: session.time,
                                    day: session.day,
@@ -24,8 +48,8 @@ class DemoController < ApplicationController
             end
         end
     end
-    
-    def display_student 
+
+    def display_student
         @path = "db/csv/"
         @courses = ImportFile.importCourses(@path + "CM_CRSE_CAT_ECMS-6383074.csv")
         @students = ImportFile.importStudents(@path + 'EN_BY_CLASS_ECMS-6384857.csv')
@@ -33,11 +57,11 @@ class DemoController < ApplicationController
         ImportFile.fillCourseOfferings(@path + 'CM_CRSE_CAT_ECMS_OFFERINGS-6383075.csv',@courses)
         ImportFile.importComponentsAndLink(@path + 'CM_CRSE_CAT_ECMS_COMPONENTS-6383069.csv',@courses)
         ImportFile.fillStudentsWithCourses(@students,@classes,@courses)
-    end    
-    
+    end
+
     def student_object
         @students.each do |student|
-            Student.create(student.id) 
-        end    
-    end    
+            Student.create(student.id)
+        end
+    end
 end
