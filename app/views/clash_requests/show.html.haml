@@ -1,20 +1,20 @@
-%h1 Enrolment request ##{@request.enrolment_request_id} #{@request.inactive and '(inactive)'}
+%h1 Enrolment request ##{@clash_request.id} #{@clash_request.inactive ? '(inactive)' : ''}
 
 .row
     .col-md-4
         %h3 Student's ID
-        = @request.studentId
+        = @clash_request.student.id
 
         %h3 Date submitted
-        = @request.date_submitted
+        = @clash_request.date_submitted
 
         %h3 Faculty
-        = @request.faculty
+        = @clash_request.faculty
 
         %h3 Comments
-        = @request.comments
+        = @clash_request.comments
     %br
-    = link_to 'Edit', edit_clash_request_path(@request), class: 'btn btn-primary'
-    - unless @request.inactive
-        = link_to 'Make inactive', clash_request_path(@request), method: :delete, class: 'btn btn-primary'
+    = link_to 'Edit', edit_clash_request_path(@clash_request), class: 'btn btn-primary'
+    = link_to "Make #{@clash_request.inactive ? 'active' : 'inactive'}", clash_request_path(@clash_request), method: :delete, class: 'btn btn-primary'
     = link_to 'Back', clash_requests_path, class: 'btn btn-default'
+

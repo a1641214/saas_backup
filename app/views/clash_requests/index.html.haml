@@ -1,21 +1,21 @@
 %h1 Clash Requests
 = link_to 'Create' , new_clash_request_path, class: 'btn btn-primary'
 
-%table.table.table-hover#clash-requests
+%table.table.table-hover#clash-clash_requests
     %thead
         %tr
-            %th Enrolment Request ID
+            %th Enrolment Requests ID
             %th Student ID
             %th Date Submitted
             %th Faculty
             %th Comments
             %th
     %tbody
-        - @requests.each do |request|
+        - @clash_requests.each do |clash_request|
             %tr
-                %td= request.enrolment_request_id
-                %td= request.studentId
-                %td= request.date_submitted
-                %td= request.faculty
-                %td= request.comments
-                %td= link_to 'View', clash_request_path(request), class: 'btn btn-default'
+                %td= clash_request.enrolment_request_id
+                %td= clash_request.student_id
+                %td= clash_request.date_submitted
+                %td= clash_request.faculty
+                %td= clash_request.comments
+                %td= link_to 'View', clash_request_path(clash_request), class: 'btn btn-default'
