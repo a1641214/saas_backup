@@ -3,5 +3,5 @@ class Session < ActiveRecord::Base
     belongs_to :component
     has_and_belongs_to_many :students
     has_and_belongs_to_many :clash_requests
-    validates_presence_of :time, :day, :weeks, :component_code, :length
+    validates_presence_of :time, :day, :weeks, :component_code, :length, :capacity
 end
