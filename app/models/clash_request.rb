@@ -3,6 +3,13 @@ class ClashRequest < ActiveRecord::Base
     belongs_to :course
     belongs_to :student
 
+    after_create :preserve_initial
+
+    # Serialize to use as integer array
+    serialize :preserve_clash_sessions
+    serialize :preserve_student_sessions
+    serialize :preserve_student_courses
+
     def current_clash_session(taking_component)
         offered_session = sessions.where(component: taking_component).first
         offered_session.component_code
@@ -20,5 +27,21 @@ class ClashRequest < ActiveRecord::Base
                 end
             end
         end
+    end
+
+    def preserve_initial
+        # For each preserved state, only update if there is something to update
+        # There should almost always be something, but mainly useful in development
+
+        update_attribute(:preserve_clash_sessions, sessions.ids) if sessions
+        update_attribute(:preserve_clash_course, course.id) if course
+
+        if student
+            update_attribute(:preserve_student_sessions, student.sessions.ids)
+            update_attribute(:preserve_student_courses, student.courses.ids)
+        end
+
+        # Commit the changes
+        save
     end
 end
