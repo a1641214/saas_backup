@@ -1,16 +1,12 @@
 require 'ImportFile'
 class DemoController < ApplicationController
     def index
-        # TODO: convert this to load from the database directly
         @path = 'db/csv/'
         @courses = ImportFile.importCourses(@path + 'CM_CRSE_CAT_ECMS-6383074.csv')
         ImportFile.fillCourseOfferings(@path + 'CM_CRSE_CAT_ECMS_OFFERINGS-6383075.csv', @courses)
         ImportFile.importComponentsAndLink(@path + 'CM_CRSE_CAT_ECMS_COMPONENTS-6383069.csv', @courses)
 
-        # TODO: do a better way of not updatng the database each render
-        if Course.count > 0
-            return
-        end
+        return unless Course.count.zero?
 
         # push courses into database objects
         @courses.each do |course|
@@ -24,8 +20,6 @@ class DemoController < ApplicationController
                 comp = Component.create(class_type: component.type)
                 c.components.push(comp)
             end
-
-            # TODO: connect components to courses
         end
 
         # push sessions into database objects
@@ -50,13 +44,13 @@ class DemoController < ApplicationController
     end
 
     def display_student
-        @path = "db/csv/"
-        @courses = ImportFile.importCourses(@path + "CM_CRSE_CAT_ECMS-6383074.csv")
+        @path = 'db/csv/'
+        @courses = ImportFile.importCourses(@path + 'CM_CRSE_CAT_ECMS-6383074.csv')
         @students = ImportFile.importStudents(@path + 'EN_BY_CLASS_ECMS-6384857.csv')
         @classes = ImportFile.importClasses(@path + 'CLS_CMBND_SECT_FULL-6385825.csv')
-        ImportFile.fillCourseOfferings(@path + 'CM_CRSE_CAT_ECMS_OFFERINGS-6383075.csv',@courses)
-        ImportFile.importComponentsAndLink(@path + 'CM_CRSE_CAT_ECMS_COMPONENTS-6383069.csv',@courses)
-        ImportFile.fillStudentsWithCourses(@students,@classes,@courses)
+        ImportFile.fillCourseOfferings(@path + 'CM_CRSE_CAT_ECMS_OFFERINGS-6383075.csv', @courses)
+        ImportFile.importComponentsAndLink(@path + 'CM_CRSE_CAT_ECMS_COMPONENTS-6383069.csv', @courses)
+        ImportFile.fillStudentsWithCourses(@students, @classes, @courses)
     end
 
     def student_object
