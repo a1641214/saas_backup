@@ -17,7 +17,7 @@ class DemoController < ApplicationController
             # create a course entry
             c = Course.create(id: course.id,
                               name: course.name,
-                              atalogue_number: course.catalog_number)
+                              catalogue_number: course.catalog_number)
 
             # create components and link to the courses
             course.components.each do |component|
