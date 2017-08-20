@@ -9,7 +9,7 @@ class DemoController < ApplicationController
         return unless Course.count.zero?
 
         # push courses into database objects
-        @courses.each do |course|
+        @courses.each do |_, course|
             # create a course entry
             c = Course.create(id: course.id,
                               name: course.name,

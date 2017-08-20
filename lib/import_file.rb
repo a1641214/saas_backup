@@ -166,12 +166,12 @@ module ImportFile
 
     # import courses from the course catalog
     def self.import_courses(filename)
-        courses = []
+        courses = {}
         CSV.foreach(filename, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
             id = row[1]
             name = row[4]
             course = Course.new(id, name, nil)
-            courses.append(course)
+            courses[id] = course
         end
         courses
     end
@@ -181,11 +181,8 @@ module ImportFile
         students.each do |student_row|
             classes.each do |class_row|
                 next if student_row.class_nbr == class_row.class_nbr && student_row.term == class_row.term
-                courses.each do |course_row|
-                    if course_row.id == class_row.course_id
-                        student_row.courses.append(course_row)
-                        break
-                    end
+                if courses.key?(class_row.course_id)
+                    student_row.courses.append(course_row)
                 end
             end
         end
@@ -195,11 +192,9 @@ module ImportFile
     def self.fill_course_offerings(filename, courses)
         CSV.foreach(filename, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
             id = row[1]
-            courses.each do |course|
-                if course.id == id
-                    # COMPSCI 3005
-                    course.assign_catalog_number(row[4] + ' ' + row[5])
-                end
+            if courses.key?(id)
+                # COMPSCI 3005
+                courses[id].assign_catalog_number(row[4] + ' ' + row[5])
             end
         end
     end
@@ -212,9 +207,8 @@ module ImportFile
             type = row[9]
             component = Component.new(id, type)
             # link component and course
-            courses.each do |course|
-                next unless course.id == id
-                components = course.components
+            if courses.key?(id)
+                components = courses[id].components
                 has_components = false
                 components.each do |component1|
                     has_components = true if component.__eq__(component1)
