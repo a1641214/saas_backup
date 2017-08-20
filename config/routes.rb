@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
     resources :clash_requests
-    get 'demo'=> 'demo#index', :as => :demo
+    get 'demo' => 'demo#index', :as => :demo
     get '/' => 'clash_resolution#index', :as => :clash_resolution
     get 'display_student' => 'demo#display_student', :as => :display_student
     # Error pages
