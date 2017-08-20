@@ -25,6 +25,7 @@ FactoryGirl.define do
         day 'Monday'
         weeks [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
         component_code 'LE01'
+        capacity 200
         component
     end
 end

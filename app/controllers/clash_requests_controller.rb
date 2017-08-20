@@ -36,6 +36,7 @@ class ClashRequestsController < ApplicationController
     def edit
         @clash_request = ClashRequest.find params[:id]
         @student = @clash_request.student
+        all_sessions = Sessons.all_request_student_sessions(@clash_request, @student)
     end
 
     def update
