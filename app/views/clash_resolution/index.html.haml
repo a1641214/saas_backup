@@ -55,7 +55,7 @@
                         %li.label_down 
                             Degree Program:
                             %span{ :style => "color: red" } *
-                        %li=select_tag("clash_request[faculty]",options_from_collection_for_select(@courses, "name", "name"), :multiple =>false,:class => "select_box" )
+                        %li=select_tag("clash_request[faculty]",options_for_select(@degrees.collect.with_index.to_a), :multiple =>false,:class => "select_box" )
                 %ul.sub_title 
                     %li The Course you wish to enrol into
                 %div.input_boxes
@@ -73,7 +73,7 @@
                         %li.label_down 
                             Course:
                             %span{ :style => "color: red" } *
-                        %li=select_tag("clash_request[course]",options_for_select(@degrees.collect.with_index.to_a), :multiple =>false,:class => "select_box" )
+                        %li=select_tag("clash_request[course]",options_from_collection_for_select(@courses, "name", "name"), :multiple =>false,:class => "select_box" )                    
                     %ul
                         %li.label_down  
                             Course Name:
