@@ -20,6 +20,8 @@ class ClashRequestsController < ApplicationController
 
     def index
         @clash_requests = ClashRequest.all
+        # rails r ExampleMailer.receive(STDIN.read)
+        ExampleMailer.sample_email.deliver_now
     end
 
     def show

@@ -80,7 +80,7 @@ module ImportFile
     end
     
     class Student
-        def initialize(id, term, class_nbr,status,courses)
+        def initialize(id, term, class_nbr, status, courses)
             @id = id
             @term = term
             @class_nbr = class_nbr
@@ -132,7 +132,7 @@ module ImportFile
             courses = Array.new
             #append to array only if the student is enrolled
             if (status != 'D')
-                student = Student.new(id,term,class_nbr,status, courses)
+                student = Student.new(id, term, class_nbr, status, courses)
                 students.append(student)
             end    
         end    
@@ -200,12 +200,12 @@ module ImportFile
                         if (course_row.id == class_row.course_id)
                             student_row.courses.append(course_row)
                             break
-                        end    
+                        end
                     end
-                end    
+                end
             end
-        end    
-    end        
+        end   
+    end  
   
     # fill offering cataglog numbers from the offerings csv
     def self.fillCourseOfferings(filename, courses)
