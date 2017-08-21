@@ -10,6 +10,7 @@
 require 'csv'
 
 module ImportFile
+    # Temnplate classes
     class Course
         def initialize(id, name, catalog_number)
             @id = id
@@ -30,11 +31,8 @@ module ImportFile
 
         # get and assign value
         attr_reader :id
-
         attr_reader :name
-
         attr_reader :catalog_number
-
         attr_reader :components
 
         def assign_id(value)
@@ -66,7 +64,6 @@ module ImportFile
 
         # get and assign value
         attr_reader :id
-
         attr_reader :type
 
         def assign_id(value)
@@ -106,37 +103,6 @@ module ImportFile
         attr_reader :class_nbr
     end
 
-    # import students
-    def self.import_students(filename)
-        students = []
-        CSV.foreach(filename, headers: true) do |row|
-            id = row[0]
-            term = row[1]
-            class_nbr = row[2]
-            status = row[3]
-            courses = []
-            # append to array only if the student is enrolled
-            if status != 'D'
-                student = Student.new(id, term, class_nbr, status, courses)
-                students.append(student)
-            end
-        end
-        students
-    end
-
-    # import classes
-    def self.import_classes(filename)
-        classes = []
-        CSV.foreach(filename, headers: true) do |row|
-            term = row[0]
-            course_id = row[1]
-            class_nbr = row[3]
-            class1 = Class.new(term, course_id, class_nbr)
-            classes.append(class1)
-        end
-        classes
-    end
-
     class Session
         def initialize(time, day, weeks, length, component_code, course_id, capacity)
             @time = time
@@ -150,17 +116,11 @@ module ImportFile
 
         # get values
         attr_reader :time
-
         attr_reader :day
-
         attr_reader :weeks
-
         attr_reader :length
-
         attr_reader :component_code
-
         attr_reader :course_id
-
         attr_reader :capacity
     end
 
@@ -174,21 +134,6 @@ module ImportFile
             courses.append(course)
         end
         courses
-    end
-
-    # fill student.courses array
-    def self.fill_students_with_courses(students, classes, courses)
-        students.each do |student_row|
-            classes.each do |class_row|
-                next if student_row.class_nbr == class_row.class_nbr && student_row.term == class_row.term
-                courses.each do |course_row|
-                    if course_row.id == class_row.course_id
-                        student_row.courses.append(course_row)
-                        break
-                    end
-                end
-            end
-        end
     end
 
     # fill offering cataglog numbers from the offerings csv
@@ -262,5 +207,51 @@ module ImportFile
             end
         end
         sessions
+    end
+
+    # import students
+    def self.import_students(filename)
+        students = []
+        CSV.foreach(filename, headers: true) do |row|
+            id = row[0]
+            term = row[1]
+            class_nbr = row[2]
+            status = row[3]
+            courses = []
+            # append to array only if the student is enrolled
+            if status != 'D'
+                student = Student.new(id, term, class_nbr, status, courses)
+                students.append(student)
+            end
+        end
+        students
+    end
+
+    # import classes
+    def self.import_classes(filename)
+        classes = []
+        CSV.foreach(filename, headers: true) do |row|
+            term = row[0]
+            course_id = row[1]
+            class_nbr = row[3]
+            class1 = Class.new(term, course_id, class_nbr)
+            classes.append(class1)
+        end
+        classes
+    end
+
+    # fill student.courses array
+    def self.fill_students_with_courses(students, classes, courses)
+        students.each do |student_row|
+            classes.each do |class_row|
+                next if student_row.class_nbr == class_row.class_nbr && student_row.term == class_row.term
+                courses.each do |course_row|
+                    if course_row.id == class_row.course_id
+                        student_row.courses.append(course_row)
+                        break
+                    end
+                end
+            end
+        end
     end
 end
