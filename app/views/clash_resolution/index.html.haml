@@ -16,7 +16,7 @@
                     %span Please note:
                     if your Timetable clash enquiry relates to other courses outside the Faculty of Engineering Computer and Mathematical Sciences such as ENTREP, ECON, ACCTING, COMMERCE, PHYSICS, BIOLOGY, ARTS etc., please forward your enquiry to the relevant Faculty office.
                 %li For e.g PHYSICS course enquiry should be forwarded to the Faculty of Sciences and ENTREP course should be forwarded to the Faculty of the Professions.
-        = form_tag "/clash_resolution" do
+        = form_tag "/clash_resolution"  do
             %div.form
                 %h1 Timetable Clash Resolution Form
                 %ul.sub_title
@@ -92,7 +92,7 @@
                     %li 
                         Select to confirm you approve and understand:
                         %span{ :style => "color: red" } *
-                    %li=radio_button_tag "clash_request[argee]",false
+                    %li=radio_button_tag :agree,true,false
                 //=hidden_field_tag 'clash_request[date_submitted]', "Time should be recorded on controller side."
                 %div.submit_button
                     =submit_tag 'Submit'
