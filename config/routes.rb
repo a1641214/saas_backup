@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
     resources :clash_requests
+    root to: 'clash_requests#index', id: 1
+
     get 'demo' => 'demo#index', :as => :demo
     get 'display_student' => 'demo#display_student', :as => :display_student
     # Error pages
