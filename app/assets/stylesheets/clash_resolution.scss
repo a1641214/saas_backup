@@ -39,20 +39,10 @@ select {
 }
 
 .select_box:focus {
-  background-image:
-    linear-gradient(45deg, gray 50%, transparent 50%),
-    linear-gradient(135deg, transparent 50%, gray 50%),
+    background-image:
+    linear-gradient(45deg, transparent 50%, red 50%),
+    linear-gradient(135deg, red 50%, transparent 50%),
     linear-gradient(to right, #ccc, #ccc);
-    background-position:
-        285px 12px,
-        280px 12px,
-        270px;
-    background-size:
-        5px 5px,
-        5px 5px,
-        1px 1.5em;
-    background-repeat: no-repeat;
-    outline: 0;
 }
 
 

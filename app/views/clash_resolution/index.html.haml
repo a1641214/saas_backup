@@ -16,11 +16,12 @@
                     %span Please note:
                     if your Timetable clash enquiry relates to other courses outside the Faculty of Engineering Computer and Mathematical Sciences such as ENTREP, ECON, ACCTING, COMMERCE, PHYSICS, BIOLOGY, ARTS etc., please forward your enquiry to the relevant Faculty office.
                 %li For e.g PHYSICS course enquiry should be forwarded to the Faculty of Sciences and ENTREP course should be forwarded to the Faculty of the Professions.
-        = form_tag "/clash_requests" do
+        = form_tag "/clash_resolution" do
             %div.form
                 %h1 Timetable Clash Resolution Form
                 %ul.sub_title
                     %li Enrolment Request ID Number
+                    %li.form_error= flash[:form_error]
                     %li.extra_info 
                         %span{ :style => "color: red" } *
                         INDICATES REQUIRED INFORMATION 
@@ -63,12 +64,12 @@
                         %li.label_down 
                             Semester:
                             %span{ :style => "color: red" } *
-                        %li=select_tag("clash_request[semester]",options_for_select(@degrees.collect.with_index.to_a), :multiple =>false,:class => "select_box" )
+                        %li=select_tag("clash_request[semester]",options_for_select(@semester.collect.with_index.to_a), :multiple =>false,:class => "select_box" )
                     %ul
                         %li.label_down 
                             Subject Area:
                             %span{ :style => "color: red" } *
-                        %li=select_tag("clash_request[subject]",options_for_select(@degrees.collect.with_index.to_a), :multiple =>false,:class => "select_box" )
+                        %li=select_tag("clash_request[subject]",options_for_select(@subject.collect.with_index.to_a), :multiple =>false,:class => "select_box" )
                     %ul
                         %li.label_down 
                             Course:
@@ -80,7 +81,7 @@
                         %li= text_field :clash_request, :course_name,:value => session[:course_name], :class => "input_box"
                     %ul
                         %li Additional Comments(if required):
-                        %li=text_area_tag "clash_request[comments]",session[:comments],:class => "text_area"
+                        %li=text_area_tag "clash_request[comments]",session[:form_comments],:class => "text_area"
                 %div.approval
                     %h1 Approval and Understanding for Overriding Clashes/Overload for Enrolment
                     %ul
@@ -92,6 +93,6 @@
                         Select to confirm you approve and understand:
                         %span{ :style => "color: red" } *
                     %li=radio_button_tag "clash_request[argee]",false
-                =hidden_field_tag 'clash_request[date_submitted]', "Time should be recorded on controller side."
+                //=hidden_field_tag 'clash_request[date_submitted]', "Time should be recorded on controller side."
                 %div.submit_button
                     =submit_tag 'Submit'
