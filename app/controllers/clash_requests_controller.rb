@@ -57,4 +57,11 @@ class ClashRequestsController < ApplicationController
 
         redirect_to clash_request_path
     end
+
+    def confirmation; end
+
+    def send_email
+        ExampleMailer.sample_email.deliver_now
+        redirect_to clash_requests_path
+    end
 end
