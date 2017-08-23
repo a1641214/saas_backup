@@ -46,10 +46,10 @@ class DemoController < ApplicationController
     def display_student
         @path = 'db/csv/'
         @courses = ImportFile.import_courses(@path + 'CM_CRSE_CAT_ECMS-6383074.csv')
-        @students = ImportFile.import_students(@path + 'EN_BY_CLASS_ECMS-6384857.csv')
-        @classes = ImportFile.import_classes(@path + 'CLS_CMBND_SECT_FULL-6385825.csv')
         ImportFile.fill_course_offerings(@path + 'CM_CRSE_CAT_ECMS_OFFERINGS-6383075.csv', @courses)
         ImportFile.import_components_and_link(@path + 'CM_CRSE_CAT_ECMS_COMPONENTS-6383069.csv', @courses)
+        @students = ImportFile.import_students(@path + 'EN_BY_CLASS_ECMS-6384857.csv')
+        @classes = ImportFile.import_classes(@path + 'CLS_CMBND_SECT_FULL-6385825.csv')
         ImportFile.fill_students_with_courses(@students, @classes, @courses)
     end
 
