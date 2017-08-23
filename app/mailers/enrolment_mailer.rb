@@ -1,6 +1,6 @@
 class EnrolmentMailer < ApplicationMailer
     default from: 'enrolmentassistant@gmail.com'
-    def sample(id)
+    def enrolment_email(id)
         @student = Student.find(id)
         @courses = @student.courses
         mail(to: 'enrolmentassistant@gmail.com', subject: 'Enrolment Update')
