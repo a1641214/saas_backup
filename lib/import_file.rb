@@ -151,19 +151,19 @@ module ImportFile
 
     # read in all the components and link them to their courses
     def self.import_components_and_link(filename, courses)
-        components = nil
+        components = {}
         CSV.foreach(filename, headers: true) do |row|
             id = row[1]
             type = row[9]
             component = Component.new(id, type)
+            components[type] = component
             # link component and course
             if courses.key?(id)
-                components = courses[id].components
                 has_components = false
-                components.each do |component1|
-                    has_components = true if component.__eq__(component1)
+                courses[id].components.each do |comp|
+                    has_components = true if component.__eq__(comp)
                 end
-                components.append(component) unless has_components
+                courses[id].components.push(component) unless has_components
             end
         end
         components

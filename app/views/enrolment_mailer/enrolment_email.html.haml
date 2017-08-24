@@ -1,0 +1,28 @@
+%h2 Hello
+%p Below are details of your enrolment:
+%p Student ID :
+= @student.id
+%p Courses :
+%table.table.table-hover
+    %thead
+        %tr
+            %th Course ID
+            %th Course Name
+            %th Catalogue number
+            %th Components
+            %th Sessions
+    %tbody
+    - @courses.each do |course|
+        %tr
+            %th= course.id
+            %th= course.name
+            %th= course.catalogue_number
+            %th
+                - components = course.components
+                - components.each do |component|
+                    %p= component.class_type
+            %th        
+                - sessions = @student.sessions
+                - sessions.each do |session|
+                    %p= session.day + ", " + (session.time).to_s
+
