@@ -91,4 +91,91 @@ RSpec.describe Session, type: :model do
             expect(all_sessions_call).to eq(every_session_array)
         end
     end
+
+    describe 'week binary conversion method' do
+        it 'should take a 52 length array and turn it to a decimal number' do
+            new_array = [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0]
+            conversion = Session.week_conversion(new_array)
+            expect(conversion).to eq(1125899906847304)
+        end
+    end
+
+    describe 'day binary conversion method' do
+        it 'should take a string of the day and turn it to a decimal number' do
+            day_one = 'Monday'
+            day_two = 'Tuesday'
+            day_three = 'Wednesday'
+            day_four = 'Thursday'
+            day_five = 'Friday'
+            day_six = 'Saturday'
+            day_seven = 'Sunday'
+
+            conversion = Session.day_conversion(day_one)
+            expect(conversion).to eq(1)
+
+            conversion = Session.day_conversion(day_two)
+            expect(conversion).to eq(2)
+
+            conversion = Session.day_conversion(day_three)
+            expect(conversion).to eq(4)
+
+            conversion = Session.day_conversion(day_four)
+            expect(conversion).to eq(8)
+
+            conversion = Session.day_conversion(day_five)
+            expect(conversion).to eq(16)
+
+            conversion = Session.day_conversion(day_six)
+            expect(conversion).to eq(32)
+
+            conversion = Session.day_conversion(day_seven)
+            expect(conversion).to eq(64)
+        end
+    end
+
+    describe 'detect clashes method' do
+        it 'will return a map of a course, pointing to an array of all the weeks there are clashes in' do
+            course_one = FactoryGirl.create(:course, name: 'Soils and Landscapes I', catalogue_number: 'SOIL&WAT 1000WT')
+            course_two = FactoryGirl.create(:course, name: 'Engineering Software as Services I', catalogue_number: 'COMP SCI 3003')
+
+            comp1 = FactoryGirl.create(:component, class_type: 'Lecture')
+            comp2 = FactoryGirl.create(:component, class_type: 'Practical')
+
+            comp3 = FactoryGirl.create(:component, class_type: 'Lecture')
+            comp4 = FactoryGirl.create(:component, class_type: 'Workshop')
+
+            comp5 = FactoryGirl.create(:component, class_type: 'Lecture')
+            comp6 = FactoryGirl.create(:component, class_type: 'Workshop')
+
+            course_one.components << comp1 << comp2
+            course_two.components << comp3 << comp4
+            course_two.components << comp5 << comp6
+            uni_weeks = [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            s1 = FactoryGirl.create(:session, component_code: 'LE01', day: 'Wednesday', time: Time.new(2017, 1, 1, 10, 0, 0, '+09:30'), length: 1, component: comp1, weeks: uni_weeks)
+            s2 = FactoryGirl.create(:session, component_code: 'LE01', day: 'Wednesday', time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 1, component: comp1, weeks: uni_weeks)
+            FactoryGirl.create(:session, component_code: 'PR01', day: 'Friday', time: Time.new(2017, 1, 1, 2, 0, 0, '+09:30'), length: 2, component: comp2, weeks: uni_weeks)
+            s4 = FactoryGirl.create(:session, component_code: 'PR02', day: 'Thursday', time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 1, component: comp2, weeks: uni_weeks)
+
+            s5 = FactoryGirl.create(:session, component_code: 'LE01', day: 'Monday', time: Time.new(2017, 1, 1, 12, 0, 0, '+09:30'), length: 1, component: comp3, weeks: uni_weeks)
+            s6 = FactoryGirl.create(:session, component_code: 'LE01', day: 'Monday', time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 1, component: comp3, weeks: uni_weeks)
+            FactoryGirl.create(:session, component_code: 'WR01', day: 'Wednesday', time: Time.new(2017, 1, 1, 16, 0, 0, '+09:30'), length: 2, component: comp4, weeks: uni_weeks)
+            s8 = FactoryGirl.create(:session, component_code: 'WR02', day: 'Friday', time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 1, component: comp4, weeks: uni_weeks)
+
+            s9 = FactoryGirl.create(:session, component_code: 'LE01', day: 'Wednesday', time: Time.new(2017, 1, 1, 9, 0, 0, '+09:30'), length: 3, component: comp5, weeks: uni_weeks)
+            s10 = FactoryGirl.create(:session, component_code: 'WR01', day: 'Friday', time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 1, component: comp6, weeks: uni_weeks)
+
+            every_session_array = []
+            every_session_array << s1 << s2 << s4 << s5 << s6 << s8 << s9 << s10
+
+            clash_hash = Session.detect_clashes(every_session_array)
+            expect(clash_hash[s9]).to eq([1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+            expect(clash_hash[s10]).to eq([1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+            expect(clash_hash[s1]).to eq([1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+            expect(clash_hash[s2]).to eq([1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+            expect(clash_hash[s4]).to eq([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+            expect(clash_hash[s5]).to eq([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+            expect(clash_hash[s6]).to eq([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+            expect(clash_hash[s8]).to eq([1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        end
+    end
 end
