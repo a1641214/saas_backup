@@ -245,16 +245,4 @@ module ImportFile
         end
         classes
     end
-
-    # fill student.courses array
-    def self.fill_students_with_courses(students, classes, courses)
-        students.each do |student_row|
-            classes.each do |class_row|
-                next if student_row.class_nbr == class_row.class_nbr && student_row.term == class_row.term
-                if courses.key?(class_row.course_id)
-                    student_row.courses.append(class_row.course_id)
-                end
-            end
-        end
-    end
 end
