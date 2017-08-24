@@ -20,7 +20,8 @@ class ClashRequestsController < ApplicationController
 
     def index
         @clash_requests = ClashRequest.all
-        EnrolmentMailer.receive(STDIN.read)
+        message = Mail.new(params[:message])
+        EnrolmentMailer.receive(message)
         # ExampleMailer.sample_email.deliver_now
     end
 
