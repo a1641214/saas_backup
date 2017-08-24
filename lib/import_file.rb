@@ -10,7 +10,7 @@
 require 'csv'
 
 module ImportFile
-    # Temnplate classes
+    # Template classes
     class Course
         def initialize(id, name, catalog_number)
             @id = id
@@ -78,29 +78,31 @@ module ImportFile
     class Student
         def initialize(id, term, class_nbr, status, courses)
             @id = id
-            @term = term
-            @class_nbr = class_nbr
+            @terms = term
+            @class_numbers = class_nbr
             @status = status
             @courses = courses
         end
 
         attr_reader :id
-        attr_reader :term
-        attr_reader :class_nbr
+        attr_reader :terms
+        attr_reader :class_numbers
         attr_reader :status
         attr_reader :courses
     end
 
     class Class
-        def initialize(term, course_id, class_nbr)
+        def initialize(term, course_id, class_nbr, section)
             @term = term
             @course_id = course_id
             @class_nbr = class_nbr
+            @section = section
         end
 
         attr_reader :term
         attr_reader :course_id
         attr_reader :class_nbr
+        attr_reader :section
     end
 
     class Session
@@ -134,18 +136,6 @@ module ImportFile
             courses[id] = course
         end
         courses
-    end
-
-    # fill student.courses array
-    def self.fill_students_with_courses(students, classes, courses)
-        students.each do |student_row|
-            classes.each do |class_row|
-                next if student_row.class_nbr == class_row.class_nbr && student_row.term == class_row.term
-                if courses.key?(class_row.course_id)
-                    student_row.courses.append(course_row)
-                end
-            end
-        end
     end
 
     # fill offering cataglog numbers from the offerings csv
@@ -186,7 +176,7 @@ module ImportFile
         CSV.foreach(filename, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
             weeks_bin = row[13].to_i
             scheduled_time = row[16]
-            break if scheduled_time == '' || scheduled_time.nil?
+            next if scheduled_time == '' || scheduled_time.nil?
             days_bin = scheduled_time.scan(/[$]\d+[$]/)[1][1..-2].to_i
             time_bin = scheduled_time.scan(/[$]\d+[$]/)[2][1..-2].to_i
             days_array = (0...days_bin.bit_length).map { |n| days_bin[n] }
@@ -222,15 +212,21 @@ module ImportFile
     def self.import_students(filename)
         students = []
         CSV.foreach(filename, headers: true) do |row|
-            id = row[0]
-            term = row[1]
-            class_nbr = row[2]
+            id = row[0].to_i
+            term = row[1].to_i
+            class_nbr = row[2].to_i
             status = row[3]
-            courses = []
+            student = students.select { |s| s.id == id }
             # append to array only if the student is enrolled
             if status != 'D'
-                student = Student.new(id, term, class_nbr, status, courses)
-                students.append(student)
+                if student.count != 0
+                    student = student[0]
+                    student.class_numbers.push(class_nbr)
+                    student.terms.push(term)
+                else
+                    student = Student.new(id, [term], [class_nbr], status, [])
+                    students.append(student)
+                end
             end
         end
         students
@@ -240,12 +236,25 @@ module ImportFile
     def self.import_classes(filename)
         classes = []
         CSV.foreach(filename, headers: true) do |row|
-            term = row[0]
-            course_id = row[1]
-            class_nbr = row[3]
-            class1 = Class.new(term, course_id, class_nbr)
+            term = row[0].to_i
+            course_id = row[1].to_i
+            class_nbr = row[3].to_i
+            section = row[4]
+            class1 = Class.new(term, course_id, class_nbr, section)
             classes.append(class1)
         end
         classes
+    end
+
+    # fill student.courses array
+    def self.fill_students_with_courses(students, classes, courses)
+        students.each do |student_row|
+            classes.each do |class_row|
+                next if student_row.class_nbr == class_row.class_nbr && student_row.term == class_row.term
+                if courses.key?(class_row.course_id)
+                    student_row.courses.append(class_row.course_id)
+                end
+            end
+        end
     end
 end
