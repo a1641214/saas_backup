@@ -1,6 +1,6 @@
-class ExampleMailer < ApplicationMailer
+class EnrolmentMailer < ApplicationMailer
     default from: 'enrolmentassistant@gmail.com'
-    def sample_email
+    def enrolment_email(id)
         mail(to: 'enrolmentassistant@gmail.com', subject: 'Sample Email')
     end
 
