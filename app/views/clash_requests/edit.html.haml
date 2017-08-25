@@ -1,19 +1,54 @@
-%h1 Update Enrolment for #{@clash_request.student_id}
-= form_tag clash_request_path(@clash_request), :method => :put do
-    %h3= @clash_request.course.catalogue_number
-    - @clash_request.course.components.each do |component|
-        %div.form-group
-            = label :"#{@clash_request.course.catalogue_number}", :"#{component.class_type}", "#{component.class_type}"
-            = select :"#{@clash_request.course.catalogue_number}",
-                :"#{component.class_type}", @clash_request.course.alternate_sessions_clash_course(@clash_request, component),
-                {}, {:class => "form-control"}
-
-    - @student.courses.each do |course|
-        %h3= "#{course.catalogue_number}"
-        - course.components.each do |component|
-            %div.form-group
-                = label :"#{course.catalogue_number}", :"#{component.class_type}", "#{component.class_type}"
-                = select :"#{course.catalogue_number}", :"#{component.class_type}", course.alternate_sessions(@student,component),
-                {}, {:class => "form-control"}
-
-    = submit_tag 'Update Enrolment', {:class => "btn btn-default"}
+%h1 Resolve clash request for #{@clash_request.student_id}
+.cr-timetable.js-full
+  .timeline
+    %ul
+      - ((8 * 60)..(18 * 60)).step(30) do |n|
+        %li
+          %span #{format('%02d', n / 60)}:#{format('%02d', n % 60)}
+  .events
+    %ul
+      %li.events-group
+        .top-info
+          %span Monday
+        %ul
+          - @map_session_by_day['monday'].map do |item|
+            %li.session{ 'data-course' => 1, :style => 'top: 50px; height: 100px;' }
+              %a
+                %span.event-date #{item[:session].time.to_formatted_s(:time)} - #{(item[:session].time + item[:session].length.minutes).to_formatted_s(:time)}
+                %em.event-name= item[:session].component_code
+      %li.events-group
+        .top-info
+          %span Tuesday
+        %ul
+          - @map_session_by_day['tuesday'].map do |item|
+            %li.session{ 'data-course' => 1, :style => 'top: 50px; height: 100px;' }
+              %a
+                %span.event-date #{item[:session].time.to_formatted_s(:time)} - #{(item[:session].time + item[:session].length.minutes).to_formatted_s(:time)}
+                %em.event-name= item[:session].component_code
+      %li.events-group
+        .top-info
+          %span Wednesday
+        %ul
+          - @map_session_by_day['wednesday'].map do |item|
+            %li.session{ 'data-course' => 1, :style => 'top: 50px; height: 100px;' }
+              %a
+                %span.event-date #{item[:session].time.to_formatted_s(:time)} - #{(item[:session].time + item[:session].length.minutes).to_formatted_s(:time)}"
+                %em.event-name= item[:session].component_code
+      %li.events-group
+        .top-info
+          %span Thursday
+        %ul
+          - @map_session_by_day['thursday'].map do |item|
+            %li.session{ 'data-course' => 1, :style => 'top: 50px; height: 100px;' }
+              %a
+                %span.event-date #{item[:session].time.to_formatted_s(:time)} - #{(item[:session].time + item[:session].length.minutes).to_formatted_s(:time)}"
+                %em.event-name= item[:session].component_code
+      %li.events-group
+        .top-info
+          %span Friday
+        %ul
+          - @map_session_by_day['friday'].map do |item|
+            %li.session{ 'data-course' => 1, :style => 'top: 50px; height: 100px;' }
+              %a
+                %span.event-date #{item[:session].time.to_formatted_s(:time)} - #{(item[:session].time + item[:session].length.minutes).to_formatted_s(:time)}"
+                %em.event-name= item[:session].component_code
