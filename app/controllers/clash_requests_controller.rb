@@ -1,3 +1,4 @@
+require 'mail'
 class ClashRequestsController < ApplicationController
     def request_params
         params.require(:clash_request).permit(
@@ -20,9 +21,9 @@ class ClashRequestsController < ApplicationController
 
     def index
         @clash_requests = ClashRequest.all
-        message = Mail.new(params[:message])
-        EnrolmentMailer.receive(message)
-        # ExampleMailer.sample_email.deliver_now
+        mail = Mail.first
+        byebug
+        EnrolmentMailer.receive(mail)
     end
 
     def show

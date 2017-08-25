@@ -1,3 +1,6 @@
+require 'mail' 
+require 'openssl'
+
 Rails.application.configure do
     # Settings specified here will take precedence over those in config/application.rb.
 
@@ -54,4 +57,12 @@ Rails.application.configure do
         password: 'essgroup01',
         openssl_verify_mode: 'none'
     }
+    
+    Mail.defaults do
+    retriever_method :pop3, :address    => "pop.gmail.com",
+                            :port       => 995,
+                            :user_name  => 'enrolmentassistant@gmail.com',
+                            :password   => 'essgroup01',
+                            :enable_ssl => true
+    end
 end

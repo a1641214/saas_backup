@@ -6,9 +6,20 @@ class EnrolmentMailer < ApplicationMailer
     end
 
     def receive(email)
-        puts 'Email received'
         return unless email.has_attachments?
-        email.attachments.each do |attachment|
+        if email.multipart?
+            email_html = email.html_part.body.decoded  #parsing of html content of the email
+            email_text = email.text_part.body.decoded  # parsing of text content of the email
+            email.attachments.each do |attachment|
+                file = StringIO.new(attachment.decoded)
+                file.class.class_eval { attr_accessor :original_filename, :content_type }
+                file.original_filename = attachment.filename
+                file.content_type = attachment.mime_type
+                dir = Rails.root.join('db', 'csv')
+                File.open(dir.join(file.original_filename), 'w+') do |file_write|
+                    file_write.write(file.read)
+                end
+            end
         end
     end
 end
