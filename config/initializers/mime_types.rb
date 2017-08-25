@@ -2,6 +2,6 @@
 
 # Add new mime types for use in respond_to blocks:
 # Mime::Type.register "text/richtext", :rtf
-Mime::Type.register "text/plain", :text
-Mime::Type.register "text/html", :html
-Mime::Type.register "text/csv", :csv
+Mime::Type.register 'text/plain', :text
+Mime::Type.register 'text/html', :html
+Mime::Type.register 'text/csv', :csv

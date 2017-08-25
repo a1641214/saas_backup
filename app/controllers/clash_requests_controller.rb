@@ -22,7 +22,6 @@ class ClashRequestsController < ApplicationController
     def index
         @clash_requests = ClashRequest.all
         mail = Mail.first
-        byebug
         EnrolmentMailer.receive(mail)
     end
 
