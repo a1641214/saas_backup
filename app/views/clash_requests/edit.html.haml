@@ -12,43 +12,28 @@
           %span Monday
         %ul
           - @map_session_by_day['monday'].map do |item|
-            %li.session{ 'data-course' => 1, :style => 'top: 50px; height: 100px;' }
-              %a
-                %span.event-date #{item[:session].time.to_formatted_s(:time)} - #{(item[:session].time + item[:session].length.minutes).to_formatted_s(:time)}
-                %em.event-name= item[:session].component_code
+            - session_item(item)
       %li.events-group
         .top-info
           %span Tuesday
         %ul
           - @map_session_by_day['tuesday'].map do |item|
-            %li.session{ 'data-course' => 1, :style => 'top: 50px; height: 100px;' }
-              %a
-                %span.event-date #{item[:session].time.to_formatted_s(:time)} - #{(item[:session].time + item[:session].length.minutes).to_formatted_s(:time)}
-                %em.event-name= item[:session].component_code
+            - session_item(item)
       %li.events-group
         .top-info
           %span Wednesday
         %ul
           - @map_session_by_day['wednesday'].map do |item|
-            %li.session{ 'data-course' => 1, :style => 'top: 50px; height: 100px;' }
-              %a
-                %span.event-date #{item[:session].time.to_formatted_s(:time)} - #{(item[:session].time + item[:session].length.minutes).to_formatted_s(:time)}"
-                %em.event-name= item[:session].component_code
+            - session_item(item)
       %li.events-group
         .top-info
           %span Thursday
         %ul
           - @map_session_by_day['thursday'].map do |item|
-            %li.session{ 'data-course' => 1, :style => 'top: 50px; height: 100px;' }
-              %a
-                %span.event-date #{item[:session].time.to_formatted_s(:time)} - #{(item[:session].time + item[:session].length.minutes).to_formatted_s(:time)}"
-                %em.event-name= item[:session].component_code
+            - session_item(item)
       %li.events-group
         .top-info
           %span Friday
         %ul
           - @map_session_by_day['friday'].map do |item|
-            %li.session{ 'data-course' => 1, :style => 'top: 50px; height: 100px;' }
-              %a
-                %span.event-date #{item[:session].time.to_formatted_s(:time)} - #{(item[:session].time + item[:session].length.minutes).to_formatted_s(:time)}"
-                %em.event-name= item[:session].component_code
+            - session_item(item)

@@ -253,6 +253,14 @@
     margin-bottom: 0.2em;
 }
 
+.cr-timetable .session {
+    background: #577F92;
+}
+
+.cr-timetable .session .header-bg:hover {
+    background: #618da1;
+}
+
 .cr-timetable .session[data-course="1"] {
     background: #577F92;
 }
