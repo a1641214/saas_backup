@@ -48,7 +48,6 @@ Rails.application.configure do
     config.action_mailer.default charset: 'utf-8'
     config.action_mailer.delivery_method = :smtp
     # SMTP settings for gmail
-
     ActionMailer::Base.smtp_settings = {
         address: 'smtp.gmail.com',
         port: 587,
@@ -57,7 +56,6 @@ Rails.application.configure do
         password: 'essgroup01',
         openssl_verify_mode: 'none'
     }
-
     Mail.defaults do
         retriever_method :pop3, address: 'pop.gmail.com',
                                 port: 995,

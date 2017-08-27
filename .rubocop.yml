@@ -27,6 +27,14 @@ Metrics/AbcSize:
 Style/NumericLiterals:
     Enabled: false
 
+Metrics/ModuleLength:
+  CountComments: false
+  Max: 200
+
+Metrics/ParameterLists:
+  Max: 8
+  CountKeywordArgs: true
+
 # Ignore all
 AllCops:
   Exclude:

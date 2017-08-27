@@ -61,4 +61,11 @@ class ClashRequestsController < ApplicationController
 
         redirect_to clash_request_path
     end
+
+    def confirmation; end
+
+    def send_email
+        EnrolmentMailer.enrolment_email(1111111).deliver_now
+        redirect_to clash_requests_path
+    end
 end

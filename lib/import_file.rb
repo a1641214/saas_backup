@@ -10,7 +10,7 @@
 require 'csv'
 
 module ImportFile
-    
+    # Template classes
     class Course
         def initialize(id, name, catalog_number)
             @id = id
@@ -31,11 +31,8 @@ module ImportFile
 
         # get and assign value
         attr_reader :id
-
         attr_reader :name
-
         attr_reader :catalog_number
-
         attr_reader :components
 
         def assign_id(value)
@@ -67,7 +64,6 @@ module ImportFile
 
         # get and assign value
         attr_reader :id
-
         attr_reader :type
 
         def assign_id(value)
@@ -78,80 +74,37 @@ module ImportFile
             @type = value
         end
     end
-    
+
     class Student
         def initialize(id, term, class_nbr, status, courses)
             @id = id
-            @term = term
-            @class_nbr = class_nbr
+            @terms = term
+            @class_numbers = class_nbr
             @status = status
             @courses = courses
         end
-        def id 
-            @id
-        end
-        def term
-            @term
-        end
-        def class_nbr
-            @class_nbr
-        end
-        def status
-            @status
-        end  
-        def courses
-            @courses
-        end    
+
+        attr_reader :id
+        attr_reader :terms
+        attr_reader :class_numbers
+        attr_reader :status
+        attr_reader :courses
     end
-    
+
     class Class
-        def initialize(term, course_id, class_nbr)
+        def initialize(term, course_id, class_nbr, section)
             @term = term
             @course_id = course_id
             @class_nbr = class_nbr
+            @section = section
         end
-        def term
-            @term
-        end
-        def course_id
-            @course_id
-        end    
-        def class_nbr
-            @class_nbr
-        end
-    end    
-    
-    #import students 
-    def self.importStudents(filename)
-        students = Array.new 
-        CSV.foreach(filename, headers: true) do |row|
-            id = row[0]
-            term = row[1]
-            class_nbr = row[2]
-            status = row[3]
-            courses = Array.new
-            #append to array only if the student is enrolled
-            if (status != 'D')
-                student = Student.new(id, term, class_nbr, status, courses)
-                students.append(student)
-            end    
-        end    
-        return students
+
+        attr_reader :term
+        attr_reader :course_id
+        attr_reader :class_nbr
+        attr_reader :section
     end
-    
-    #import classes
-    def self.importClasses(filename)
-        classes = Array.new
-        CSV.foreach(filename, headers:true) do |row|
-            term = row[0]
-            course_id = row[1]
-            class_nbr = row[3]
-            class1 = Class.new(term, course_id,class_nbr)
-            classes.append(class1)
-        end
-        return classes
-    end    
- 
+
     class Session
         def initialize(time, day, weeks, length, component_code, course_id, capacity)
             @time = time
@@ -165,28 +118,22 @@ module ImportFile
 
         # get values
         attr_reader :time
-
         attr_reader :day
-
         attr_reader :weeks
-
         attr_reader :length
-
         attr_reader :component_code
-
         attr_reader :course_id
-
         attr_reader :capacity
     end
 
     # import courses from the course catalog
-    def self.importCourses(filename)
-        courses = []
+    def self.import_courses(filename)
+        courses = {}
         CSV.foreach(filename, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
             id = row[1]
             name = row[4]
             course = Course.new(id, name, nil)
-            courses.append(course)
+            courses[id] = course
         end
         courses
     end
@@ -207,35 +154,33 @@ module ImportFile
         end   
     end  
   
+
     # fill offering cataglog numbers from the offerings csv
-    def self.fillCourseOfferings(filename, courses)
+    def self.fill_course_offerings(filename, courses)
         CSV.foreach(filename, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
             id = row[1]
-            courses.each do |course|
-                if course.id == id
-                    # COMPSCI 3005
-                    course.assign_catalog_number(row[4] + ' ' + row[5])
-                end
+            if courses.key?(id)
+                # COMPSCI 3005
+                courses[id].assign_catalog_number(row[4] + ' ' + row[5])
             end
         end
     end
 
     # read in all the components and link them to their courses
-    def self.importComponentsAndLink(filename, courses)
-        components = nil
+    def self.import_components_and_link(filename, courses)
+        components = {}
         CSV.foreach(filename, headers: true) do |row|
             id = row[1]
             type = row[9]
             component = Component.new(id, type)
+            components[type] = component
             # link component and course
-            courses.each do |course|
-                next unless course.id == id
-                components = course.components
+            if courses.key?(id)
                 has_components = false
-                components.each do |component1|
-                    has_components = true if component.__eq__(component1)
+                courses[id].components.each do |comp|
+                    has_components = true if component.__eq__(comp)
                 end
-                components.append(component) unless has_components
+                courses[id].components.push(component) unless has_components
             end
         end
         components
@@ -248,7 +193,7 @@ module ImportFile
         CSV.foreach(filename, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
             weeks_bin = row[13].to_i
             scheduled_time = row[16]
-            break if scheduled_time == '' || scheduled_time.nil?
+            next if scheduled_time == '' || scheduled_time.nil?
             days_bin = scheduled_time.scan(/[$]\d+[$]/)[1][1..-2].to_i
             time_bin = scheduled_time.scan(/[$]\d+[$]/)[2][1..-2].to_i
             days_array = (0...days_bin.bit_length).map { |n| days_bin[n] }
@@ -278,5 +223,43 @@ module ImportFile
             end
         end
         sessions
+    end
+
+    # import students
+    def self.import_students(filename)
+        students = []
+        CSV.foreach(filename, headers: true) do |row|
+            id = row[0].to_i
+            term = row[1].to_i
+            class_nbr = row[2].to_i
+            status = row[3]
+            student = students.select { |s| s.id == id }
+            # append to array only if the student is enrolled
+            if status != 'D'
+                if student.count != 0
+                    student = student[0]
+                    student.class_numbers.push(class_nbr)
+                    student.terms.push(term)
+                else
+                    student = Student.new(id, [term], [class_nbr], status, [])
+                    students.append(student)
+                end
+            end
+        end
+        students
+    end
+
+    # import classes
+    def self.import_classes(filename)
+        classes = []
+        CSV.foreach(filename, headers: true) do |row|
+            term = row[0].to_i
+            course_id = row[1].to_i
+            class_nbr = row[3].to_i
+            section = row[4]
+            class1 = Class.new(term, course_id, class_nbr, section)
+            classes.append(class1)
+        end
+        classes
     end
 end

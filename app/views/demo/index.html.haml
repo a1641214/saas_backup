@@ -7,7 +7,7 @@
             %th Catalog_number
             %th Components
     %tbody
-    - @courses.each_with_index do |course,i|
+    - @courses.each do |_, course|
         %tr
             %th= course.id
             %th= course.name
