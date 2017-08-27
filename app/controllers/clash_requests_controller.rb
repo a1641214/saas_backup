@@ -23,6 +23,7 @@ class ClashRequestsController < ApplicationController
         @clash_requests = ClashRequest.all
         mail = Mail.first
         EnrolmentMailer.receive(mail)
+        DemoController.index
     end
 
     def show
