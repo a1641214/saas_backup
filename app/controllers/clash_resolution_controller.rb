@@ -1,6 +1,6 @@
 class ClashResolutionController < ApplicationController
     def form_params
-        params[:clash_resolution] = params[:resolution].merge(:date_submitted => Time.new.to_date)
+        params[:clash_resolution] = params[:clash_resolution].merge(:date_submitted => Time.new.to_date)
         params.require(:clash_resolution).permit(
             :enrolment_request_id,
             :faculty,
@@ -20,13 +20,14 @@ class ClashResolutionController < ApplicationController
     
     def create
         session[:clash_resolution] = params[:clash_resolution]
-        if ( ! params[:agree] )
-            flash[:form_error] = "You have to confirm you approve and understand all conditions."
+        error = ClashResolution.checkParameters(params)
+        if( error != nil )
+            flash[:form_error] = error
             redirect_to "/clash_resolution"
             return
         end
         @clash_request = ClashRequest.create!(form_params)
-        flash[:notice] = "Clash request from student #{params[:agree]} was created"
+        flash[:notice] = "Clash request from student #{params[:student_id]} was created"
         redirect_to clash_requests_path
     end
     

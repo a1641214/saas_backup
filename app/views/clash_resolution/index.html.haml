@@ -21,7 +21,7 @@
                 %h1 Timetable Clash Resolution Form
                 %ul.sub_title
                     %li Enrolment Request ID Number
-                    %li.form_error= flash[:form_error]
+                    %li.form_error=flash[:form_error]
                     %li.extra_info 
                         %span{ :style => "color: red" } *
                         INDICATES REQUIRED INFORMATION 
@@ -56,7 +56,7 @@
                         %li.label_down 
                             Degree Program:
                             %span{ :style => "color: red" } *
-                        %li=select_tag("clash_resolution[faculty]",options_for_select(@degrees.collect.with_index.to_a), :multiple =>false,:class => "select_box" )
+                        %li=select_tag("clash_resolution[faculty]",options_for_select(@degrees), :multiple =>false,:class => "select_box" )
                 %ul.sub_title 
                     %li The Course you wish to enrol into
                 %div.input_boxes

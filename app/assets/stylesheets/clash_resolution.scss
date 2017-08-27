@@ -124,14 +124,14 @@ select {
     color: #005A9C;
     font-size: 1.1em;
     font-weight: bold;
-    display: inline;
-    height: 100%;
+    display:inline-block;
 }
 
 .sub_title li.form_error{
     font-size: 10px;
     color: #F00;
-    margin-left: 100px;
+    width: 572px;
+    text-align: center;
 }
 
 .sub_title li.extra_info{
