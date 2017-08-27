@@ -1,6 +1,7 @@
 class ClashResolutionController < ApplicationController
     def form_params
-        params[:clash_resolution] = params[:clash_resolution].merge(:date_submitted => Time.new.to_date)
+        time = Time.now.getlocal('+09:30')
+        params[:clash_resolution] = params[:clash_resolution].merge(:date_submitted => time.to_date)
         params.require(:clash_resolution).permit(
             :enrolment_request_id,
             :faculty,
