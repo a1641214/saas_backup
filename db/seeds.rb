@@ -42,7 +42,8 @@ when 'development', 'test'
         day: 'Monday',
         weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         component_code: 'LE01',
-        component: comp1
+        component: comp1,
+        capacity: 50
     )
     s2 = Session.create(
         time: Time.new(2017, 1, 1, 10, 0, 0, '+09:30'),
@@ -50,7 +51,8 @@ when 'development', 'test'
         day: 'Wednesday',
         weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         component_code: 'LE01',
-        component: comp1
+        component: comp1,
+        capacity: 50
     )
     s3 = Session.create(
         time: Time.new(2017, 1, 1, 12, 0, 0, '+09:30'),
@@ -58,7 +60,8 @@ when 'development', 'test'
         day: 'Monday',
         weeks: [2, 4, 6, 8, 10, 12],
         component_code: 'TU01',
-        component: comp2
+        component: comp2,
+        capacity: 50
     )
     Session.create(
         time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'),
@@ -66,7 +69,8 @@ when 'development', 'test'
         day: 'Monday',
         weeks: [1, 3, 5, 7, 9, 11],
         component_code: 'TU02',
-        component: comp2
+        component: comp2,
+        capacity: 50
     )
     s5 = Session.create(
         time: Time.new(2017, 1, 1, 9, 0, 0, '+09:30'),
@@ -74,7 +78,8 @@ when 'development', 'test'
         day: 'Monday',
         weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         component_code: 'LE01',
-        component: comp3
+        component: comp3,
+        capacity: 50
     )
     s6 = Session.create(
         time: Time.new(2017, 1, 1, 14, 0, 0, '+09:30'),
@@ -82,7 +87,8 @@ when 'development', 'test'
         day: 'Tuesday',
         weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         component_code: 'WR01',
-        component: comp4
+        component: comp4,
+        capacity: 50
     )
     s7 = Session.create(
         time: Time.new(2017, 1, 1, 10, 0, 0, '+09:30'),
@@ -90,7 +96,8 @@ when 'development', 'test'
         day: 'Monday',
         weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         component_code: 'LE01',
-        component: comp5
+        component: comp5,
+        capacity: 50
     )
     s8 = Session.create(
         time: Time.new(2017, 1, 1, 15, 0, 0, '+09:30'),
@@ -98,7 +105,8 @@ when 'development', 'test'
         day: 'Wednesday',
         weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         component_code: 'LE01',
-        component: comp5
+        component: comp5,
+        capacity: 50
     )
     Session.create(
         time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'),
@@ -106,7 +114,8 @@ when 'development', 'test'
         day: 'Friday',
         weeks: [2, 4, 6, 8, 10, 12],
         component_code: 'WR01',
-        component: comp6
+        component: comp6,
+        capacity: 50
     )
     s10 = Session.create(
         time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'),
@@ -114,7 +123,8 @@ when 'development', 'test'
         day: 'Thursday',
         weeks: [1, 3, 5, 7, 9, 11],
         component_code: 'WR02',
-        component: comp6
+        component: comp6,
+        capacity: 50
     )
     s11 = Session.create(
         time: Time.new(2017, 1, 1, 9, 0, 0, '+09:30'),
@@ -122,7 +132,8 @@ when 'development', 'test'
         day: 'Wednesday',
         weeks: [2, 4, 6, 8, 10, 12],
         component_code: 'PR01',
-        component: comp7
+        component: comp7,
+        capacity: 50
     )
     s12 = Session.create(
         time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'),
@@ -130,7 +141,8 @@ when 'development', 'test'
         day: 'Wednesday',
         weeks: [2, 4, 6, 8, 10, 12],
         component_code: 'PR02',
-        component: comp7
+        component: comp7,
+        capacity: 50
     )
     s13 = Session.create(
         time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'),
@@ -138,7 +150,8 @@ when 'development', 'test'
         day: 'Monday',
         weeks: [2, 4, 6, 8, 10, 12],
         component_code: 'LE01',
-        component: comp8
+        component: comp8,
+        capacity: 50
     )
     Session.create(
         time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'),
@@ -146,7 +159,8 @@ when 'development', 'test'
         day: 'Monday',
         weeks: [2, 4, 6, 8, 10, 12],
         component_code: 'PR01',
-        component: comp9
+        component: comp9,
+        capacity: 50
     )
     s15 = Session.create(
         time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'),
@@ -154,7 +168,8 @@ when 'development', 'test'
         day: 'Monday',
         weeks: [2, 4, 6, 8, 10, 12],
         component_code: 'PR02',
-        component: comp9
+        component: comp9,
+        capacity: 50
     )
 
     # create students
