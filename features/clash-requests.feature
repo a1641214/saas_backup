@@ -60,3 +60,17 @@ Feature: Clash Requests (#16)
         Given typical usage and data 
         And I am on the view clash request page for id "5"
         Then I should see "Lecture" as "LE01" and "LE01" for the course "COMP SCI 3003"
+        Then I should see "Tutorial" as "TU02" and "TU02" for the course "COMP SCI 3003"
+        Then I should see "Lecture" as "LE01" and "LE01" for the course "SOIL&WAT 1000WT"
+        Then I should see "Practical" as "PR02" and "PR02" for the course "SOIL&WAT 1000WT"
+
+    Scenario: Seeing the current status of a clash with changes (#78)
+        Given typical usage and data 
+        And I am on the edit clash request page for id "5"
+        When I select "PR01" for the course "SOIL&WAT 1000WT" for the "Practical"
+        And  I select "TU01" for the course "COMP SCI 3003" for the "Tutorial"
+        And I press "Update Enrolment"
+        Then I should see "Lecture" as "LE01" and "LE01" for the course "COMP SCI 3003"
+        Then I should see "Tutorial" as "TU02" and "TU01" for the course "COMP SCI 3003"
+        Then I should see "Lecture" as "LE01" and "LE01" for the course "SOIL&WAT 1000WT"
+        Then I should see "Practical" as "PR02" and "PR01" for the course "SOIL&WAT 1000WT"
