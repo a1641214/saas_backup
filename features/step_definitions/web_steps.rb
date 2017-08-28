@@ -49,15 +49,15 @@ Given /^typical usage and data$/ do
     # Clash Course
     course_clash = FactoryGirl.create(:course, catalogue_number: 'SOIL&WAT 1000WT', name: 'Soil and Water')
     comp1_clash = FactoryGirl.create(:component, class_type: 'Lecture')
-    comp2_clash = FactoryGirl.create(:component, class_type: 'Tutorial')
+    comp2_clash = FactoryGirl.create(:component, class_type: 'Practical')
     course_clash.components << comp1_clash
     course_clash.components << comp2_clash
 
     # Clashed Sessions
     s1_c = FactoryGirl.create(:session, component_code: 'LE01', component: comp1_clash)
     s2_c = FactoryGirl.create(:session, component_code: 'LE01', day: 'Wednesday', component: comp1_clash)
-    s3_c = FactoryGirl.create(:session, component_code: 'TU01', component: comp2_clash)
-    s4_c = FactoryGirl.create(:session, component_code: 'TU02', component: comp2_clash)
+    s3_c = FactoryGirl.create(:session, component_code: 'PR01', component: comp2_clash)
+    s4_c = FactoryGirl.create(:session, component_code: 'PR02', component: comp2_clash)
 
     # Student
     student_one = create(:student, id: 1680000)
@@ -68,7 +68,7 @@ Given /^typical usage and data$/ do
     # Clash Request
     clash_request = create(:clash_request)
     clash_request.course = course_clash
-    clash_request.sessions << s1_c << s2_c << s3_c
+    clash_request.sessions << s1_c << s2_c << s4_c
     clash_request.student = student_one
 
     clash_request.save!

@@ -36,13 +36,7 @@ Feature: Clash Requests (#16)
         And I should see "COMP SCI 3004"
 
     Scenario: Seeing already enrolled classes in updating a request (#45)
-        Given there is a student with id "1680000"
-        And there is a clash request with the following:
-            | id         | 5         |
-            | student_id | 1680000   |
-            | faculty    | ECMS      |
-        And clash request "5" is resolving the course "SOIL&WAT 1000WT" with default sessions and components
-        And student "1680000" is enrolled in sessions "LE01" of type "Lecture" and "TU02" of type "Tutorial", with "TU01" also offered for "COMP SCI 3003"
+        Given typical usage and data
         And I am on the view clash request page for id "5"
         When I follow "Edit"
         Then I should see "TU02" selected for the course "COMP SCI 3003" for the "Tutorial"
