@@ -27,6 +27,5 @@ FactoryGirl.define do
         component_code 'LE01'
         capacity 200
         component
-        capacity 10
     end
 end
