@@ -47,6 +47,8 @@ class ClashRequestsController < ApplicationController
     def edit
         @clash_request = ClashRequest.find params[:id]
         @student = @clash_request.student
+        all_sessions = Session.all_request_student_sessions(@clash_request, @student)
+        @clash_hash = Session.detect_clashes(all_sessions)
     end
 
     def update
@@ -67,5 +69,12 @@ class ClashRequestsController < ApplicationController
         @clash_request.update_attributes!(sessions: @clash_request.sessions)
 
         redirect_to clash_request_path
+    end
+
+    def confirmation; end
+
+    def send_email
+        EnrolmentMailer.enrolment_email(1111111).deliver_now
+        redirect_to clash_requests_path
     end
 end
