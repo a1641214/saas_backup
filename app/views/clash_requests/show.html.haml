@@ -1,20 +1,67 @@
 %h1 Enrolment request ##{@clash_request.id} #{@clash_request.inactive ? '(inactive)' : ''}
 
 .row
-    .col-md-4
-        %h3 Student's ID
+    .col-md-12
+        = link_to 'Back', clash_requests_path, class: 'btn btn-default'
+
+.row
+    .col-md-6
+        %h4 Student ID
         = @clash_request.student.id
 
-        %h3 Date submitted
+        %h4 Date submitted
         = @clash_request.date_submitted
 
-        %h3 Faculty
+        %h4 Faculty
         = @clash_request.faculty
 
-        %h3 Comments
+        %h4 Comments
         = @clash_request.comments
-    %br
-    = link_to 'Edit', edit_clash_request_path(@clash_request), class: 'btn btn-primary'
-    = link_to "Make #{@clash_request.inactive ? 'active' : 'inactive'}", clash_request_path(@clash_request), method: :delete, class: 'btn btn-primary'
-    = link_to 'Back', clash_requests_path, class: 'btn btn-default'
+
+    .col-md-6
+        = link_to 'Edit', edit_clash_request_path(@clash_request), class: 'btn btn-primary'
+        = link_to "Make #{@clash_request.inactive ? 'Active' : 'Inactive'}", clash_request_path(@clash_request), method: :delete, class: 'btn btn-danger'
+        
+
+%hr
+.row
+    .col-md-12
+        %table.table.table-hover.table-fixed-header
+            %tbody
+                %tr
+                    %th{:colspan => 3}
+                        %h3 Original Enrolment
+                    %th{:colspan => 3}
+                        %h3 Proposed Enrolment
+                - @clash_request.student.courses.each do |course|
+                    %tr
+                        %td{:colspan => 6}
+                            %h4= "#{course.catalogue_number} | #{course.name}"
+                    - course.components.each do |component|
+                        %tr{:class => ("warning" unless ((@clash_request.student.sessions & component.sessions).first.id == (@old_student_sessions & component.sessions).first.id))}
+                            %div{:id => "#{course.catalogue_number.tr(' ','_').tr('&','_')}_#{component.class_type}" }
+                                %td.cell_indent= component.class_type
+                                %td= (@old_student_sessions & component.sessions).first.component_code
+                                %td= (@old_student_sessions & component.sessions).first.id
+                                %td.cell_indent= component.class_type
+                                %td= (@clash_request.student.sessions & component.sessions).first.component_code
+                                %td= (@clash_request.student.sessions & component.sessions).first.id
+                            
+                
+                %tr
+                    %th{:colspan => 6}
+                        %h3 Requested Class
+                %tr
+                    %td{:colspan => 6}
+                        %h4= "#{@clash_request.course.catalogue_number} | #{@clash_request.course.name}"
+
+                - @clash_request.course.components.each do |component|
+                    %tr{:class => ("warning" unless (@clash_request.sessions & component.sessions).first.id == (@old_clash_sessions & component.sessions).first.id)}
+                        %div{:id => "#{@clash_request.course.catalogue_number.tr(' ','_').tr('&','_')}_#{component.class_type}" }
+                            %td.cell_indent= component.class_type
+                            %td= (@clash_request.sessions & component.sessions).first.component_code
+                            %td= (@clash_request.sessions & component.sessions).first.id
+                            %td.cell_indent= component.class_type
+                            %td= (@old_clash_sessions & component.sessions).first.component_code
+                            %td= (@old_clash_sessions & component.sessions).first.id
 

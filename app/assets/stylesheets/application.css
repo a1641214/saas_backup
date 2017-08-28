@@ -1,3 +1,7 @@
 /*
     *= require bootstrap.scss
 */
+
+#style-override .cell_indent {
+    padding-left: 40px;
+}
