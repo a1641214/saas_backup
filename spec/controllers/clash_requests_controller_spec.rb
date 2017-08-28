@@ -60,7 +60,7 @@ RSpec.describe ClashRequestsController, type: :controller do
             student_one.save
             clash_one.save
 
-            get :edit, id: 1
+            get :edit, id: 5
         end
     end
 
@@ -109,7 +109,7 @@ RSpec.describe ClashRequestsController, type: :controller do
             student_one.save
             clash_one.save
 
-            put :update, :id => 1, 'SOIL&WAT 1000WT' => { 'Lecture' => 'LE01', 'Practical' => 'PR02' }, 'COMP SCI 3003' => { 'Lecture' => 'LE01', 'Tutorial' => 'TU02' }, 'COMP SCI 3004' => { 'Lecture' => 'LE01', 'Workshop' => 'WR01' }
+            put :update, :id => 5, 'SOIL&WAT 1000WT' => { 'Lecture' => 'LE01', 'Practical' => 'PR02' }, 'COMP SCI 3003' => { 'Lecture' => 'LE01', 'Tutorial' => 'TU02' }, 'COMP SCI 3004' => { 'Lecture' => 'LE01', 'Workshop' => 'WR01' }
             updated_student = Student.find(student_one.id)
             updated_clash = ClashRequest.find(clash_one.id)
             arr = []
