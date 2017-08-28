@@ -32,10 +32,10 @@ class ClashRequest < ActiveRecord::Base
         ClashRequest.rebuild_preserve(id)
     end
 
-    def self.rebuild_preserve rID
+    def self.rebuild_preserve(r_id)
         # For each preserved state, only update if there is something to update
         # There should almost always be something, but mainly useful in development
-        clash_request = ClashRequest.find(rID)
+        clash_request = ClashRequest.find(r_id)
 
         clash_request.update(preserve_clash_sessions: clash_request.sessions.ids) if clash_request.sessions.ids
         clash_request.update(preserve_student_sessions: clash_request.student.sessions.ids) if clash_request.student

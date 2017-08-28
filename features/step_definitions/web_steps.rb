@@ -43,7 +43,7 @@ Given /^typical usage and data$/ do
     # Enroled Sessions
     s1_e = FactoryGirl.create(:session, component_code: 'LE01', component: comp1_enrol)
     s2_e = FactoryGirl.create(:session, component_code: 'LE01', day: 'Wednesday', component: comp1_enrol)
-    s3_e = FactoryGirl.create(:session, component_code: 'TU01', component: comp2_enrol)
+    FactoryGirl.create(:session, component_code: 'TU01', component: comp2_enrol)
     s4_e = FactoryGirl.create(:session, component_code: 'TU02', component: comp2_enrol)
 
     # Clash Course
@@ -56,7 +56,7 @@ Given /^typical usage and data$/ do
     # Clashed Sessions
     s1_c = FactoryGirl.create(:session, component_code: 'LE01', component: comp1_clash)
     s2_c = FactoryGirl.create(:session, component_code: 'LE01', day: 'Wednesday', component: comp1_clash)
-    s3_c = FactoryGirl.create(:session, component_code: 'PR01', component: comp2_clash)
+    FactoryGirl.create(:session, component_code: 'PR01', component: comp2_clash)
     s4_c = FactoryGirl.create(:session, component_code: 'PR02', component: comp2_clash)
 
     # Student
@@ -73,7 +73,6 @@ Given /^typical usage and data$/ do
 
     clash_request.save!
     ClashRequest.rebuild_preserve(clash_request.id)
-
 end
 
 Given(/^student "([^"]*)" is enrolled in courses "([^"]*)" and "([^"]*)"$/) do |in_id, course1, course2|
@@ -265,7 +264,7 @@ When(/^I select "([^"]*)" for the course "([^"]*)" for the "([^"]*)"$/) do |comp
 end
 
 Then(/^I should see "([^"]*)" as "([^"]*)" and "([^"]*)" for the course "([^"]*)"$/) do |class_type, org_comp, prop_comp, course|
-    css_id = '#' + course.tr(' ','_').tr('&','_') + '_' + class_type
+    css_id = '#' + course.tr(' ', '_').tr('&', '_') + '_' + class_type
     expect(find(css_id)).to have_content(org_comp)
     expect(find(css_id)).to have_content(prop_comp)
 end
