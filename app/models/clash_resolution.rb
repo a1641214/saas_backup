@@ -1,52 +1,45 @@
 class ClashResolution < ActiveRecord::Base
-    def self.getSessionData(current_session)
-        if(current_session)
-            return current_session
-        end
+    def self.get_session_data(current_session)
+        return current_session if current_session
         # create an empty hash and return
-        result = Hash.new();
-        hash = Hash.new();
-        result["clash_resolution"] = hash
-        return result
+        result = {}
+        hash = {}
+        result['clash_resolution'] = hash
+        result
     end
-    
-    def self.isValid(txt)
+
+    def self.valid?(txt)
         txt.each_byte do |i|
-            if( !(47 < i and i < 58) )
-                return false
-            end
+            return false unless i > 47 && i < 58
         end
-        return true
+        true
     end
 
-    def self.isStudentExist(student_id)
-        student = Student.where(:id => student_id)
-        if(student.size == 0)
-            return false
-        end
-        return true
+    def self.student_exist?(student_id)
+        student = Student.where(id: student_id)
+        return false if student.empty?
+        true
     end
 
-    
-    def self.checkParameters(parameters)
-        form =  parameters[:clash_resolution]
-        if ( ! parameters[:agree] )
-            return "You have to confirm you approve and understand all conditions."
+    def self.check_parameters(parameters)
+        form = parameters[:clash_resolution]
+        unless parameters[:agree]
+            return 'You have to confirm you approve and understand all conditions.'
         end
-        if( form[:name].length == 0 || form[:student_id] == 0 || 
-            form[:email].length == 0 || form[:enrolment_request_id].length == 0
-        )
-            return "Please fill in all required information."
+        if form[:name].empty? || form[:student_id].empty? ||
+           form[:email].empty? || form[:enrolment_request_id].empty?
+
+            return 'Please fill in all required information.'
         end
-        if ( !isValid(form[:enrolment_request_id]) ||  form[:enrolment_request_id].length > 9 )
-            return "Invalid enrolment request id"
+        if !valid?(form[:enrolment_request_id]) || form[:enrolment_request_id].length > 9
+            return 'Invalid enrolment request id'
         end
-        if ( !isValid(form[:student_id]) ||  form[:student_id].length > 9 )
-            return "Invalid student id."
+        if !valid?(form[:student_id]) || form[:student_id].length > 9
+            return 'Invalid student id.'
         end
-        if( !isStudentExist(form[:student_id]))
-            return "Student id does not exist on database."
+        unless student_exist?(form[:student_id])
+            return 'Student id does not exist on database.'
         end
-        return nil
+        nil
     end
 end

@@ -1,7 +1,7 @@
 class ClashResolutionController < ApplicationController
     def form_params
-        time = Time.now.getlocal('+09:30')
-        params[:clash_resolution] = params[:clash_resolution].merge(:date_submitted => time.to_date)
+        time = Time.zone.now
+        params[:clash_resolution] = params[:clash_resolution].merge(date_submitted: time.to_date)
         params.require(:clash_resolution).permit(
             :enrolment_request_id,
             :faculty,
@@ -12,24 +12,24 @@ class ClashResolutionController < ApplicationController
     end
 
     def index
-        session[:clash_resolution] = ClashResolution.getSessionData(session[:clash_resolution])
-        @degrees = ["Software Engineering","Finance","Electronic Electricity","Telecommunication","Accounting"]
-        @semester = ["Summer semester, 2017","Semester2, 2017"]
-        @subject = ["COMP","MATH","C&ENVENG"]
+        # to do: add degrees, semester, subject attribute in database.
+        session[:clash_resolution] = ClashResolution.get_session_data(session[:clash_resolution])
+        @degrees = ['Software Engineering', 'Finance', 'Electronic Electricity', 'Telecommunication', 'Accounting']
+        @semester = ['Summer semester, 2017', 'Semester2, 2017']
+        @subject = ['COMP', 'MATH', 'C&ENVENG']
         @courses = Course.all
     end
-    
+
     def create
         session[:clash_resolution] = params[:clash_resolution]
-        error = ClashResolution.checkParameters(params)
-        if( error != nil )
+        error = ClashResolution.check_parameters(params)
+        unless error.nil?
             flash[:form_error] = error
-            redirect_to "/clash_resolution"
+            redirect_to '/clash_resolution'
             return
         end
         @clash_request = ClashRequest.create!(form_params)
         flash[:notice] = "Clash request from student #{params[:student_id]} was created"
         redirect_to clash_requests_path
     end
-    
 end
