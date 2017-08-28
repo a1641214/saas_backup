@@ -8,7 +8,6 @@ class ClashRequest < ActiveRecord::Base
     # Serialize to use as integer array
     serialize :preserve_clash_sessions
     serialize :preserve_student_sessions
-    serialize :preserve_student_courses
 
     def current_clash_session(taking_component)
         offered_session = sessions.where(component: taking_component).first
@@ -30,18 +29,18 @@ class ClashRequest < ActiveRecord::Base
     end
 
     def preserve_initial
+        ClashRequest.rebuild_preserve(id)
+    end
+
+    def self.rebuild_preserve rID
         # For each preserved state, only update if there is something to update
         # There should almost always be something, but mainly useful in development
+        clash_request = ClashRequest.find(rID)
 
-        update_attribute(:preserve_clash_sessions, sessions.ids) if sessions
-        update_attribute(:preserve_clash_course, course.id) if course
+        clash_request.update(preserve_clash_sessions: clash_request.sessions.ids) if clash_request.sessions.ids
+        clash_request.update(preserve_student_sessions: clash_request.student.sessions.ids) if clash_request.student
 
-        if student
-            update_attribute(:preserve_student_sessions, student.sessions.ids)
-            update_attribute(:preserve_student_courses, student.courses.ids)
-        end
-
-        # Commit the changes
-        save
+        # Commit changes
+        clash_request.save
     end
 end
