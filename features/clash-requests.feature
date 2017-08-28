@@ -45,13 +45,7 @@ Feature: Clash Requests (#16)
         Then I should see "PR02" selected for the course "SOIL&WAT 1000WT" for the "Practical"
 
     Scenario: Updating a request and seeing the changes (#45)
-        Given there is a student with id "1680000"
-        And there is a clash request with the following:
-            | id         | 5         |
-            | student_id | 1680000   |
-            | faculty    | ECMS      |
-        And clash request "5" is resolving the course "SOIL&WAT 1000WT" with default sessions and components
-        And student "1680000" is enrolled in sessions "LE01" of type "Lecture" and "TU02" of type "Tutorial", with "TU01" also offered for "COMP SCI 3003"
+        Given typical usage and data 
         And I am on the edit clash request page for id "5"
         When I select "PR01" for the course "SOIL&WAT 1000WT" for the "Practical"
         And  I select "TU01" for the course "COMP SCI 3003" for the "Tutorial"
@@ -61,3 +55,8 @@ Feature: Clash Requests (#16)
         Then I should see "LE01" selected for the course "COMP SCI 3003" for the "Lecture"
         Then I should see "LE01" selected for the course "SOIL&WAT 1000WT" for the "Lecture"
         Then I should see "PR01" selected for the course "SOIL&WAT 1000WT" for the "Practical"
+
+    Scenario: Seeing the current status of a clash without changes (#78)
+        Given typical usage and data 
+        And I am on the view clash request page for id "5"
+        Then I should see "Lecture" as "LE01" and "LE01" for the course "COMP SCI 3003"

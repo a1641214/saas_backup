@@ -264,6 +264,12 @@ When(/^I select "([^"]*)" for the course "([^"]*)" for the "([^"]*)"$/) do |comp
     select comp_code, from: under_course + '_' + class_type
 end
 
+Then(/^I should see "([^"]*)" as "([^"]*)" and "([^"]*)" for the course "([^"]*)"$/) do |class_type, org_comp, prop_comp, course|
+    css_id = '#' + course.tr(' ','_') + '_' + class_type
+    expect(find(css_id)).to have_content(org_comp)
+    expect(find(css_id)).to have_content(prop_comp)
+end
+
 Then /^(?:|I )should not see \/([^\/]*)\/$/ do |regexp|
     regexp = Regexp.new(regexp)
 
