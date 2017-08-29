@@ -1,5 +1,3 @@
-require 'active_support/core_ext/time'
-
 class ClashResolutionController < ApplicationController
     def form_params
         Time.zone = 'Adelaide'
