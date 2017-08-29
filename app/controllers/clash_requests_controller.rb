@@ -1,3 +1,4 @@
+require 'mail'
 class ClashRequestsController < ApplicationController
     def request_params
         params.require(:clash_request).permit(
@@ -20,6 +21,10 @@ class ClashRequestsController < ApplicationController
 
     def index
         @clash_requests = ClashRequest.all
+        mail = Mail.first
+        return if mail.is_a? Array
+        EnrolmentMailer.receive(mail)
+        DemoController.index
     end
 
     def show
