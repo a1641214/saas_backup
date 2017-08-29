@@ -76,4 +76,26 @@ Rails.application.configure do
 
     # Do not dump schema after migrations.
     config.active_record.dump_schema_after_migration = false
+
+    config.action_mailer.default_url_options = { host: 'localhost:3000' }
+    config.action_mailer.perform_deliveries = true
+    config.action_mailer.raise_delivery_errors = true
+    config.action_mailer.default charset: 'utf-8'
+    config.action_mailer.delivery_method = :smtp
+    # SMTP settings for gmail
+    ActionMailer::Base.smtp_settings = {
+        address: 'smtp.gmail.com',
+        port: 587,
+        authentication: 'plain',
+        user_name: 'enrolmentassistant@gmail.com',
+        password: 'essgroup01',
+        openssl_verify_mode: 'none'
+    }
+    Mail.defaults do
+        retriever_method :pop3, address: 'pop.gmail.com',
+                                port: 995,
+                                user_name: 'enrolmentassistant@gmail.com',
+                                password: 'essgroup01',
+                                enable_ssl: true
+    end
 end
