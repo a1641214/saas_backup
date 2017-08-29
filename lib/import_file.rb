@@ -139,7 +139,7 @@ module ImportFile
     end
 
     # fill student.courses array
-    def self.fill_students_wit_courses(students, classes, courses)
+    def self.fill_students_with_courses(students, classes, courses)
         students.each do |student_row|
             classes.each do |class_row|
                 next unless student_row.class_nbr == class_row.class_nbr && student_row.term == class_row.term
