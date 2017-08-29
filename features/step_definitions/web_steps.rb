@@ -66,7 +66,7 @@ Given /^typical usage and data$/ do
     student_one.save!
 
     # Clash Request
-    clash_request = create(:clash_request)
+    clash_request = create(:clash_request, id: 5)
     clash_request.course = course_clash
     clash_request.sessions << s1_c << s2_c << s4_c
     clash_request.student = student_one

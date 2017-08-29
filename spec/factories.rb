@@ -1,6 +1,5 @@
 FactoryGirl.define do
     factory :clash_request do
-        id 5
         studentId 1680000
         comments 'test'
         enrolment_request_id 1
