@@ -13,7 +13,7 @@
     /[if lt IE 9]
       = javascript_include_tag '//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js'
 
-  %body
+  %body#style-override
     .navbar.navbar-default.navbar-static-top
       .container
         %a.navbar-brand(href='#') Enrolment System
@@ -21,3 +21,5 @@
     .container
       = bootstrap_flash
       = yield
+
+    %br

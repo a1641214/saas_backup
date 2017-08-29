@@ -1,3 +1,4 @@
+require 'mail'
 class ClashRequestsController < ApplicationController
     def request_params
         params.require(:clash_request).permit(
@@ -20,10 +21,23 @@ class ClashRequestsController < ApplicationController
 
     def index
         @clash_requests = ClashRequest.all
+        mail = Mail.first
+        return if mail.is_a? Array
+        EnrolmentMailer.receive(mail)
+        DemoController.index
     end
 
     def show
-        @clash_request = ClashRequest.find(params[:id])
+        @clash_request = ClashRequest.find params[:id]
+
+        # Load serialised data into nicer format
+        @old_student_sessions = @clash_request.preserve_student_sessions.map do |session|
+            Session.find(session)
+        end
+
+        @old_clash_sessions = @clash_request.preserve_clash_sessions.map do |session|
+            Session.find(session)
+        end
     end
 
     def destroy
