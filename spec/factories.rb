@@ -1,6 +1,6 @@
 FactoryGirl.define do
     factory :clash_request do
-        studentId 10
+        studentId 1680000
         comments 'test'
         enrolment_request_id 1
         date_submitted Time.new(2017, 1, 1, 9, 0, 0, '+09:30')

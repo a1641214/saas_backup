@@ -33,6 +33,49 @@ Given /^(?:|I )am logged in$/ do
     # TODO: Implement when authentication is completed (#21)
 end
 
+Given /^typical usage and data$/ do
+    # Student Course
+    course_enrol = FactoryGirl.create(:course)
+    comp1_enrol = FactoryGirl.create(:component, class_type: 'Lecture')
+    comp2_enrol = FactoryGirl.create(:component, class_type: 'Tutorial')
+    course_enrol.components << comp1_enrol
+    course_enrol.components << comp2_enrol
+
+    # Enroled Sessions
+    s1_e = FactoryGirl.create(:session, component_code: 'LE01', component: comp1_enrol)
+    s2_e = FactoryGirl.create(:session, component_code: 'LE01', day: 'Wednesday', component: comp1_enrol)
+    FactoryGirl.create(:session, component_code: 'TU01', component: comp2_enrol)
+    s4_e = FactoryGirl.create(:session, component_code: 'TU02', component: comp2_enrol)
+
+    # Clash Course
+    course_clash = FactoryGirl.create(:course, catalogue_number: 'SOIL&WAT 1000WT', name: 'Soil and Water')
+    comp1_clash = FactoryGirl.create(:component, class_type: 'Lecture')
+    comp2_clash = FactoryGirl.create(:component, class_type: 'Practical')
+    course_clash.components << comp1_clash
+    course_clash.components << comp2_clash
+
+    # Clashed Sessions
+    s1_c = FactoryGirl.create(:session, component_code: 'LE01', component: comp1_clash)
+    s2_c = FactoryGirl.create(:session, component_code: 'LE01', day: 'Wednesday', component: comp1_clash)
+    FactoryGirl.create(:session, component_code: 'PR01', component: comp2_clash)
+    s4_c = FactoryGirl.create(:session, component_code: 'PR02', component: comp2_clash)
+
+    # Student
+    student_one = create(:student, id: 1680000)
+    student_one.courses << course_enrol
+    student_one.sessions << s1_e << s2_e << s4_e
+    student_one.save!
+
+    # Clash Request
+    clash_request = create(:clash_request, id: 5)
+    clash_request.course = course_clash
+    clash_request.sessions << s1_c << s2_c << s4_c
+    clash_request.student = student_one
+
+    clash_request.save!
+    ClashRequest.rebuild_preserve(clash_request.id)
+end
+
 Given(/^student "([^"]*)" is enrolled in courses "([^"]*)" and "([^"]*)"$/) do |in_id, course1, course2|
     course_one = FactoryGirl.create(:course, catalogue_number: course1)
     course_two = FactoryGirl.create(:course, catalogue_number: course2)
@@ -78,6 +121,7 @@ end
 Given /^there is a clash request with the following:$/ do |fields|
     clash_request = create(:clash_request)
     clash_request.update!(fields.rows_hash)
+    ClashRequest.rebuild_preserve(clash_request.id)
 end
 
 Given(/^clash request "([^"]*)" is resolving the course "([^"]*)"$/) do |clash_id, course_code|
@@ -85,6 +129,7 @@ Given(/^clash request "([^"]*)" is resolving the course "([^"]*)"$/) do |clash_i
     clash_course = create(:course, catalogue_number: course_code)
     clash_request.course = clash_course
     clash_request.save!
+    ClashRequest.rebuild_preserve(clash_request.id)
 end
 
 Given(/^clash request "([^"]*)" is resolving the course "([^"]*)" with default sessions and components$/) do |clash_id, course_code|
@@ -101,6 +146,7 @@ Given(/^clash request "([^"]*)" is resolving the course "([^"]*)" with default s
     s3 = FactoryGirl.create(:session, component_code: 'PR02', component: comp2)
     clash_request.sessions << s1 << s3
     clash_request.save!
+    ClashRequest.rebuild_preserve(clash_request.id)
 end
 
 Given /^student "([^"]*)" is enrolled in the following course:$/ do |student_id, table|
@@ -118,6 +164,7 @@ Given /^there is a clash request for the student "([^"]*)" with the following:$/
     clash_request.update!(table.rows_hash)
     clash_request.save!
     student.save!
+    ClashRequest.rebuild_preserve(clash_request.id)
 end
 
 When /^(?:|I )go to (.+)$/ do |page_name|
@@ -215,6 +262,12 @@ When(/^I select "([^"]*)" for the course "([^"]*)" for the "([^"]*)"$/) do |comp
     under_course = under_course.upcase
     under_course.tr!('&', '_')
     select comp_code, from: under_course + '_' + class_type
+end
+
+Then(/^I should see "([^"]*)" as "([^"]*)" and "([^"]*)" for the course "([^"]*)"$/) do |class_type, org_comp, prop_comp, course|
+    css_id = '#' + course.tr(' ', '_').tr('&', '_') + '_' + class_type
+    expect(find(css_id)).to have_content(org_comp)
+    expect(find(css_id)).to have_content(prop_comp)
 end
 
 Then /^(?:|I )should not see \/([^\/]*)\/$/ do |regexp|
