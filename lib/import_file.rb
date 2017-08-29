@@ -137,6 +137,23 @@ module ImportFile
         end
         courses
     end
+    
+    #fill student.courses array 
+    def self.fillStudentsWithCourses(students, classes, courses)
+        students.each do |student_row|
+            classes.each do |class_row|
+                if (student_row.class_nbr == class_row.class_nbr && student_row.term == class_row.term)
+                    courses.each do |course_row|
+                        if (course_row.id == class_row.course_id)
+                            student_row.courses.append(course_row)
+                            break
+                        end
+                    end
+                end
+            end
+        end   
+    end  
+  
 
     # fill offering cataglog numbers from the offerings csv
     def self.fill_course_offerings(filename, courses)

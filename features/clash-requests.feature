@@ -1,6 +1,7 @@
 Feature: Clash Requests (#16)
     Scenario: View all requests (#20)
         Given I am logged in
+
         Given there is a clash request in the database
         Given I am on the clash requests list page
         Then there should be 1 row
