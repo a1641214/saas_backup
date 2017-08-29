@@ -142,13 +142,11 @@ module ImportFile
     def self.fill_students_wit_courses(students, classes, courses)
         students.each do |student_row|
             classes.each do |class_row|
-                if (student_row.class_nbr == class_row.class_nbr && student_row.term == class_row.term)
-                    courses.each do |course_row|
-                        if (course_row.id == class_row.course_id)
-                            student_row.courses.append(course_row)
-                            break
-                        end
-                    end
+                next unless student_row.class_nbr == class_row.class_nbr && student_row.term == class_row.term
+                courses.each do |course_row|
+                    next unless course_row.id == class_row.course_id
+                    student_row.courses.append(course_row)
+                    break
                 end
             end
         end
