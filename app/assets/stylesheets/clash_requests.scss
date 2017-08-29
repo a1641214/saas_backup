@@ -1,3 +1,7 @@
 // Place all the styles related to the ClashRequests controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#style-override .cell_indent {
+    padding-left: 40px;
+}
