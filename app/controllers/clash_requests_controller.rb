@@ -42,7 +42,8 @@ class ClashRequestsController < ApplicationController
 
         index = 0
         map_course_id_by_index = {}
-        @map_session_by_day = @student.sessions.each_with_object('monday' => [], 'tuesday' => [], 'wednesday' => [], 'thursday' => [], 'friday' => []) do |session, by_day|
+
+        current_sessions = @student.sessions.each_with_object('monday' => [], 'tuesday' => [], 'wednesday' => [], 'thursday' => [], 'friday' => []) do |session, by_day|
             id = if map_course_id_by_index[session.component_id]
                      map_course_id_by_index[session.component_id]
                  else
@@ -50,7 +51,21 @@ class ClashRequestsController < ApplicationController
                  end
             by_day[session.day.downcase] << {
                 session: session,
-                id: id
+                id: id,
+                requested: false
+            }
+        end
+
+        @map_session_by_day = @clash_request.sessions.each_with_object(current_sessions) do |session, by_day|
+            id = if map_course_id_by_index[session.component_id]
+                     map_course_id_by_index[session.component_id]
+                 else
+                     map_course_id_by_index[session.component_id] = index += 1
+                 end
+            by_day[session.day.downcase] << {
+                session: session,
+                id: id,
+                requested: true
             }
         end
     end
