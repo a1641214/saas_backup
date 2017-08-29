@@ -21,24 +21,29 @@ class ClashResolution < ActiveRecord::Base
         true
     end
 
-    def self.check_parameters(parameters)
-        form = parameters[:clash_resolution]
-        unless parameters[:agree]
-            return 'You have to confirm you approve and understand all conditions.'
-        end
+    def self.check_parameters2(form)
         if form[:name].empty? || form[:student_id].empty? ||
            form[:email].empty? || form[:enrolment_request_id].empty?
-
             return 'Please fill in all required information.'
         end
         if !valid?(form[:enrolment_request_id]) || form[:enrolment_request_id].length > 9
             return 'Invalid enrolment request id'
         end
+        nil
+    end
+
+    def self.check_parameters(parameters)
+        form = parameters[:clash_resolution]
+        unless parameters[:agree]
+            return 'You have to confirm you approve and understand all conditions.'
+        end
+        error = check_parameters2(form)
+        return error unless error.nil?
         if !valid?(form[:student_id]) || form[:student_id].length > 9
             return 'Invalid student id.'
         end
         unless student_exist?(form[:student_id])
-            return 'Student id does not exist on database.'
+            return 'Student id does not exist in database.'
         end
         nil
     end

@@ -4,15 +4,15 @@
     %div.main_form
         %div.intro
             %h1 Timetable Clash Resolution
-            %h2 Please complete the Timetable Clash Resolution Form below if you are unable to enrol due to a timetable clash. 
+            %h2 Please complete the Timetable Clash Resolution Form below if you are unable to enrol due to a timetable clash.
             %ul
                 %li This form has been designed for students who have attempted to enrol through Access Adelaide but due to timetable clashes (i.e. two contact hours scheduled for the same time), the addition of courses has not been successful.
                 %li If you have experienced an error as outlined above, an Enrolment Request ID Number will be generated in Access Adelaide. This Enrolment Request ID Number must be recorded in the form below for your form to be processed.
-                %li 
-                    %span Please note: 
-                    Please fill out a separate form for each timetable clash. 
+                %li
+                    %span Please note:
+                    Please fill out a separate form for each timetable clash.
                 %li While every attempt will be made to action your requests as soon as possible, please allow up to five working days for processing.
-                %li 
+                %li
                     %span Please note:
                     if your Timetable clash enquiry relates to other courses outside the Faculty of Engineering Computer and Mathematical Sciences such as ENTREP, ECON, ACCTING, COMMERCE, PHYSICS, BIOLOGY, ARTS etc., please forward your enquiry to the relevant Faculty office.
                 %li For e.g PHYSICS course enquiry should be forwarded to the Faculty of Sciences and ENTREP course should be forwarded to the Faculty of the Professions.
@@ -22,61 +22,61 @@
                 %ul.sub_title
                     %li Enrolment Request ID Number
                     %li.form_error=flash[:form_error]
-                    %li.extra_info 
+                    %li.extra_info
                         %span{ :style => "color: red" } *
-                        INDICATES REQUIRED INFORMATION 
+                        INDICATES REQUIRED INFORMATION
                 %div.input_boxes
                     %ul
-                        %li.label_down 
+                        %li.label_down
                             Enrolment Request ID Number: (found in the top right-hand corner in Access Adelaide on the screen displaying the error)
                             %span{ :style => "color: red" } *
                         %li.no_float= text_field :clash_resolution, :enrolment_request_id,:value => session[:clash_resolution]["enrolment_request_id"], :class => "input_box"
-                %ul.sub_title 
+                %ul.sub_title
                     %li Personal Details
                 %div.input_boxes
                     %ul
-                        %li.label_down 
+                        %li.label_down
                             Name:
                             %span{ :style => "color: red" } *
                         %li= text_field :clash_resolution, :name,:value => session[:clash_resolution]["name"], :class => "input_box"
                     %ul
-                        %li.label_down  
+                        %li.label_down
                             Student ID:
                             %span{ :style => "color: red" } *
                         %li= text_field :clash_resolution, :student_id,:value => session[:clash_resolution]["student_id"], :class => "input_box"
                     %ul
-                        %li.label_down  
+                        %li.label_down
                             Email:
                             %span{ :style => "color: red" } *
                         %li= text_field :clash_resolution, :email,:value => session[:clash_resolution]["email"], :class => "input_box"
-                %ul.sub_title 
+                %ul.sub_title
                     %li The Degree Program for this enrolment
                 %div.input_boxes
                     %ul
-                        %li.label_down 
+                        %li.label_down
                             Degree Program:
                             %span{ :style => "color: red" } *
-                        %li=select_tag("clash_resolution[faculty]",options_for_select(@degrees), :multiple =>false,:class => "select_box" )
-                %ul.sub_title 
+                        %li=select_tag("clash_resolution[degree]",options_for_select(@degrees,session[:clash_resolution]["degree"]), :multiple =>false,:class => "select_box")
+                %ul.sub_title
                     %li The Course you wish to enrol into
                 %div.input_boxes
                     %ul
-                        %li.label_down 
+                        %li.label_down
                             Semester:
                             %span{ :style => "color: red" } *
-                        %li=select_tag("clash_resolution[semester]",options_for_select(@semester.collect.with_index.to_a), :multiple =>false,:class => "select_box" )
+                        %li=select_tag("clash_resolution[semester]",options_for_select(@semester,session[:clash_resolution]["semester"]), :multiple =>false,:class => "select_box" )
                     %ul
-                        %li.label_down 
+                        %li.label_down
                             Subject Area:
                             %span{ :style => "color: red" } *
-                        %li=select_tag("clash_resolution[subject]",options_for_select(@subject.collect.with_index.to_a), :multiple =>false,:class => "select_box" )
+                        %li=select_tag("clash_resolution[faculty]",options_for_select(@subjects,session[:clash_resolution]["faculty"]), :multiple =>false,:class => "select_box" )
                     %ul
-                        %li.label_down 
+                        %li.label_down
                             Course:
                             %span{ :style => "color: red" } *
-                        %li=select_tag("clash_resolution[course]",options_from_collection_for_select(@courses, "name", "name"), :multiple =>false,:class => "select_box" )                    
+                        %li=select_tag("clash_resolution[course]",options_from_collection_for_select(@courses, "name", "name",session[:clash_resolution]["course"]), :multiple =>false,:class => "select_box" )
                     %ul
-                        %li.label_down  
+                        %li.label_down
                             Course Name:
                         %li= text_field :clash_resolution, :course_name,:value => session[:clash_resolution]["course_name"], :class => "input_box"
                     %ul
@@ -89,7 +89,7 @@
                         %li Note: Timetable clashes will still need to be managed. Please make yourself aware of the online resources available to you and make contact with the relevant course coordinators to determine if measures can be put in place for work missed as a result of a clash.
                         %li Please refer to your unofficial academic transcript to confirm your request has been processed and you will need to check Access Adelaide to confirm your class times. Please allow five working days for processing.
                 %ul.agree
-                    %li 
+                    %li
                         Select to confirm you approve and understand:
                         %span{ :style => "color: red" } *
                     %li=radio_button_tag :agree,true,false

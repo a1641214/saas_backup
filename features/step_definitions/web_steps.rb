@@ -19,6 +19,10 @@ Given(/^there is a student with id "([^"]*)"$/) do |student_id|
     create(:student, id: student_id)
 end
 
+Given(/^there is a course with name "([^"]*)"$/) do |course_name|
+    create(:course, name: course_name)
+end
+
 # Multi-line step scoper
 When /^(.*) within (.*[^:]):$/ do |step, parent, table_or_string|
     with_scope(parent) { When "#{step}:", table_or_string }
@@ -182,6 +186,16 @@ Then /^(?:|I )should see "([^"]*)"$/ do |text|
     else
         assert page.has_content?(text)
     end
+end
+
+# this is for testing content in input box
+Then(/^I can find "([^"]*)" on "([^"]*)"$/) do |text, field|
+    expect(find_field(field).value).to eq text
+end
+
+# this is for testing content in select tag
+Then(/^"([^"]*)" should be selected for "([^"]*)"$/) do |value, field|
+    field_labeled(field).find(:xpath, ".//option[@selected = 'selected'][text() = '#{value}']").should be_present
 end
 
 Then /^(?:|I )should see \/([^\/]*)\/$/ do |regexp|
