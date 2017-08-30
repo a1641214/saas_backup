@@ -16,9 +16,10 @@
     .navbar.navbar-default.navbar-static-top
       .container
         %a.navbar-brand(href='#') Enrolment System
-
+        %form{class: "navbar-form navbar-right"}
+          %div{class: "form-group"}
+            %input{type:"text", class:"form-control col-sm-8", placeholder:"Search"}
     .container
       = bootstrap_flash
       = yield
-
     %br
