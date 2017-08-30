@@ -50,6 +50,39 @@ class ClashRequestsController < ApplicationController
     def edit
         @clash_request = ClashRequest.find params[:id]
         @student = @clash_request.student
+
+        @map_session_by_day = {}
+        return unless @student
+
+        index = 0
+        map_course_id_by_index = {}
+
+        current_sessions = @student.sessions.each_with_object('monday' => [], 'tuesday' => [], 'wednesday' => [], 'thursday' => [], 'friday' => []) do |session, by_day|
+            id = if map_course_id_by_index[session.component_id]
+                     map_course_id_by_index[session.component_id]
+                 else
+                     map_course_id_by_index[session.component_id] = index += 1
+                 end
+            by_day[session.day.downcase] << {
+                session: session,
+                id: id,
+                requested: false
+            }
+        end
+
+        @map_session_by_day = @clash_request.sessions.each_with_object(current_sessions) do |session, by_day|
+            id = if map_course_id_by_index[session.component_id]
+                     map_course_id_by_index[session.component_id]
+                 else
+                     map_course_id_by_index[session.component_id] = index += 1
+                 end
+            by_day[session.day.downcase] << {
+                session: session,
+                id: id,
+                requested: true
+            }
+        end
+
         all_sessions = Session.all_request_student_sessions(@clash_request, @student)
         @clash_hash = Session.detect_clashes(all_sessions)
     end
