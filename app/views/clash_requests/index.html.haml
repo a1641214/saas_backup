@@ -1,5 +1,12 @@
 %h1 Clash Requests
-= link_to 'Create' , new_clash_request_path, class: 'btn btn-primary'
+
+%div{class:"navbar red"}
+    %ul.nav.navbar-nav
+        %li.active
+            %a{href: "javascript:void(0)"} Active
+        %li
+            %a{href: "javascript:void(0)"} Inactive
+    = link_to 'Create' , new_clash_request_path, class: 'btn btn-primary pull-right red'
 
 %table.table.table-hover#clash-clash_requests
     %thead

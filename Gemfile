@@ -124,7 +124,7 @@ gem 'andand', '~> 1.3', '>= 1.3.3'
 gem 'awesome_print', '~> 1.6', '>= 1.6.1', require: 'ap'
 
 # bootstrap material design
-gem 'bootstrap-material-design', '~> 0.2.2'
+gem 'bootstrap-material-design'
 
 # Bootstrap
 gem 'twitter-bootstrap-rails'
