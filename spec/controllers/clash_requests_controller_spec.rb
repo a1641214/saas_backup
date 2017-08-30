@@ -48,7 +48,7 @@ RSpec.describe ClashRequestsController, type: :controller do
             FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 2, day: 'Monday', weeks: [2, 4, 6, 8, 10, 12], component_code: 'PR02', component: comp9)
 
             student_one = FactoryGirl.create(:student)
-            clash_one = FactoryGirl.create(:clash_request, faculty: 'Engineering', student: student_one, course: c4)
+            clash_one = FactoryGirl.create(:clash_request, faculty: 'Engineering', student: student_one, id: 5, course: c4)
 
             student_one.courses << c1 << c2
             student_one.sessions << s1 << s2 << s3 << s5 << s6
@@ -97,7 +97,7 @@ RSpec.describe ClashRequestsController, type: :controller do
             FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 2, day: 'Monday', weeks: [2, 4, 6, 8, 10, 12], component_code: 'PR02', component: comp9)
 
             student_one = FactoryGirl.create(:student)
-            clash_one = FactoryGirl.create(:clash_request, faculty: 'Engineering', student: student_one, course: c4)
+            clash_one = FactoryGirl.create(:clash_request, faculty: 'Engineering', student: student_one, id: 5, course: c4)
 
             student_one.courses << c1 << c2
             student_one.sessions << s1 << s2 << s3 << s5 << s6
