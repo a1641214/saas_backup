@@ -10,6 +10,7 @@ RSpec.describe ClashRequestsController, type: :controller do
 
     describe 'GET #index' do
         it 'returns http success' do
+            expect(Mail).to receive(:first).and_return([])
             get :index
             expect(response).to have_http_status(:success)
         end
@@ -47,7 +48,7 @@ RSpec.describe ClashRequestsController, type: :controller do
             FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 2, day: 'Monday', weeks: [2, 4, 6, 8, 10, 12], component_code: 'PR02', component: comp9)
 
             student_one = FactoryGirl.create(:student)
-            clash_one = FactoryGirl.create(:clash_request, faculty: 'Engineering', student: student_one, course: c4)
+            clash_one = FactoryGirl.create(:clash_request, faculty: 'Engineering', student: student_one, id: 5, course: c4)
 
             student_one.courses << c1 << c2
             student_one.sessions << s1 << s2 << s3 << s5 << s6
@@ -60,7 +61,7 @@ RSpec.describe ClashRequestsController, type: :controller do
             student_one.save
             clash_one.save
 
-            get :edit, id: 1
+            get :edit, id: 5
         end
 
         it 'map days of week to hash' do
@@ -145,7 +146,7 @@ RSpec.describe ClashRequestsController, type: :controller do
             FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 2, day: 'Monday', weeks: [2, 4, 6, 8, 10, 12], component_code: 'PR02', component: comp9)
 
             student_one = FactoryGirl.create(:student)
-            clash_one = FactoryGirl.create(:clash_request, faculty: 'Engineering', student: student_one, course: c4)
+            clash_one = FactoryGirl.create(:clash_request, faculty: 'Engineering', student: student_one, id: 5, course: c4)
 
             student_one.courses << c1 << c2
             student_one.sessions << s1 << s2 << s3 << s5 << s6
@@ -158,7 +159,7 @@ RSpec.describe ClashRequestsController, type: :controller do
             student_one.save
             clash_one.save
 
-            put :update, :id => 1, 'SOIL&WAT 1000WT' => { 'Lecture' => 'LE01', 'Practical' => 'PR02' }, 'COMP SCI 3003' => { 'Lecture' => 'LE01', 'Tutorial' => 'TU02' }, 'COMP SCI 3004' => { 'Lecture' => 'LE01', 'Workshop' => 'WR01' }
+            put :update, :id => 5, 'SOIL&WAT 1000WT' => { 'Lecture' => 'LE01', 'Practical' => 'PR02' }, 'COMP SCI 3003' => { 'Lecture' => 'LE01', 'Tutorial' => 'TU02' }, 'COMP SCI 3004' => { 'Lecture' => 'LE01', 'Workshop' => 'WR01' }
             updated_student = Student.find(student_one.id)
             updated_clash = ClashRequest.find(clash_one.id)
             arr = []

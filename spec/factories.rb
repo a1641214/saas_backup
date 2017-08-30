@@ -1,6 +1,6 @@
 FactoryGirl.define do
     factory :clash_request do
-        studentId 10
+        studentId 1680000
         comments 'test'
         enrolment_request_id 1
         date_submitted Time.new(2017, 1, 1, 9, 0, 0, '+09:30')
@@ -25,7 +25,7 @@ FactoryGirl.define do
         day 'Monday'
         weeks [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
         component_code 'LE01'
+        capacity 200
         component
-        capacity 10
     end
 end

@@ -1,3 +1,4 @@
+require 'mail'
 class ClashRequestsController < ApplicationController
     def request_params
         params.require(:clash_request).permit(
@@ -20,10 +21,23 @@ class ClashRequestsController < ApplicationController
 
     def index
         @clash_requests = ClashRequest.all
+        mail = Mail.first
+        return if mail.is_a? Array
+        EnrolmentMailer.receive(mail)
+        DemoController.index
     end
 
     def show
-        @clash_request = ClashRequest.find(params[:id])
+        @clash_request = ClashRequest.find params[:id]
+
+        # Load serialised data into nicer format
+        @old_student_sessions = @clash_request.preserve_student_sessions.map do |session|
+            Session.find(session)
+        end
+
+        @old_clash_sessions = @clash_request.preserve_clash_sessions.map do |session|
+            Session.find(session)
+        end
     end
 
     def destroy
@@ -68,6 +82,9 @@ class ClashRequestsController < ApplicationController
                 requested: true
             }
         end
+
+        all_sessions = Session.all_request_student_sessions(@clash_request, @student)
+        @clash_hash = Session.detect_clashes(all_sessions)
     end
 
     def update
@@ -88,5 +105,12 @@ class ClashRequestsController < ApplicationController
         @clash_request.update_attributes!(sessions: @clash_request.sessions)
 
         redirect_to clash_request_path
+    end
+
+    def confirmation; end
+
+    def send_email
+        EnrolmentMailer.enrolment_email(1111111).deliver_now
+        redirect_to clash_requests_path
     end
 end
