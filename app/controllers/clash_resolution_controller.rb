@@ -16,9 +16,10 @@ class ClashResolutionController < ApplicationController
         # to do: add degrees, semester, subject attribute in database.
         session[:clash_resolution] = ClashResolution.get_session_data(session[:clash_resolution])
         @degrees = ['Software Engineering', 'Finance', 'Electronic Electricity', 'Telecommunication', 'Accounting']
-        @semester = ['Summer semester, 2017', 'Semester2, 2017']
+        @semester = ['Summer Semester, 2017', 'Semester 1, 2017', 'Winter Semester, 2017', 'Semester 2, 2017']
         @subjects = ['COMP', 'MATH', 'C&ENVENG']
         @courses = Course.all
+        @sessions = Session.all
     end
 
     def create

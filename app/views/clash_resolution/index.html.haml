@@ -74,11 +74,24 @@
                         %li.label_down
                             Course:
                             %span{ :style => "color: red" } *
-                        %li=select_tag("clash_resolution[course]",options_from_collection_for_select(@courses, "name", "name",session[:clash_resolution]["course"]), :multiple =>false,:class => "select_box" )
+                        %li=select_tag("clash_resolution[course]", options_from_collection_for_select(@courses, "name", "name", session[:clash_resolution]["course"]), :multiple =>false, :class => "select_box" )
                     %ul
                         %li.label_down
                             Course Name:
                         %li= text_field :clash_resolution, :course_name,:value => session[:clash_resolution]["course_name"], :class => "input_box"
+                %ul.sub_title
+                    %li The Classes you wish to enrol into
+                %div.input_boxes
+                    %ul
+                        %li.label_down
+                            Enrolment Class:
+                            %span{ :style => "color: red" } *
+                        %li=select_tag("clash_resolution[enrollment]", options_from_collection_for_select(@sessions, "component_code", "component_code", session[:clash_resolution]["enrollment"]), :multiple =>false, :class => "select_box" )
+                    %ul
+                        %li.label_down
+                            Related Classes:
+                            %span{ :style => "color: red" } *
+                        %li=select_tag("clash_resolution[related]", options_from_collection_for_select(@sessions, "component_code", "component_code", session[:clash_resolution]["related"]), :multiple =>false, :class => "select_box" )
                     %ul
                         %li Additional Comments(if required):
                         %li=text_area_tag "clash_resolution[comments]",session[:clash_resolution]["comments"],:class => "text_area"
