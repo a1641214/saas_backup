@@ -1,6 +1,301 @@
-// Place all the styles related to the ClashRequests controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+.cr-timetable {
+    position: relative;
+    margin: 2em 0;
+
+    ul {
+        list-style: none;
+    }
+}
+
+.cr-timetable .timeline {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    padding-top: 50px;
+}
+
+.cr-timetable .timeline li {
+    position: relative;
+    height: 50px;
+}
+
+.cr-timetable .timeline li::after {
+    /* this is used to create the table horizontal lines */
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: #EAEAEA;
+}
+
+.cr-timetable .timeline li:last-of-type::after {
+    display: none;
+}
+
+.cr-timetable .timeline li span {
+    display: none;
+}
+
+.cr-timetable .timeline li::after {
+    width: calc(100% - 60px);
+    left: 60px;
+}
+
+.cr-timetable .timeline li span {
+    display: inline-block;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.cr-timetable .timeline li:nth-of-type(2n) span {
+    display: none;
+}
+
+.cr-timetable .events {
+    position: relative;
+    z-index: 1;
+}
+
+.cr-timetable .events .events-group {
+    margin-bottom: 30px;
+}
+
+.cr-timetable .events .top-info {
+    width: 100%;
+    padding: 0 5%;
+}
+
+.cr-timetable .events .top-info > span {
+    display: inline-block;
+    line-height: 1.2;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.cr-timetable .events .events-group > ul {
+    position: relative;
+    padding: 0 5%;
+    /* force its children to stay on one line */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+.cr-timetable .events .events-group > ul::after {
+    /* never visible - used to add a right padding to .events-group > ul */
+    display: inline-block;
+    content: '-';
+    width: 1px;
+    height: 100%;
+    opacity: 0;
+    color: transparent;
+}
+
+.cr-timetable .events .session {
+    /* force them to stay on one line */
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    float: left;
+    height: 150px;
+    width: 70%;
+    max-width: 300px;
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.2);
+    margin-right: 20px;
+    -webkit-transition: opacity 0.2s, background 0.2s;
+    transition: opacity 0.2s, background 0.2s;
+}
+
+.cr-timetable .events .session:last-of-type {
+    margin-right: 5%;
+}
+
+.cr-timetable .events .session a {
+    display: block;
+    height: 100%;
+    padding: 0.8em;
+}
+@media only screen and (min-width: 550px) {
+    .cr-timetable .events .session {
+        width: 40%;
+    }
+}
+@media only screen and (min-width: 800px) {
+    .cr-timetable .events {
+        float: left;
+        width: 100%;
+    }
+
+    .cr-timetable .events .events-group {
+        width: 20%;
+        float: left;
+        border: 1px solid #EAEAEA;
+        /* reset style */
+        margin-bottom: 0;
+    }
+
+    .cr-timetable .events .events-group:not(:first-of-type) {
+        border-left-width: 0;
+    }
+
+    .cr-timetable .events .top-info {
+        /* vertically center its content */
+        display: table;
+        height: 50px;
+        border-bottom: 1px solid #EAEAEA;
+        /* reset style */
+        padding: 0;
+    }
+
+    .cr-timetable .events .top-info > span {
+        /* vertically center inside its parent */
+        display: table-cell;
+        vertical-align: middle;
+        padding: 0 0.5em;
+        text-align: center;
+        /* reset style */
+        font-weight: normal;
+        margin-bottom: 0;
+    }
+
+    .cr-timetable .events .events-group > ul {
+        height: 1050px;
+        /* reset style */
+        display: block;
+        overflow: visible;
+        padding: 0;
+    }
+
+    .cr-timetable .events .events-group > ul::after {
+        clear: both;
+        content: "";
+        display: block;
+    }
+
+    .cr-timetable .events .events-group > ul::after {
+        /* reset style */
+        display: none;
+    }
+
+    .cr-timetable .events .session {
+        position: absolute;
+        z-index: 3;
+        /* top position and height will be set using js */
+        width: calc(100% + 2px);
+        left: -1px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), inset 0 -3px 0 rgba(0, 0, 0, 0.2);
+        /* reset style */
+        -ms-flex-negative: 1;
+        flex-shrink: 1;
+        height: auto;
+        max-width: none;
+        margin-right: 0;
+    }
+
+    .cr-timetable .events .session a {
+        padding: 1.2em;
+    }
+
+    .cr-timetable .events .session:last-of-type {
+        /* reset style */
+        margin-right: 0;
+    }
+
+    .cr-timetable .events .session.selected-event {
+        /* the .selected-event class is added when an user select the event */
+        visibility: hidden;
+    }
+}
+@media only screen and (min-width: 1000px) {
+    .cr-timetable .events {
+        /* 60px is the .timeline element width */
+        width: calc(100% - 60px);
+        margin-left: 60px;
+    }
+}
+
+.cr-timetable.loading .events .session {
+    /* the class .loading is added by default to the .cr-timetable element
+	   it is removed as soon as the single events are placed in the schedule plan (using javascript) */
+    opacity: 0;
+}
+
+.cr-timetable .event-date,
+.cr-timetable .event-name {
+    display: block;
+    color: white;
+    font-weight: bold;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.cr-timetable .event-name {
+    font-size: 2.4rem;
+}
+@media only screen and (min-width: 800px) {
+    .cr-timetable .event-name {
+        font-size: 2rem;
+    }
+}
+
+.cr-timetable .event-date {
+    /* they are not included in the the HTML but added using JavScript */
+    font-size: 1.4rem;
+    opacity: 0.7;
+    line-height: 1.2;
+    margin-bottom: 0.2em;
+}
+
+.cr-timetable .session {
+    background: #577F92;
+}
+
+.cr-timetable .session .header-bg:hover {
+    background: #618da1;
+}
+
+.cr-timetable .session[data-course="1"] {
+    background: #577F92;
+}
+
+.cr-timetable .session[data-course="1"] .header-bg:hover {
+    background: #618da1;
+}
+
+.cr-timetable .session[data-course="2"] {
+    background: #443453;
+}
+
+.cr-timetable .session[data-course="2"]:hover {
+    background: #513e63;
+}
+
+.cr-timetable .session[data-course="3"] {
+    background: #A2B9B2;
+}
+
+.cr-timetable .session[data-course="3"]:hover {
+    background: #b1c4be;
+}
+
+.cr-timetable .session[data-course="4"] {
+    background: #f6b067;
+}
+
+.cr-timetable .session[data-course="4"]:hover {
+    background: #f7bd7f;
+}
+
+.requested {
+    border-bottom: 5px solid red;
+}
 
 #style-override .cell_indent {
     padding-left: 40px;
