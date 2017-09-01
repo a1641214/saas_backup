@@ -22,6 +22,13 @@ class ClashResolutionController < ApplicationController
         @sessions = Session.all
     end
 
+    def update_classes
+        @classes = Session.where('component.id = ?', params[:clash_resolution][:enrolment].component.id)
+        respond_to do |format|
+            format.js
+        end
+    end
+
     def create
         session[:clash_resolution] = params[:clash_resolution]
         error = ClashResolution.check_parameters(params)

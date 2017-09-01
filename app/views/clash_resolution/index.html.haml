@@ -74,7 +74,7 @@
                         %li.label_down
                             Course:
                             %span{ :style => "color: red" } *
-                        %li=select_tag("clash_resolution[course]", options_from_collection_for_select(@courses, "name", "name", session[:clash_resolution]["course"]), :multiple =>false, :class => "select_box" )
+                        %li=select_tag("clash_resolution[course]", options_from_collection_for_select(@courses, "long_name", "long_name", session[:clash_resolution]["course"]), :multiple =>false, :class => "select_box" )
                     %ul
                         %li.label_down
                             Course Name:

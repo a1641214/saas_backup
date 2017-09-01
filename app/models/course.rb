@@ -25,4 +25,8 @@ class Course < ActiveRecord::Base
         end
         arr
     end
+
+    def long_name
+        "#{catalogue_number} #{name}"
+    end
 end
