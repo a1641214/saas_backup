@@ -5,7 +5,6 @@ ActiveRecord::Import.require_adapter('mysql2')
 
 class DemoController < ApplicationController
     def index
-
         # modifier specifies the path for the reduced dataset. use empty string for full set
         modifier = '.min'
         @path = 'db/csv/'
