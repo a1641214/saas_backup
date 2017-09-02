@@ -15,5 +15,5 @@
             %th
                 - components = course.components
                 - components.each do |component|
-                    %p= component.type + " " + component.id
+                    %p= component.type + " " + component.id.to_s
 
