@@ -13,7 +13,11 @@ select {
 }
 
 .body{
-    width: 100%;
+    width: 1000px;
+    margin: 0 auto;
+    -moz-box-shadow: 0 15px 20px #c4cad2;
+    -webkit-box-shadow: 0 15px 20px #c4cad2;
+    box-shadow: 0 15px 20px #c4cad2;
     min-width: 1000px;
 }
 
@@ -46,7 +50,6 @@ select {
 }
 
 
-
 .input_box{
     width: 300px;
     border-radius: 3px 3px 3px 3px;
@@ -62,9 +65,46 @@ select {
     padding: 5px;
 }
 
+.explain{
+    color: #666;
+    margin: 0;
+    font-size: 14px;
+    padding-bottom: 10px;
+}
+
+.explain span{
+    font-weight: bold;
+    color: #000;
+}
+
+.link{
+    width: 100%;
+    height: 30px;
+    font-size: .95em;
+    font-style: italic;
+    background: #fff asset-data-url("link_bg.png") top left repeat-x;
+}
+
+.link_menu{
+    padding: 5px 0 0 10px;
+}
+
+.link_menu li{
+    display: inline-block;
+}
+
+.link_menu li.divider{
+    color: #ccc;
+    padding: 0 3px 0 3px;
+}
+
+.link_menu li a:hover{
+    text-decoration: none;
+    color: red;
+}
 
 .main_form{
-    width: 1000px;
+    width: 860px;
     margin: 0 auto;
 }
 
@@ -108,38 +148,84 @@ select {
     width: 100%;
 }
 
-.form h1{
-    margin: 0;
-    padding: 5px 0 15px 0;
-    font-size: 12px;
+.form_title{
+    width: 485px;
+    position: relative;
+}
+
+.form_title_collision{
+    width: 100%;
+    height: 20px;
+}
+
+.form_title_background1{
+    background-position: 100% -62px;
+    background-image: asset-data-url("ui-form.png");
+    width: 100%;
+    height: 33px;
+    background-repeat: no-repeat;
+    z-index: 1;
+    position: absolute;
+    left: -10px;
+    top: 0px;
+    font-size: 1.385em;
+    font-family: Georgia,Times,serif;
+    padding-top: 2px;
+    color: white;
+    padding-left: 10px;
+}
+
+
+
+.form_title_background2{
+    background-position: 0 -94px;
+    width: 10px;
+    height: 27px;
+    top: 32px;
+    left: -10px;
+    background-image: asset-data-url("ui-form.png");
+    position: absolute;
 }
 
 .sub_title{
     width: 100%;
-    border-bottom: 1px solid #C7DAEA;
+    padding-top: 20px;
+    padding-bottom: 20px;
     position: relative;
 }
 
-.sub_title li{
+.sub_title h1{
     color: #005A9C;
     font-size: 1.1em;
     font-weight: bold;
-    display:inline-block;
+    padding: 0 0 2px 0;
+    border-bottom: 1px solid #C7DAEA;
+    margin: 0;
 }
 
-.sub_title li.form_error{
-    font-size: 10px;
-    color: #F00;
-    width: 572px;
-    text-align: center;
-}
-
-.sub_title li.extra_info{
+.sub_title h2{
     font-size: 10px;
     color: #000;
     font-weight: normal;
+    right: 0px;
+    padding: 0 0 22px 0;
+    margin: 0;
+    bottom: 0px;
     position: absolute;
-    right:0;
+}
+
+
+.sub_title div{
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    color: red;
+    padding: 0 0 22px 0;
+    font-weight: bold;
+    display: table-cell;
+    vertical-align: text-bottom;
 }
 
 
@@ -152,7 +238,7 @@ select {
 .input_boxes ul{
     width: 100%;
     padding-top:10px;
-    padding-bottom: 10px; 
+    padding-bottom: 10px;
     display: block;
 }
 

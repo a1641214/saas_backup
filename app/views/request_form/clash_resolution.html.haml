@@ -1,0 +1,25 @@
+- content_for(:big_title) do
+    %h1 Timetable Clash Resolution
+    %h2 Please complete the Timetable Clash Resolution Form below if you are unable to enrol due to a timetable clash.
+
+- content_for(:title_explain) do
+    %ul
+        %li This form has been designed for students who have attempted to enrol through Access Adelaide but due to timetable clashes (i.e. two contact hours scheduled for the same time), the addition of courses has not been successful.
+        %li If you have experienced an error as outlined above, an Enrolment Request ID Number will be generated in Access Adelaide. This Enrolment Request ID Number must be recorded in the form below for your form to be processed.
+        %li
+            %span Please note:
+            Please fill out a separate form for each timetable clash.
+        %li While every attempt will be made to action your requests as soon as possible, please allow up to five working days for processing.
+        %li
+            %span Please note:
+            if your Timetable clash enquiry relates to other courses outside the Faculty of Engineering Computer and Mathematical Sciences such as ENTREP, ECON, ACCTING, COMMERCE, PHYSICS, BIOLOGY, ARTS etc., please forward your enquiry to the relevant Faculty office.
+        %li For e.g PHYSICS course enquiry should be forwarded to the Faculty of Sciences and ENTREP course should be forwarded to the Faculty of the Professions.
+
+-content_for(:post_url,"/clash_resolution")
+
+-content_for(:form_title,"Timetable Clash Resolution Form")
+
+-content_for(:form_input_addon) do
+    %ul
+        %li Additional Comments(if required):
+        %li=text_area_tag "clash_resolution[comments]",session[:clash_resolution]["comments"],:class => "text_area"

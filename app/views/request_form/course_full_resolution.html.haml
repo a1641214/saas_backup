@@ -1,0 +1,30 @@
+- content_for(:big_title) do
+    %h1 Course Full Resolution
+    %h2 Please complete the Course Full Resolution Form below if all classes in a course are full.
+
+- content_for(:title_explain) do
+    %ul
+        %li This form has been designed for students who have attempted to enrol through Access Adelaide but due to classes being full, the addition of a course has not been possible.
+        %li If you have experienced an error as outlined above please attempt to enrol in alternative classes even if this results in a timetable clash. Timetable clashes can resolved by lodging an online Timetable Clash Resolution Form with the Faculty Office.
+        %li
+            %span Please note:
+            Please fill out a separate form for each course full.
+        %li While every attempt will be made to action your requests as soon as possible, please allow up to five working days for processing.
+
+-content_for(:post_url,"/course_full_resolution")
+
+-content_for(:form_title,"Course Full Resolution Form")
+
+-content_for(:form_input_addon) do
+    %ul
+        %li
+            Is this a core course ?
+            %span{ :style => "color: red" } *
+        %li
+            =radio_button_tag :request_form,:core_yes,false
+            Yes
+            =radio_button_tag :request_form,:core_no,false
+            No
+    %ul
+        %li Justification (if not a core course):
+        %li=text_area_tag "clash_resolution[justification]",session[:clash_resolution]["justification"],:class => "text_area"

@@ -1,0 +1,32 @@
+- content_for(:big_title) do
+    %h1 Unit Overload
+    %h2 Please complete the Unit Overload Request form below if you need to enrol in more than 15 units of courses in a semester.
+
+- content_for(:title_explain) do
+    %ul
+        %li This form has been designed for students who have attempted to enrol in a course through Access Adelaide resulting in a unit overload (an enrolment in units above the allowed number of units per semester).
+        %li If you have experienced an error as outlined above, an Enrolment Request ID Number will be generated in Access Adelaide. This Enrolment Request ID Number must be recorded in the form below for your form to be processed.
+        %li Students applying to enrol into courses where the total unit value exceeds 15 units are required to complete the Unit Overload Form. Approval for unit overload is based on previous academic performance and takes into consideration your future study pathways.
+        %li
+            %span Please note:
+            Please fill out a separate form for each unit overload request.
+        %li While every attempt will be made to action your requests as soon as possible, please allow up to five working days for processing.
+
+-content_for(:post_url,"/unit_overload")
+
+-content_for(:form_title,"Unit Overload Request Form")
+
+- content_for(:form_addon) do
+    %div.sub_title
+        %h1 Reason for Overloading
+    %h1.explain
+        %span Please note:
+        approval for unit overload is based on students' previous academic performance.
+    %div.input_boxes
+        %ul
+            %li
+                Reasons:
+                %span{ :style => "color: red" } *
+            %li=text_area_tag "request_form[reasons]",session[:request_form]["reasons"],:class => "text_area"
+
+
