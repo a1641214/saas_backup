@@ -5,9 +5,12 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"os"
 	"strings"
 )
+
+const sampleRate float64 = 0.005
 
 func newCSV(filename string) (*os.File, *csv.Reader, string) {
 	file, err := os.Open(filename)
@@ -100,6 +103,10 @@ func main() {
 				return true
 			}
 		}
+		if rand.Float64() < sampleRate {
+			return true
+		}
+
 		return false
 	})
 
