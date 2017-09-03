@@ -21,9 +21,6 @@ class ClashRequestsController < ApplicationController
 
     def index
         @clash_requests = ClashRequest.all
-        mail = Mail.first
-        return if mail.is_a? Array
-        EnrolmentMailer.receive(mail)
         DemoController.index
     end
 
