@@ -51,13 +51,20 @@ func keepWhere(reader *csv.Reader, pred func([]string) bool) [][]string {
 	return lines
 }
 
+func closeFile(file *os.File) {
+	err := file.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func writeCSV(headers string, records [][]string, filename string) {
 	file, err := os.Create(filename)
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
-	defer file.Close()
+	defer closeFile(file)
 
 	_, err = io.WriteString(file, headers+"\n")
 	if err != nil {
@@ -79,19 +86,19 @@ func writeCSV(headers string, records [][]string, filename string) {
 
 func main() {
 	studentsFile, studentsReader, studentHeader := newCSV("db/csv/EN_BY_CLASS_ECMS-6384857.csv")
-	defer studentsFile.Close()
+	defer closeFile(studentsFile)
 
 	classesFile, classesReader, classesHeader := newCSV("db/csv/CLS_CMBND_SECT_FULL-6385825.csv")
-	defer classesFile.Close()
+	defer closeFile(classesFile)
 
 	coursesFile, coursesReader, coursesHeader := newCSV("db/csv/CM_CRSE_CAT_ECMS-6383074.csv")
-	defer coursesFile.Close()
+	defer closeFile(coursesFile)
 
 	componentsFile, componentsReader, componentsHeader := newCSV("db/csv/CM_CRSE_CAT_ECMS_COMPONENTS-6383069.csv")
-	defer componentsFile.Close()
+	defer closeFile(componentsFile)
 
 	sessionsFile, sessionsReader, sessionsHeader := newCSV("db/csv/SPActivity_2017.csv")
-	defer sessionsFile.Close()
+	defer closeFile(sessionsFile)
 
 	students := keepWhere(studentsReader, func(record []string) bool {
 		return true
@@ -103,11 +110,8 @@ func main() {
 				return true
 			}
 		}
-		if rand.Float64() < sampleRate {
-			return true
-		}
 
-		return false
+		return rand.Float64() < sampleRate
 	})
 
 	courses := keepWhere(coursesReader, func(record []string) bool {
