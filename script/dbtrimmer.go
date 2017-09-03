@@ -7,6 +7,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -125,8 +126,20 @@ func main() {
 
 	components := keepWhere(componentsReader, func(record []string) bool {
 		for _, c := range courses {
-			if c[1] == "00"+record[1] {
-				return true
+			if i, err := strconv.Atoi(c[1]); err == nil {
+				if j, err := strconv.Atoi(record[1]); err == nil {
+					if i == j {
+						return true
+					}
+				} else {
+					if c[1] == "00"+record[1] {
+						return true
+					}
+				}
+			} else {
+				if c[1] == "00"+record[1] {
+					return true
+				}
 			}
 		}
 		return false
