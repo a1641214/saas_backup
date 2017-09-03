@@ -19,3 +19,11 @@ Feature: Clash Requests (#16)
         Given I am on the view clash request page for id "5"
         Then I should see "1680000"
         Then I should see "ECMS"
+
+    Scenario: Search for a student (#126)
+        Given I am logged in
+        Given I am on the new clash request page
+        Given I search with "1111111"
+        When I press "Submit"
+        Then I should see "1 row of student"
+        
