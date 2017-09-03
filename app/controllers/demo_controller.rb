@@ -32,12 +32,17 @@ class DemoController < ApplicationController
         # push components into database
         @courses.each do |_, course|
             # create a course entry
-            c = Course.find(course.id)
+            c = Course.find(course.id.to_i)
 
             # create components and link to the courses
             course.components.each do |component|
-                comp = Component.create(class_type: component.type)
+                comp = Component.create(class_type: component.type, class_numbers: {})
+                comp_classes = classes.select { |cl| component.type[0, 2] == cl.section[0, 2] && cl.course_id.to_i == course.id.to_i }
+                comp_classes.each do |cl|
+                    comp.class_numbers[cl.section] = cl.class_nbr
+                end
                 comp.courses << c
+                comp.save!
             end
         end
 

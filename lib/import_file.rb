@@ -138,6 +138,20 @@ module ImportFile
         courses
     end
 
+    # fill student.courses array
+    def self.fill_students_with_courses(students, classes, courses)
+        students.each do |student_row|
+            classes.each do |class_row|
+                next unless student_row.class_nbr == class_row.class_nbr && student_row.term == class_row.term
+                courses.each do |course_row|
+                    next unless course_row.id == class_row.course_id
+                    student_row.courses.append(course_row)
+                    break
+                end
+            end
+        end
+    end
+
     # fill offering cataglog numbers from the offerings csv
     def self.fill_course_offerings(filename, courses)
         CSV.foreach(filename, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
