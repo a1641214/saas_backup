@@ -85,6 +85,21 @@ func writeCSV(headers string, records [][]string, filename string) {
 	}
 }
 
+func compareID(a, b string) (bool, error) {
+	if i, err1 := strconv.Atoi(a); err1 == nil {
+		if j, err2 := strconv.Atoi(b); err2 == nil {
+			if i == j {
+				return true, nil
+			}
+		} else {
+			return false, err2
+		}
+	} else {
+		return false, err1
+	}
+	return false, nil
+}
+
 func main() {
 	studentsFile, studentsReader, studentHeader := newCSV("db/csv/EN_BY_CLASS_ECMS-6384857.csv")
 	defer closeFile(studentsFile)
@@ -107,7 +122,7 @@ func main() {
 
 	classes := keepWhere(classesReader, func(record []string) bool {
 		for _, s := range students {
-			if s[2] == record[3] {
+			if r, err := compareID(s[2], record[3]); err == nil && r {
 				return true
 			}
 		}
@@ -117,7 +132,7 @@ func main() {
 
 	courses := keepWhere(coursesReader, func(record []string) bool {
 		for _, c := range classes {
-			if c[1] == record[1] {
+			if r, err := compareID(c[1], record[1]); err == nil && r {
 				return true
 			}
 		}
@@ -126,20 +141,14 @@ func main() {
 
 	components := keepWhere(componentsReader, func(record []string) bool {
 		for _, c := range courses {
-			if i, err := strconv.Atoi(c[1]); err == nil {
-				if j, err := strconv.Atoi(record[1]); err == nil {
-					if i == j {
-						return true
-					}
-				} else {
-					if c[1] == "00"+record[1] {
-						return true
-					}
-				}
-			} else {
-				if c[1] == "00"+record[1] {
+			if r, err := compareID(c[1], record[1]); err == nil {
+				if r {
 					return true
 				}
+				continue
+			}
+			if c[1] == "00"+record[1] {
+				return true
 			}
 		}
 		return false
@@ -147,6 +156,12 @@ func main() {
 
 	sessions := keepWhere(sessionsReader, func(record []string) bool {
 		for _, c := range components {
+			if r, err := compareID(c[1], record[1]); err == nil {
+				if r {
+					return true
+				}
+				continue
+			}
 			if strings.Contains(record[6], c[1]) {
 				return true
 			}
