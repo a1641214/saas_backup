@@ -75,7 +75,7 @@ func writeCSV(headers string, records [][]string, filename string) {
 
 	for _, record := range records {
 		for i, field := range record {
-			record[i] = fmt.Sprint("\"", field, "\"")
+			record[i] = fmt.Sprint("\"", strings.Replace(field, "\"", "\"\"", -1), "\"")
 		}
 		_, err = io.WriteString(file, strings.Join(record, ",")+"\n")
 		if err != nil {
