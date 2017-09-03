@@ -2,7 +2,7 @@ class ClashRequest < ActiveRecord::Base
     has_and_belongs_to_many :sessions
     belongs_to :course
     belongs_to :student
-
+    validates_uniqueness_of :studentId
     after_create :preserve_initial
 
     # Serialize to use as integer array
@@ -43,4 +43,12 @@ class ClashRequest < ActiveRecord::Base
         # Commit changes
         clash_request.save
     end
+    
+    def self.search(query)
+        where("enrolment_request_id LIKE ?", "%#{query}%") 
+        where("student_id LIKE ?", "%#{query}%")
+        where("date_submitted LIKE ?", "%#{query}%")
+        where("faculty LIKE ?", "%#{query}%")
+        where("date_submitted LIKE ?", "%#{query}%")
+      end
 end

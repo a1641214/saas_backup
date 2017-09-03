@@ -21,6 +21,9 @@ class ClashRequestsController < ApplicationController
 
     def index
         @clash_requests = ClashRequest.all
+        if params[:search] 
+            @clash_requests = ClashRequest.search(params[:search])
+        end    
         mail = Mail.first
         return if mail.is_a? Array
         EnrolmentMailer.receive(mail)
