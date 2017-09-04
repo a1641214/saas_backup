@@ -4,14 +4,16 @@ require 'activerecord-import'
 ActiveRecord::Import.require_adapter('mysql2')
 
 class DemoController < ApplicationController
-    def self.index
+    def index
+        # modifier specifies the path for the reduced dataset. use empty string for full set
+        modifier = '.min'
         @path = 'db/csv/'
-        @courses = ImportFile.import_courses(@path + 'CM_CRSE_CAT_ECMS-6383074.csv')
+        @courses = ImportFile.import_courses(@path + 'CM_CRSE_CAT_ECMS-6383074' + modifier + '.csv')
         ImportFile.fill_course_offerings(@path + 'CM_CRSE_CAT_ECMS_OFFERINGS-6383075.csv', @courses)
-        ImportFile.import_components_and_link(@path + 'CM_CRSE_CAT_ECMS_COMPONENTS-6383069.csv', @courses)
-        sessions = ImportFile.import_sessions(@path + 'SPActivity_2017.csv')
-        students = ImportFile.import_students(@path + 'EN_BY_CLASS_ECMS-6384857.csv')
-        classes = ImportFile.import_classes(@path + 'CLS_CMBND_SECT_FULL-6385825.csv')
+        ImportFile.import_components_and_link(@path + 'CM_CRSE_CAT_ECMS_COMPONENTS-6383069' + modifier + '.csv', @courses)
+        sessions = ImportFile.import_sessions(@path + 'SPActivity_2017' + modifier + '.csv')
+        students = ImportFile.import_students(@path + 'EN_BY_CLASS_ECMS-6384857' + modifier + '.csv')
+        classes = ImportFile.import_classes(@path + 'CLS_CMBND_SECT_FULL-6385825' + modifier + '.csv')
 
         return unless Course.count.zero?
 
@@ -32,12 +34,17 @@ class DemoController < ApplicationController
         # push components into database
         @courses.each do |_, course|
             # create a course entry
-            c = Course.find(course.id)
+            c = Course.find(course.id.to_i)
 
             # create components and link to the courses
             course.components.each do |component|
-                comp = Component.create(class_type: component.type)
+                comp = Component.create(class_type: component.type, class_numbers: {})
+                comp_classes = classes.select { |cl| component.type[0, 2] == cl.section[0, 2] && cl.course_id.to_i == course.id.to_i }
+                comp_classes.each do |cl|
+                    comp.class_numbers[cl.section] = cl.class_nbr
+                end
                 comp.courses << c
+                comp.save!
             end
         end
 
