@@ -10,7 +10,6 @@ RSpec.describe ClashRequestsController, type: :controller do
 
     describe 'GET #index' do
         it 'returns http success' do
-            expect(Mail).to receive(:first).and_return([])
             get :index
             expect(response).to have_http_status(:success)
         end
