@@ -32,6 +32,11 @@ def import_students(students, classes)
 end
 
 def execute_import
+    Component.destroy_all
+    Course.destroy_all
+    Session.destroy_all
+    Student.destroy_all
+
     # modifier specifies the path for the reduced dataset. use empty string for full set
     modifier = '.min'
     @path = 'db/csv/'
@@ -41,8 +46,6 @@ def execute_import
     sessions = ImportFile.import_sessions(@path + 'SPActivity_2017' + modifier + '.csv')
     students = ImportFile.import_students(@path + 'EN_BY_CLASS_ECMS-6384857' + modifier + '.csv')
     classes = ImportFile.import_classes(@path + 'CLS_CMBND_SECT_FULL-6385825' + modifier + '.csv')
-
-    return unless Course.count.zero?
 
     # using activerecord-import to batch create objects to avoid N+1 problem
     batch_courses = []
@@ -104,9 +107,12 @@ end
 
 namespace :import do
     desc 'Import Files'
-    task run: :environment do
-        break if Mail.all.empty?
+    task mail: :environment do
+        next if Mail.all.empty?
         Mail.all.each { |mail| EnrolmentMailer.receive(mail) }
+        execute_import
+    end
+    task run: :environment do
         execute_import
     end
 end

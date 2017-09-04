@@ -21,7 +21,6 @@ class ClashRequestsController < ApplicationController
 
     def index
         @clash_requests = ClashRequest.all
-        DemoController.index
     end
 
     def show

@@ -1,19 +1,17 @@
-
 %table.table.table-hover
-    %thead
-        %tr
-            %th Course ID
-            %th Course Name
-            %th Catalog_number
-            %th Components
-    %tbody
-    - @courses.each do |_, course|
-        %tr
-            %th= course.id
-            %th= course.name
-            %th= course.catalog_number
-            %th
-                - components = course.components
-                - components.each do |component|
-                    %p= component.type + " " + component.id.to_s
-
+  %thead
+    %tr
+      %th Course ID
+      %th Course Name
+      %th Catalog Number
+      %th Components
+  %tbody
+    - @courses.map do |course|
+      %tr
+        %th= course.id
+        %th= course.name
+        %th= course.catalogue_number
+        %th
+          - components = course.components
+          - components.map do |component|
+            %p #{component.class_type} #{component.id}
