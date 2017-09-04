@@ -8,10 +8,10 @@
   %tbody
     - @courses.map do |course|
       %tr
-        %th= course.id
-        %th= course.name
-        %th= course.catalogue_number
-        %th
+        %td= course.id
+        %td= course.name
+        %td= course.catalogue_number
+        %td
           - components = course.components
           - components.map do |component|
             %p #{component.class_type} #{component.id}
