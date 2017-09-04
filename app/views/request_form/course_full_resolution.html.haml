@@ -1,3 +1,6 @@
+-content_for(:head) do
+    = stylesheet_link_tag "request_form"
+
 - content_for(:big_title) do
     %h1 Course Full Resolution
     %h2 Please complete the Course Full Resolution Form below if all classes in a course are full.
@@ -27,4 +30,4 @@
             No
     %ul
         %li Justification (if not a core course):
-        %li=text_area_tag "clash_resolution[justification]",session[:clash_resolution]["justification"],:class => "text_area"
+        %li=text_area_tag "request_form[justification]",session[:request_form]["justification"],:class => "text_area"

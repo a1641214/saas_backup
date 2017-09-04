@@ -13,12 +13,21 @@ class RequestFormController < ApplicationController
         )
     end
 
+
+    def update_classes
+        @classes = Session.where('component.id = ?', params[:clash_resolution][:enrolment].component.id)
+        respond_to do |format|
+            format.js
+        end
+    end
+
     def clash_resolution
         session[:request_form] = RequestForm.get_session_data(session[:request_form])
         @degrees = ["Software Engineering","Finance","Electronic Electricity","Telecommunication","Accounting"]
         @semester = ["Summer semester, 2017","Semester2, 2017"]
         @subject = ["COMP","MATH","C&ENVENG"]
         @courses = Course.all
+        @sessions = Session.all
     end
 
     def unit_overload
