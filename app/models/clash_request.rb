@@ -44,10 +44,7 @@ class ClashRequest < ActiveRecord::Base
         clash_request.save
     end
 
-    def self.search(query)
-        where('enrolment_request_id LIKE ?', "%#{query}%")
-        where('student_id LIKE ?', "%#{query}%")
-        # where('date_submitted LIKE ?', "%#{query}%")
-        # where('faculty LIKE ?', "%#{query}%")
+    def self.search(search)
+        where('enrolment_request_id LIKE ? OR student_id LIKE ? OR date_submitted LIKE ? OR faculty LIKE ? OR comments LIKE ?', "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%")
     end
 end
