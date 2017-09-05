@@ -3,16 +3,19 @@
     = link_to 'Create' , new_clash_request_path, class: 'btn btn-primary pull-right red'
 
 %div{class:"navbar red"}
-    %ul.nav.navbar-nav
+    %ul.nav.navbar-nav.hover_nav
+        %li.active
+            %a{href: "#messages"} All
+    %ul.nav.navbar-nav.hover_nav
         %li
             %a{href: "#messages"} Active
+    %ul.nav.navbar-nav.hover_nav        
         %li
             %a{href: "#messages"} Inactive
             
     = form_tag(clash_requests_path, method: 'get', class: 'form form-inline pull-right white') do
         = search_field_tag 'search', nil, class: 'form-control white', placeholder: 'Search'
-        // = submit_tag "Submit", class: 'btn btn-default', :name => nil
-        %button{type: 'submit', class: 'btn btn-default white'}
+        %button{type: 'submit', class: 'btn btn-default white', id: 'search_icon'}
             %span{class: 'glyphicon glyphicon-search'}
 
 %table.table.table-hover#clash-clash_requests

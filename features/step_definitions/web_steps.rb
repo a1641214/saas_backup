@@ -333,6 +333,14 @@ Then /^the "([^"]*)" field should have the error "([^"]*)"$/ do |field, error_me
     end
 end
 
+Given(/^I search with "([^"]*)"$/) do |student_id|
+    # fill_in :search, :with => student_id
+end
+
+When(/^I press search icon$/) do
+    find('#search_box .glyphicon-search').click
+end
+
 Then /^the "([^"]*)" field should have no error$/ do |field|
     element = find_field(field)
     classes = element.find(:xpath, '..')[:class].split(' ')

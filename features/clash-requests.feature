@@ -23,7 +23,8 @@ Feature: Clash Requests (#16)
     Scenario: Search for a student (#126)
         Given I am logged in
         Given I am on the new clash request page
-        Given I search with "1111111"
-        When I press "Submit"
+        Given typical usage and data
+        Given I search with "1680000"
+        When I press search icon
         Then I should see "1 row of student"
         
