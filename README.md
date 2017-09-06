@@ -6,8 +6,9 @@ Enrolment Resolver In Clashes (E.R.I.C.) is a tool that will be available to fac
 
 Product can be found at: https://uoa-2017-s2-esasii-group-01.herokuapp.com
 
-# Table of Contents
-## Documentation
+# Quick Links
+- [Wiki Table of Contents](https://github.cs.adelaide.edu.au/a1002160/2017-S2-ESaSII-Group-01/wiki)
+  
 - [Requirements Document](https://github.cs.adelaide.edu.au/a1002160/2017-S2-ESaSII-Group-01/wiki/Requirements-Document)
 - [Architecture Plan](https://github.cs.adelaide.edu.au/a1002160/2017-S2-ESaSII-Group-01/wiki/Architecture)
 - [Internal Processes](https://github.cs.adelaide.edu.au/a1002160/2017-S2-ESaSII-Group-01/wiki/Processes)
