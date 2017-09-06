@@ -68,4 +68,34 @@ RSpec.describe Course, type: :model do
             expect(course_one.alternate_sessions_clash_course(clash_one, comp2)).to eq(%w[PR02 PR01])
         end
     end
+
+    describe 'all subject areas method' do
+        it 'should return the list of all the subject areas offered' do
+            FactoryGirl.create(:course, name: 'Engineering Software as Services I', catalogue_number: 'COMP SCI 3003')
+            FactoryGirl.create(:course, name: 'Engineering Software as Services II', catalogue_number: 'COMP SCI 3004')
+            FactoryGirl.create(:course, name: 'Soils and Landscapes I', catalogue_number: 'SOIL&WAT 1000WT')
+            FactoryGirl.create(:course, name: 'Applied Areodynamics', catalogue_number: 'MECH ENG 3101')
+            FactoryGirl.create(:course, name: 'Introduction to Petroleum Engineering', catalogue_number: 'PETROENG 1006')
+            desired_array = ['COMP SCI', 'MECH ENG', 'PETROENG', 'SOIL&WAT']
+            output_array = Course.all_subject_areas
+            expect(output_array).to eq(desired_array)
+        end
+    end
+
+        describe 'all subject areas method' do
+        it 'should return the list of all the subject areas offered' do
+            c1 = FactoryGirl.create(:course, name: 'Engineering Software as Services I', catalogue_number: 'COMP SCI 3003')
+            c2 = FactoryGirl.create(:course, name: 'Engineering Software as Services II', catalogue_number: 'COMP SCI 3004')
+            FactoryGirl.create(:course, name: 'Soils and Landscapes I', catalogue_number: 'SOIL&WAT 1000WT')
+            FactoryGirl.create(:course, name: 'Applied Areodynamics', catalogue_number: 'MECH ENG 3101')
+            c5 = FactoryGirl.create(:course, name: 'Introduction to Petroleum Engineering', catalogue_number: 'PETROENG 1006')
+            desired_array = [c1, c2]
+            output_array = Course.search_by_area("COMP SCI")
+            expect(output_array).to eq(desired_array)
+
+            desired_array = [c5]
+            output_array = Course.search_by_area("PETROENG")
+            expect(output_array).to eq(desired_array)
+        end
+    end
 end
