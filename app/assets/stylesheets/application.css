@@ -3,3 +3,7 @@
     *= require bootstrap-material-design
     *= require clash_requests.scss
 */
+
+.title{
+    margin-top: 10px !important;
+}

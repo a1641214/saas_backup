@@ -21,9 +21,9 @@ class ClashRequestsController < ApplicationController
 
     def index
         @clash_requests = ClashRequest.all
-        if params[:search]
-            @clash_requests = ClashRequest.search(params[:search])
-        end
+        @clash_requests = ClashRequest.search(params[:search]) if params[:search]
+        @clash_requests = ClashRequest.where('inactive = ?', false) if params[:order] == 'active'
+        @clash_requests = ClashRequest.where('inactive = ?', true) if params[:order] == 'inactive'
         mail = Mail.first
         return if mail.is_a? Array
         EnrolmentMailer.receive(mail)
@@ -45,8 +45,8 @@ class ClashRequestsController < ApplicationController
 
     def destroy
         @clash_request = ClashRequest.find(params[:id])
-        @request.update!(inactive: !@request.inactive)
-        flash[:notice] = "Clash Request from student #{@request.studentId} was made #{@request.inactive ? 'inactive' : 'active'}"
+        @clash_request.update!(inactive: !@clash_request.inactive)
+        flash[:notice] = "Clash Request from student #{@clash_request.studentId} was made #{@clash_request.inactive ? 'inactive' : 'active'}"
         redirect_to clash_requests_path
     end
 

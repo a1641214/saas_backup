@@ -20,6 +20,20 @@ Feature: Clash Requests (#16)
         Then I should see "1680000"
         Then I should see "ECMS"
 
+    Scenario: View active clash requests (#126)
+        Given I am logged in
+        Given I am on the new clash request page
+        Given typical usage and data
+        Given I click on "Active"
+        Then I should see student_id of "1111112"
+
+    Scenario: View inactive clash requests (#126)
+        Given I am logged in
+        Given I am on the new clash request page
+        Given typical usage and data
+        Given I click on "Inactive"
+        Then I should see student_id of "1111111"
+
     Scenario: Search for a student (#126)
         Given I am logged in
         Given I am on the new clash request page

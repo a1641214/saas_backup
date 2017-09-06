@@ -4,14 +4,14 @@
 
 %div{class:"navbar red"}
     %ul.nav.navbar-nav.hover_nav
-        %li.active
-            %a{href: "#"} All
+        %li{:class=>(params[:order] == nil)?'active':""}
+            = link_to 'All', clash_requests_path
     %ul.nav.navbar-nav.hover_nav
-        %li
-            %a{href: "#messages"} Active
+        %li{:class=>(params[:order] == 'active')?'active':""}
+            = link_to 'Active', clash_requests_path(order: 'active')
     %ul.nav.navbar-nav.hover_nav        
-        %li
-            %a{href: "#messages"} Inactive
+        %li{:class=>(params[:order] == 'inactive')?'active':""}
+            = link_to 'Inactive', clash_requests_path(order: 'inactive')
             
     = form_tag(clash_requests_path, method: 'get', class: 'form form-inline pull-right white') do
         = search_field_tag 'search', nil, class: 'form-control white', placeholder: 'Search'
