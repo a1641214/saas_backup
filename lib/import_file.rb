@@ -106,7 +106,7 @@ module ImportFile
     end
 
     class Session
-        def initialize(time, day, weeks, length, component_code, course_id, capacity)
+        def initialize(time, day, weeks, length, component_code, course_id, capacity, term, accoc, enrol)
             @time = time
             @day = day
             @weeks = weeks
@@ -114,6 +114,9 @@ module ImportFile
             @component_code = component_code
             @course_id = course_id
             @capacity = capacity
+            @term = term
+            @accoc = accoc
+            @enrol = enrol
         end
 
         # get values
@@ -124,6 +127,9 @@ module ImportFile
         attr_reader :component_code
         attr_reader :course_id
         attr_reader :capacity
+        attr_reader :term
+        attr_reader :accoc
+        attr_reader :enrol
     end
 
     # import courses from the course catalog
@@ -203,7 +209,7 @@ module ImportFile
             capacity = row[5].to_i
             term = row[0].to_i
             accoc = row[8].to_i
-            enroll = row[11]
+            enrol = row[11]
 
             # determine time
             start_hours = -1
@@ -220,7 +226,7 @@ module ImportFile
                 next unless val == 1
                 sessions.push(Session.new(time, CONST_DAYS_ARRAY[index],
                                           weeks_array, length, component_code,
-                                          course_id, capacity))
+                                          course_id, capacity, term, accoc, enrol))
             end
         end
         sessions
