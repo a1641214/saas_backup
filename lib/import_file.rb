@@ -201,6 +201,10 @@ module ImportFile
             component_code = row[1][-8..-1]
             component_code = component_code[0, 2] + component_code[-2, 2]
             capacity = row[5].to_i
+            term = row[0].to_i
+            accoc = row[8].to_i
+            enroll = row[11]
+
             # determine time
             start_hours = -1
             start_minutes = -30
