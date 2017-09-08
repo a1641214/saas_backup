@@ -128,6 +128,7 @@ class ClashResolutionController < ApplicationController
 
     def find_subjects
         subject_array = Course.all_subject_areas.as_json
+        puts "THESE ARE MY SUBJECTS IN A HASH :: #{subject_array}"
         respond_to do |format|
             format.json {
                 render json: subject_array

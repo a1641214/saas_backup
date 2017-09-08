@@ -1,7 +1,8 @@
 console.log('loaded courses.js')
 
 $(document).on('change','#semester_select', function () {
-   update_subject_selection();
+    console.log("semester change")
+    update_subject_selection();
 });
 
 $(document).on('change','#subject_select', function () {
@@ -18,14 +19,11 @@ $(document).on('change','#course_select', function () {
 
 function change_subject_options(data) {
     $("#course_select").empty();
-    var defaultOption = $("<option/>").attr("value", -1);
-    defaultOption.text("Select a Subject");
-    $("#subject_area").append(defaultOption);
-
+    console.log(data);
     for(var i = 0;i<data.length;i++){
         var newOption = $("<option/>").attr("value", data[i]);
         newOption.text(data[i]);
-        $("#subject_area").append(newOption);
+        $("#subject_select").append(newOption);
     }
 };
 
@@ -82,7 +80,6 @@ function update_course_selection(){
 
 function change_courses_options(data) {
     reset_course_selector();
-    $("#course_select").append(defaultOption);
 
     for(var i = 0;i<data.length;i++){
         var newOption = $("<option/>").attr("value", data[i].id);
