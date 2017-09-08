@@ -100,10 +100,10 @@ class ClashResolutionController < ApplicationController
         select_course = Course.find(id)
         select_components = select_course.components
         select_components.each do |comp|
-            puts (comp.id)
             js = JsonSessions.new(comp.class_type)
-            comp.sessions.each do |comp_session|
-                js.component_sessions << comp_session
+            indv_sessions = comp.unique_sessions
+            indv_sessions.each do |sess|
+                js.component_sessions << sess
             end
             component_session_join << js
 
