@@ -40,4 +40,13 @@ Feature: Clash Requests (#16)
         Given I am on the clash requests list page
         Given I search with "1680000"
         Then I should see "1680000"
+
+    Scenario: View a request using dropdown menu (#138)
+        Given I am logged in
+        Given typical usage and data
+        Given I am on the clash requests list page
+        When I press "More"
+        Given I click on "View request"
+        Then I should see "1680000"
+        Then I should see "ECMS"
         
