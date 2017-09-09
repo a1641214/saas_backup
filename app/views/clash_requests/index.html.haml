@@ -1,3 +1,5 @@
+%script{:src => "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js", :type => "text/javascript"}
+
 =link_to 'Create' , new_clash_request_path, class: 'btn btn-primary pull-right create red'
 %h1 Clash Requests 
    
@@ -35,4 +37,16 @@
                 %td= clash_request.date_submitted
                 %td= clash_request.faculty
                 %td= clash_request.comments
-                %td= link_to 'View', clash_request_path(clash_request), class: 'btn btn-default'
+                %td
+                    %div.dropdown
+                        %button.btn.btn-default.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :type => "button"} 
+                            More
+                            %span{class: 'glyphicon glyphicon-chevron-down'}
+                        %ul.dropdown-menu
+                            %li.dropdown-item
+                                =link_to  'View request', clash_request_path(clash_request)
+                            %li.dropdown-item
+                                =link_to 'Edit', edit_clash_request_path(clash_request)
+                            %li.dropdown-item
+                                =link_to "Make #{clash_request.inactive ? 'Active' : 'Inactive'}", clash_request_path(clash_request), method: :delete
+                                
