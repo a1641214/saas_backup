@@ -92,21 +92,25 @@ module ImportFile
     end
 
     class Class
-        def initialize(term, course_id, class_nbr, section)
+        def initialize(term, course_id, class_nbr, section, associated, enrol)
             @term = term
             @course_id = course_id
             @class_nbr = class_nbr
             @section = section
+            @associated = associated
+            @enrol = enrol
         end
 
         attr_reader :term
         attr_reader :course_id
         attr_reader :class_nbr
         attr_reader :section
+        attr_reader :associated
+        attr_reader :enrol
     end
 
     class Session
-        def initialize(time, day, weeks, length, component_code, course_id, capacity, term, accoc, enrol)
+        def initialize(time, day, weeks, length, component_code, course_id, capacity)
             @time = time
             @day = day
             @weeks = weeks
@@ -114,9 +118,6 @@ module ImportFile
             @component_code = component_code
             @course_id = course_id
             @capacity = capacity
-            @term = term
-            @accoc = accoc
-            @enrol = enrol
         end
 
         # get values
@@ -127,9 +128,6 @@ module ImportFile
         attr_reader :component_code
         attr_reader :course_id
         attr_reader :capacity
-        attr_reader :term
-        attr_reader :accoc
-        attr_reader :enrol
     end
 
     # import courses from the course catalog
@@ -207,9 +205,6 @@ module ImportFile
             component_code = row[1][-8..-1]
             component_code = component_code[0, 2] + component_code[-2, 2]
             capacity = row[5].to_i
-            term = row[0].to_i
-            accoc = row[8].to_i
-            enrol = row[11]
 
             # determine time
             start_hours = -1
@@ -264,7 +259,9 @@ module ImportFile
             course_id = row[1].to_i
             class_nbr = row[3].to_i
             section = row[4]
-            class1 = Class.new(term, course_id, class_nbr, section)
+            associated = row[8].to_i
+            enrol = row[11]
+            class1 = Class.new(term, course_id, class_nbr, section, associated, enrol)
             classes.append(class1)
         end
         classes
