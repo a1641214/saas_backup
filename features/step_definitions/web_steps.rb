@@ -338,11 +338,11 @@ Given(/^I click on "([^"]*)"$/) do |navbar_link|
 end
 
 Given(/^I search with "([^"]*)"$/) do |student_id|
-    fill_in('Search', :with => student_id)
+    fill_in('Search', with: student_id)
 end
 
 Then(/^I should not see any student$/) do
-    content = find("tbody").text
+    content = find('tbody').text
     expect(content).to eq('')
 end
 
