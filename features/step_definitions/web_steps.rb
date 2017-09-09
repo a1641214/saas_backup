@@ -334,23 +334,16 @@ Then /^the "([^"]*)" field should have the error "([^"]*)"$/ do |field, error_me
 end
 
 Given(/^I click on "([^"]*)"$/) do |navbar_link|
-    # find(navbar_link, :visible => false).click
-    # click_link(navbar_link)
-    within(:css, 'div') do
-        find(navbar_link).click
-    end    
+    click_on(navbar_link)
 end
 
 Given(/^I search with "([^"]*)"$/) do |student_id|
-    # fill_in :search, :with => student_id
+    fill_in('Search', :with => student_id)
 end
 
-When(/^I press search icon$/) do
-    # find('#search_box .glyphicon-search').click
-end
-
-Then(/^I should see student_id of "([^"]*)"$/) do |arg1|
-#   pending # Write code here that turns the phrase above into concrete actions
+Then(/^I should not see any student$/) do
+    content = find("tbody").text
+    expect(content).to eq('')
 end
 
 Then /^the "([^"]*)" field should have no error$/ do |field|

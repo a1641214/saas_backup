@@ -22,23 +22,22 @@ Feature: Clash Requests (#16)
 
     Scenario: View active clash requests (#126)
         Given I am logged in
-        Given I am on the new clash request page
         Given typical usage and data
+        Given I am on the clash requests list page
         Given I click on "Active"
-        Then I should see student_id of "1111112"
+        Then I should see "1680000"
 
     Scenario: View inactive clash requests (#126)
         Given I am logged in
-        Given I am on the new clash request page
         Given typical usage and data
+        Given I am on the clash requests list page
         Given I click on "Inactive"
-        Then I should see student_id of "1111111"
+        Then I should not see any student
 
     Scenario: Search for a student (#126)
         Given I am logged in
-        Given I am on the new clash request page
         Given typical usage and data
+        Given I am on the clash requests list page
         Given I search with "1680000"
-        When I press search icon
-        Then I should see "1 row of student"
+        Then I should see "1680000"
         
