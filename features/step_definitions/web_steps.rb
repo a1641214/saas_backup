@@ -412,3 +412,66 @@ Then /^there should be ([0-9]+) row(?:|s)$/ do |rows|
         expect(all('tr').count).to eq(rows.to_i)
     end
 end
+
+Given(/^"([^"]*)" is a student wanting to make a clash request$/) do |student_id|
+    create(:student, id: student_id)
+end
+
+Given /^two comp sci and one soil and water course exsist$/ do
+    c1 = FactoryGirl.create(:course, name: 'Engineering Software as Services I', catalogue_number: 'COMP SCI 3003')
+    c2 = FactoryGirl.create(:course, name: 'Engineering Software as Services II', catalogue_number: 'COMP SCI 3004')
+    c4 = FactoryGirl.create(:course, name: 'Soils and Landscapes I', catalogue_number: 'SOIL&WAT 1000WT')
+
+    # Create components
+    comp1 = FactoryGirl.create(:component, class_type: 'Lecture')
+    comp2 = FactoryGirl.create(:component, class_type: 'Tutorial')
+    c1.components << comp1 << comp2
+    comp3 = FactoryGirl.create(:component, class_type: 'Lecture')
+    comp4 = FactoryGirl.create(:component, class_type: 'Workshop')
+    c2.components << comp3 << comp4
+
+    comp8 = FactoryGirl.create(:component, class_type: 'Lecture')
+    comp9 = FactoryGirl.create(:component, class_type: 'Practical')
+    c4.components << comp8 << comp9
+
+    FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 10, 0, 0, '+09:30'), length: 1, day: 'Monday', weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], component_code: 'LE01', component: comp1)
+    FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 10, 0, 0, '+09:30'), length: 1, day: 'Wednesday', weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], component_code: 'LE01', component: comp1)
+    FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 12, 0, 0, '+09:30'), length: 1, day: 'Monday', weeks: [2, 4, 6, 8, 10, 12], component_code: 'TU01', component: comp2)
+    FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 1, day: 'Monday', weeks: [1, 3, 5, 7, 9, 11], component_code: 'TU02', component: comp2)
+
+    FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 9, 0, 0, '+09:30'), length: 2, day: 'Monday', weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], component_code: 'LE01', component: comp3)
+    FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 14, 0, 0, '+09:30'), length: 3, day: 'Tuesday', weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], component_code: 'WR01', component: comp4)
+
+    FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 2, day: 'Monday', weeks: [2, 4, 6, 8, 10, 12], component_code: 'LE01', component: comp8)
+    FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 2, day: 'Monday', weeks: [2, 4, 6, 8, 10, 12], component_code: 'PR01', component: comp9)
+    FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 2, day: 'Monday', weeks: [2, 4, 6, 8, 10, 12], component_code: 'PR02', component: comp9)
+
+    c1.save!
+    c2.save!
+    c4.save!
+
+    comp1.save!
+    comp2.save!
+    comp3.save!
+    comp4.save!
+    comp8.save!
+    comp9.save!
+end
+
+Given(/^I have filled out the clash request form and pressed submit$/) do
+    fill_in('clash_resolution[enrolment_request_id]', with: '1814')
+    fill_in('clash_resolution[name]', with: 'Mary')
+    fill_in('clash_resolution[student]', with: '1705')
+    fill_in('clash_resolution[email]', with: 'xyz123@gmail.com')
+    select('Summer Semester, 2017', from: 'clash_resolution[semester]')
+    select('COMP SCI', from: 'clash_resolution[subject]')
+    select('COMP SCI 3003', from: 'clash_resolution[course]')
+    select('LE01:1', from: 'clash_resolution[Lecture]')
+    select('TU02:4', from: 'clash_resolution[Tutorial]')
+    choose('agree')
+    click_button('Submit')
+end
+
+When(/^I press View for the clash request for "([^"]*)"$/) do |id|
+    find('tr', text: id).click_link('View')
+end

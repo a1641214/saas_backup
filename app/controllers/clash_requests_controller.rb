@@ -14,39 +14,38 @@ class ClashRequestsController < ApplicationController
     def new; end
 
     def create
-
-        if Student.where(id: params[:clash_resolution]["student"]).empty?
-            flash[:notice] = "The form was filled out incorrectly. Please try again"
+        if Student.where(id: params[:clash_resolution]['student']).empty?
+            flash[:notice] = 'The form was filled out incorrectly. Please try again'
             redirect_to clash_requests_path
             return
         end
-        if params[:clash_resolution]["subject"].eql?("Select a Subject")
-            flash[:notice] = "The form was filled out incorrectly. Please try again"
-            redirect_to clash_requests_path
-            return
-        end
-
-        if params[:clash_resolution]["course"].eql?("-1")
-            flash[:notice] = "The form was filled out incorrectly. Please try again"
+        if params[:clash_resolution]['subject'].eql?('Select a Subject')
+            flash[:notice] = 'The form was filled out incorrectly. Please try again'
             redirect_to clash_requests_path
             return
         end
 
-        clash_degree = params[:clash_resolution]["degree"]
-        clash_semester = params[:clash_resolution]["semester"]
-        clash_subject = params[:clash_resolution]["subject"]
-        clash_course = Course.find(params[:clash_resolution]["course"])
-        clash_student = Student.find(params[:clash_resolution]["student"])
-        #clash_comments = params[:clash_resolution]["comments"]
-        #clash_faculty = params[:clash_resolution]["faculty"]
+        if params[:clash_resolution]['course'].eql?('-1')
+            flash[:notice] = 'The form was filled out incorrectly. Please try again'
+            redirect_to clash_requests_path
+            return
+        end
+
+        # clash_degree = params[:clash_resolution]['degree']
+        # clash_semester = params[:clash_resolution]['semester']
+        # clash_subject = params[:clash_resolution]['subject']
+        clash_course = Course.find(params[:clash_resolution]['course'])
+        clash_student = Student.find(params[:clash_resolution]['student'])
+        clash_comments = params[:clash_resolution]['comments']
+        clash_faculty = 'ECMS'
         clash_sessions = []
         comps_to_get = clash_course.components
         comps_to_get.each do |comp|
             type = comp.class_type
             session_form_id = params[:clash_resolution][type]
 
-            if session_form_id.eql?("-1")
-                flash[:notice] = "The form was filled out incorrectly. Please try again"
+            if session_form_id.eql?('-1')
+                flash[:notice] = 'The form was filled out incorrectly. Please try again'
                 redirect_to clash_requests_path
                 return
             end
@@ -54,12 +53,11 @@ class ClashRequestsController < ApplicationController
             session_component_code = clash_session.component_code
             same_sessions = comp.sessions.where(component_code: session_component_code)
             same_sessions.each do |sess|
-                puts sess.component_code
                 clash_sessions << sess
             end
         end
 
-        @clash_request = ClashRequest.create!(student_id: clash_student.id, course_id: clash_course.id, sessions: clash_sessions)
+        @clash_request = ClashRequest.create!(student_id: clash_student.id, course_id: clash_course.id, sessions: clash_sessions, comments: clash_comments, faculty: clash_faculty)
         flash[:notice] = "Clash request from student #{@clash_request.student_id} was created"
         redirect_to clash_requests_path
     end

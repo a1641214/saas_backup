@@ -1,12 +1,10 @@
 Rails.application.routes.draw do
-
     get '/clash_resolution/find_courses_from_subject_area' => 'clash_resolution#find_courses_from_subject_area', :as => :find_courses_from_subject_area
     get '/clash_resolution/find_components_and_sessions_from_course' => 'clash_resolution#find_components_and_sessions_from_course', :as => :find_components_and_sessions_from_course
     get '/clash_resolution/find_session_from_components' => 'clash_resolution#find_session_from_components', :as => :find_session_from_components
     get '/clash_resolution/find_degrees_offered' => 'clash_resolution#find_degrees_offered', :as => :find_degrees_offered
 
     get '/clash_resolution/find_subjects' => 'clash_resolution#find_subjects', :as => :find_subjects
-
 
     resources :clash_requests
     resources :clash_resolution

@@ -172,7 +172,7 @@ when 'development', 'test'
         capacity: 50
     )
 
-    stud1 = Student.create(id: 1705)
+    Student.create(id: 1705)
 
     # create students
     stud1 = Student.create(id: 1111111)

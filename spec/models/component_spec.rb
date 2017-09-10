@@ -24,14 +24,14 @@ RSpec.describe Component, type: :model do
             comp2 = FactoryGirl.create(:component, class_type: 'Tutorial')
 
             s1 = FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 10, 0, 0, '+09:30'), length: 1, day: 'Monday', weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], component_code: 'LE01', component: comp1)
-            s2 = FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 10, 0, 0, '+09:30'), length: 1, day: 'Wednesday', weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], component_code: 'LE01', component: comp1)
+            FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 10, 0, 0, '+09:30'), length: 1, day: 'Wednesday', weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], component_code: 'LE01', component: comp1)
             s3 = FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 12, 0, 0, '+09:30'), length: 1, day: 'Monday', weeks: [2, 4, 6, 8, 10, 12], component_code: 'TU01', component: comp2)
             s4 = FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 11, 0, 0, '+09:30'), length: 1, day: 'Monday', weeks: [1, 3, 5, 7, 9, 11], component_code: 'TU02', component: comp2)
 
             lecture_expect_array = [s1]
             expect(comp1.unique_sessions).to eq(lecture_expect_array)
 
-            tutorial_expect_array = [s3,s4]
+            tutorial_expect_array = [s3, s4]
             expect(comp2.unique_sessions).to eq(tutorial_expect_array)
         end
     end

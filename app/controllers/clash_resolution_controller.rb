@@ -15,21 +15,23 @@ class ClashResolutionController < ApplicationController
     def new
         # to do: add degrees, semester, subject attribute in database.
         session[:clash_resolution] = ClashResolution.get_session_data(session[:clash_resolution])
-        @degrees = ['Select a Degree','BE(Hons)(Petro) & BSc(Physics)', 'Scandinavian Studies ', 'BE(Honours)(Mech-Comp)', 'Engineering Enabling', 'BE(Honours)(SustEnergy-Mech)']
-        @semester = ['Select a Semester','Summer Semester, 2017', 'Semester 1, 2017', 'Winter Semester, 2017', 'Semester 2, 2017']
+        @degrees = ['Select a Degree', 'BE(Hons)(Petro) & BSc(Physics)', 'Scandinavian Studies ', 'BE(Honours)(Mech-Comp)', 'Engineering Enabling', 'BE(Honours)(SustEnergy-Mech)']
+        @semester = ['Select a Semester', 'Summer Semester, 2017', 'Semester 1, 2017', 'Winter Semester, 2017', 'Semester 2, 2017']
         @courses = []
         @sessions = []
         @subjects = ['Select a Subject']
+        @faculties = ['ECMS']
     end
 
     def index
         # to do: add degrees, semester, subject attribute in database.
         session[:clash_resolution] = ClashResolution.get_session_data(session[:clash_resolution])
-        @degrees = ['Software Engineering', 'Finance', 'Electronic Electricity', 'Telecommunication', 'Accounting']
-        @semester = ['Summer Semester, 2017', 'Semester 1, 2017', 'Winter Semester, 2017', 'Semester 2, 2017']
-        @subjects = Course.all_subject_areas
-        @courses = Course.all
-        @sessions = Session.all
+        @degrees = ['Select a Degree', 'BE(Hons)(Petro) & BSc(Physics)', 'Scandinavian Studies ', 'BE(Honours)(Mech-Comp)', 'Engineering Enabling', 'BE(Honours)(SustEnergy-Mech)']
+        @semester = ['Select a Semester', 'Summer Semester, 2017', 'Semester 1, 2017', 'Winter Semester, 2017', 'Semester 2, 2017']
+        @courses = []
+        @sessions = []
+        @subjects = ['Select a Subject']
+        @faculties = ['ECMS']
     end
 
     def update_classes
@@ -39,12 +41,8 @@ class ClashResolutionController < ApplicationController
         end
     end
 
-    def show
-        puts "CURRENTLY SHOULD NOT BE CALLED"
-        # if params[:id].eql?(find_courses_from_subject_area)
-        #     redirect_to find_courses_from_subject_area
-        # end
-    end
+    def show; end
+
     def create
         session[:clash_resolution] = params[:clash_resolution]
         error = ClashResolution.check_parameters(params)
@@ -60,38 +58,32 @@ class ClashResolutionController < ApplicationController
 
     def find_courses_from_subject_area
         subject_area = params[:area_code]
-        puts "THIS IS MY AREA CODE ID :: #{subject_area}"
-
         select_courses = Course.search_by_area(subject_area).as_json
-        puts "THESE ARE MY COURSES IN A HASH :: #{select_courses}"
         respond_to do |format|
-            format.json {
+            format.json do
                 render json: select_courses
-            }
+            end
         end
     end
 
     class JsonSessions
-        def initialize(_name)
-            @component_name = _name
+        def initialize(name)
+            @component_name = name
             @component_sessions = []
         end
-
         attr_reader :component_name
         attr_reader :component_sessions
     end
 
     def find_components_and_sessions_from_course
         id = params[:selected_id]
-        puts "THIS IS MY ID :: #{id}"
-
-        if id.eql?("-1")
+        if id.eql?('-1')
             empty_array = []
             empty_array.as_json
             respond_to do |format|
-                format.json {
+                format.json do
                     render json: empty_array
-                }
+                end
             end
             return
         end
@@ -106,33 +98,30 @@ class ClashResolutionController < ApplicationController
                 js.component_sessions << sess
             end
             component_session_join << js
-
         end
         component_session_join.as_json
-        puts "THESE ARE MY COMPONENTS IN A HASH :: #{component_session_join}"
         respond_to do |format|
-            format.json {
+            format.json do
                 render json: component_session_join
-            }
+            end
         end
     end
 
     def find_degrees_offered
         degree_array = ['BE(Hons)(Petro) & BSc(Physics)', 'Scandinavian Studies ', 'BE(Honours)(Mech-Comp)', 'Engineering Enabling', 'BE(Honours)(SustEnergy-Mech)'].as_json
         respond_to do |format|
-            format.json {
+            format.json do
                 render json: degree_array
-            }
+            end
         end
     end
 
     def find_subjects
         subject_array = Course.all_subject_areas.as_json
-        puts "THESE ARE MY SUBJECTS IN A HASH :: #{subject_array}"
         respond_to do |format|
-            format.json {
+            format.json do
                 render json: subject_array
-            }
+            end
         end
     end
 end

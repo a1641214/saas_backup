@@ -114,9 +114,8 @@ function make_component_select_boxes(component_data) {
     for(var i = 0;i<component_data.length;i++){
         var selectList = document.createElement("select");
 
-        var att = document.createAttribute("name");
-        att.value = "clash_resolution[" + component_data[i].component_name + "]";
-        selectList.setAttributeNode(att);
+        attvalue = "clash_resolution[" + component_data[i].component_name + "]";
+        selectList.setAttribute("name", attvalue);
 
 
         var defaultOption = $("<option/>").attr("value", -1);
