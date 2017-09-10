@@ -227,6 +227,7 @@
     opacity: 0;
 }
 
+.cr-timetable .class-number,
 .cr-timetable .event-date,
 .cr-timetable .event-name {
     display: block;
@@ -303,6 +304,7 @@
     width: calc(50% + 2px)!important;
     margin-left: 50%;
 }
+
 .larger-class {
     width: calc(90% + 2px)!important;
 }
