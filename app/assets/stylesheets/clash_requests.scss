@@ -297,6 +297,16 @@
     border-bottom: 5px solid red;
 }
 
+.smaller-class {
+    z-index: 50!important;
+    opacity: 0.5;
+    width: calc(50% + 2px)!important;
+    margin-left: 50%;
+}
+.larger-class {
+    width: calc(90% + 2px)!important;
+}
+
 #style-override .cell_indent {
     padding-left: 40px;
 }
