@@ -54,4 +54,18 @@ class RequestForm < ActiveRecord::Base
         end
         return false
     end
+
+    def self.convertType(parameters)
+        type = ""
+        unless parameters[:request_form]["clash_resolution"]
+            type = type + " Timetable Clash";
+        end
+        unless parameters[:request_form]["unit_overload"]
+            type = type + " Unit Overload";
+        end
+        unless parameters[:request_form]["class_full"]
+            type = type + " Class Full";
+        end
+        return type
+    end
 end

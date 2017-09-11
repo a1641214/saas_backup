@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170830013352) do
+ActiveRecord::Schema.define(version: 20170911013633) do
 
   create_table "clash_requests", force: :cascade do |t|
     t.string   "studentId"
@@ -29,6 +29,8 @@ ActiveRecord::Schema.define(version: 20170830013352) do
     t.integer  "preserve_clash_course"
     t.text     "preserve_student_sessions"
     t.text     "preserve_student_courses"
+    t.string   "core"
+    t.string   "request_type"
   end
 
   add_index "clash_requests", ["course_id"], name: "index_clash_requests_on_course_id"
