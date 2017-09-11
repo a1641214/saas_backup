@@ -50,7 +50,7 @@ Given /^typical usage and data$/ do
     # Clash Course
     course_clash = FactoryGirl.create(:course, catalogue_number: 'SOIL&WAT 1000WT', name: 'Soil and Water')
     comp1_clash = FactoryGirl.create(:component, class_type: 'Lecture', class_numbers: { 'LE01' => 13131 })
-    comp2_clash = FactoryGirl.create(:component, class_type: 'Practical', class_numbers: { 'PR01' => 13133, 'PR01' => 13134  })
+    comp2_clash = FactoryGirl.create(:component, class_type: 'Practical', class_numbers: { 'PR01' => 13133, 'PR02' => 13134 })
     course_clash.components << comp1_clash
     course_clash.components << comp2_clash
 
