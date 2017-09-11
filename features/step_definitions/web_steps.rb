@@ -423,15 +423,15 @@ Given /^two comp sci and one soil and water course exsist$/ do
     c4 = FactoryGirl.create(:course, name: 'Soils and Landscapes I', catalogue_number: 'SOIL&WAT 1000WT')
 
     # Create components
-    comp1 = FactoryGirl.create(:component, class_type: 'Lecture')
-    comp2 = FactoryGirl.create(:component, class_type: 'Tutorial')
+    comp1 = FactoryGirl.create(:component, class_type: 'Lecture', class_numbers: { 'LE01' => 17131 })
+    comp2 = FactoryGirl.create(:component, class_type: 'Tutorial', class_numbers: { 'TU01' => 17132, 'TU02' => 17133 })
     c1.components << comp1 << comp2
-    comp3 = FactoryGirl.create(:component, class_type: 'Lecture')
-    comp4 = FactoryGirl.create(:component, class_type: 'Workshop')
+    comp3 = FactoryGirl.create(:component, class_type: 'Lecture', class_numbers: { 'LE01' => 17134 })
+    comp4 = FactoryGirl.create(:component, class_type: 'Workshop', class_numbers: { 'WR01' => 17135 })
     c2.components << comp3 << comp4
 
-    comp8 = FactoryGirl.create(:component, class_type: 'Lecture')
-    comp9 = FactoryGirl.create(:component, class_type: 'Practical')
+    comp8 = FactoryGirl.create(:component, class_type: 'Lecture', class_numbers: { 'LE01' => 17136 })
+    comp9 = FactoryGirl.create(:component, class_type: 'Practical', class_numbers: { 'PR01' => 17139, 'PR02' => 17140 })
     c4.components << comp8 << comp9
 
     FactoryGirl.create(:session, time: Time.new(2017, 1, 1, 10, 0, 0, '+09:30'), length: 1, day: 'Monday', weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], component_code: 'LE01', component: comp1)

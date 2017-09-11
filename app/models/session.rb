@@ -76,16 +76,16 @@ class Session < ActiveRecord::Base
             session_array.each do |session_two|
                 next if session_one == session_two
                 next unless two_session_clash(session_one, session_two)
-                if clash_hash[session_one] == nil
-                    clash_hash[session_one] = [session_two]
-                else
-                    clash_hash[session_one] = clash_hash[session_one].concat [session_two]
-                end
-                if clash_hash[session_two] == nil
-                    clash_hash[session_two] = [session_one]
-                else
-                    clash_hash[session_two] = clash_hash[session_two].concat [session_one]
-                end
+                clash_hash[session_one] = if clash_hash[session_one].nil?
+                                              [session_two]
+                                          else
+                                              clash_hash[session_one].concat [session_two]
+                                          end
+                clash_hash[session_two] = if clash_hash[session_two].nil?
+                                              [session_one]
+                                          else
+                                              clash_hash[session_two].concat [session_one]
+                                          end
             end
         end
         clash_hash
