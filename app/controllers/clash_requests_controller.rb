@@ -35,8 +35,8 @@ class ClashRequestsController < ApplicationController
             Session.find(session)
         end
 
-        @enrol_info = {:enrolment => {}, :request => {}}
-        
+        @enrol_info = { enrolment: {}, request: {} }
+
         # Current Enrolment (with proposed changes)
         @clash_request.student.courses.each do |course|
             @enrol_info[:enrolment][course] = {}
@@ -46,9 +46,9 @@ class ClashRequestsController < ApplicationController
                 new_session = (@clash_request.student.sessions & component.sessions).first
                 details[:type] = component.class_type
                 details[:org_code] = old_session.component_code
-                details[:org_nbr] = 1 #old_session.component.class_numbers[details[:org_code]]
+                details[:org_nbr] = old_session.component.class_numbers[details[:org_code]]
                 details[:new_code] = new_session.component_code
-                details[:new_nbr] = 1 #old_session.component.class_numbers[details[:new_code]]
+                details[:new_nbr] = old_session.component.class_numbers[details[:new_code]]
 
                 @enrol_info[:enrolment][course][component] = details
             end
@@ -61,9 +61,9 @@ class ClashRequestsController < ApplicationController
             new_session = (old_clash_sessions & component.sessions).first
             details[:type] = component.class_type
             details[:org_code] = old_session.component_code
-            details[:org_nbr] = 1 #old_session.component.class_numbers[details[:org_code]]
+            details[:org_nbr] = old_session.component.class_numbers[details[:org_code]]
             details[:new_code] = new_session.component_code
-            details[:new_nbr] = 1 #old_session.component.class_numbers[details[:new_code]]
+            details[:new_nbr] = old_session.component.class_numbers[details[:new_code]]
 
             @enrol_info[:request][component] = details
         end
