@@ -5,7 +5,7 @@ class RequestFormController < ApplicationController
         time = Time.zone.now
         params[:request_form] = params[:request_form].merge(:date_submitted => time.to_date)
         core = "No"
-        unless params[:request_form]["core_yes"]
+        if params[:request_form]["core_yes"]
             core = "Yes"
         end
         type = RequestForm.convertType(params)
