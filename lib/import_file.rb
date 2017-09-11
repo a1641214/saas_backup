@@ -221,7 +221,7 @@ module ImportFile
                 next unless val == 1
                 sessions.push(Session.new(time, CONST_DAYS_ARRAY[index],
                                           weeks_array, length, component_code,
-                                          course_id, capacity, term, accoc, enrol))
+                                          course_id, capacity))
             end
         end
         sessions
