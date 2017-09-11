@@ -70,22 +70,51 @@ class ClashRequestsController < ApplicationController
 
     def index
         @clash_requests = ClashRequest.all
-        mail = Mail.first
-        return if mail.is_a? Array
-        EnrolmentMailer.receive(mail)
-        DemoController.index
     end
 
     def show
         @clash_request = ClashRequest.find params[:id]
 
         # Load serialised data into nicer format
-        @old_student_sessions = @clash_request.preserve_student_sessions.map do |session|
+        old_student_sessions = @clash_request.preserve_student_sessions.map do |session|
             Session.find(session)
         end
 
-        @old_clash_sessions = @clash_request.preserve_clash_sessions.map do |session|
+        old_clash_sessions = @clash_request.preserve_clash_sessions.map do |session|
             Session.find(session)
+        end
+
+        @enrol_info = { enrolment: {}, request: {} }
+
+        # Current Enrolment (with proposed changes)
+        @clash_request.student.courses.each do |course|
+            @enrol_info[:enrolment][course] = {}
+            course.components.each do |component|
+                details = {}
+                old_session = (old_student_sessions & component.sessions).first
+                new_session = (@clash_request.student.sessions & component.sessions).first
+                details[:type] = component.class_type
+                details[:org_code] = old_session.component_code
+                details[:org_nbr] = old_session.component.class_numbers[details[:org_code]]
+                details[:new_code] = new_session.component_code
+                details[:new_nbr] = old_session.component.class_numbers[details[:new_code]]
+
+                @enrol_info[:enrolment][course][component] = details
+            end
+        end
+
+        # Requested course
+        @clash_request.course.components.each do |component|
+            details = {}
+            old_session = (@clash_request.sessions & component.sessions).first
+            new_session = (old_clash_sessions & component.sessions).first
+            details[:type] = component.class_type
+            details[:org_code] = old_session.component_code
+            details[:org_nbr] = old_session.component.class_numbers[details[:org_code]]
+            details[:new_code] = new_session.component_code
+            details[:new_nbr] = old_session.component.class_numbers[details[:new_code]]
+
+            @enrol_info[:request][component] = details
         end
     end
 
@@ -103,6 +132,23 @@ class ClashRequestsController < ApplicationController
         @map_session_by_day = {}
         return unless @student
 
+        # find clashes
+        all_sessions = Session.all_request_student_sessions(@clash_request, @student)
+        clash_hash = Session.detect_clashes(all_sessions)
+        @clashes = {}
+        clash_hash.each do |clash_session, clashes_with|
+            next if clashes_with.nil?
+            clash = { max_class: clash_session, max_length: clash_session.length, other_sessions: [] }
+            clashes_with.each do |a_clash|
+                next unless a_clash.length > clash[:max_length]
+                clash[:other_sessions].concat [clash[:max_class]]
+                clash[:max_class] = a_clash
+                clash[:max_length] = a_clash.length
+            end
+            @clashes[clash_session] = clash
+        end
+
+        # map sessions to day
         index = 0
         map_course_id_by_index = {}
 
@@ -115,7 +161,8 @@ class ClashRequestsController < ApplicationController
             by_day[session.day.downcase] << {
                 session: session,
                 id: id,
-                requested: false
+                requested: false,
+                clashes: @clashes[session]
             }
         end
 
@@ -128,12 +175,10 @@ class ClashRequestsController < ApplicationController
             by_day[session.day.downcase] << {
                 session: session,
                 id: id,
-                requested: true
+                requested: true,
+                clashes: @clashes[session]
             }
         end
-
-        all_sessions = Session.all_request_student_sessions(@clash_request, @student)
-        @clash_hash = Session.detect_clashes(all_sessions)
     end
 
     def update

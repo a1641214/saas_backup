@@ -40,8 +40,8 @@ end
 Given /^typical usage and data$/ do
     # Student Course
     course_enrol = FactoryGirl.create(:course)
-    comp1_enrol = FactoryGirl.create(:component, class_type: 'Lecture')
-    comp2_enrol = FactoryGirl.create(:component, class_type: 'Tutorial')
+    comp1_enrol = FactoryGirl.create(:component, class_type: 'Lecture', class_numbers: { 'LE01' => 17131 })
+    comp2_enrol = FactoryGirl.create(:component, class_type: 'Tutorial', class_numbers: { 'TU01' => 17132, 'TU02' => 17133 })
     course_enrol.components << comp1_enrol
     course_enrol.components << comp2_enrol
 
@@ -53,8 +53,8 @@ Given /^typical usage and data$/ do
 
     # Clash Course
     course_clash = FactoryGirl.create(:course, catalogue_number: 'SOIL&WAT 1000WT', name: 'Soil and Water')
-    comp1_clash = FactoryGirl.create(:component, class_type: 'Lecture')
-    comp2_clash = FactoryGirl.create(:component, class_type: 'Practical')
+    comp1_clash = FactoryGirl.create(:component, class_type: 'Lecture', class_numbers: { 'LE01' => 13131 })
+    comp2_clash = FactoryGirl.create(:component, class_type: 'Practical', class_numbers: { 'PR01' => 13133, 'PR02' => 13134 })
     course_clash.components << comp1_clash
     course_clash.components << comp2_clash
 

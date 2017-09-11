@@ -38,6 +38,9 @@ Metrics/ParameterLists:
   Max: 8
   CountKeywordArgs: true
 
+Metrics/ClassLength:
+    Enabled: false
+
 # Ignore all
 AllCops:
   Exclude:
