@@ -50,6 +50,23 @@ class ClashRequestsController < ApplicationController
         @map_session_by_day = {}
         return unless @student
 
+        # find clashes
+        all_sessions = Session.all_request_student_sessions(@clash_request, @student)
+        clash_hash = Session.detect_clashes(all_sessions)
+        @clashes = {}
+        clash_hash.each do |clash_session, clashes_with|
+            next if clashes_with.nil?
+            clash = { max_class: clash_session, max_length: clash_session.length, other_sessions: [] }
+            clashes_with.each do |a_clash|
+                next unless a_clash.length > clash[:max_length]
+                clash[:other_sessions].concat [clash[:max_class]]
+                clash[:max_class] = a_clash
+                clash[:max_length] = a_clash.length
+            end
+            @clashes[clash_session] = clash
+        end
+
+        # map sessions to day
         index = 0
         map_course_id_by_index = {}
 
@@ -62,7 +79,8 @@ class ClashRequestsController < ApplicationController
             by_day[session.day.downcase] << {
                 session: session,
                 id: id,
-                requested: false
+                requested: false,
+                clashes: @clashes[session]
             }
         end
 
@@ -75,12 +93,10 @@ class ClashRequestsController < ApplicationController
             by_day[session.day.downcase] << {
                 session: session,
                 id: id,
-                requested: true
+                requested: true,
+                clashes: @clashes[session]
             }
         end
-
-        all_sessions = Session.all_request_student_sessions(@clash_request, @student)
-        @clash_hash = Session.detect_clashes(all_sessions)
     end
 
     def update
