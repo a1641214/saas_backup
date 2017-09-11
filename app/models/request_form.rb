@@ -47,4 +47,11 @@ class RequestForm < ActiveRecord::Base
         end
         nil
     end
+
+    def self.isTrue(value)
+        if value == 1
+            return true
+        end
+        return false
+    end
 end

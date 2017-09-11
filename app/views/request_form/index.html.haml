@@ -96,25 +96,25 @@
                         %li
                             Timetable Clash:
                         %li.center
-                            =check_box_tag "request_form[clash_resolution]",  1, false
+                            =check_box_tag "request_form[clash_resolution]",1, RequestForm.isTrue(session["request_form"]["clash_resolution"])
                     %ul
                         %li
                             Course Full:
                         %li.center
-                            =check_box_tag "request_form[unit_overload]",  1, false
+                            =check_box_tag "request_form[unit_overload]",  1, RequestForm.isTrue(session["request_form"]["unit_overload"])
                     %ul
                         %li
                             Unit Overload:
                         %li.center
-                            =check_box_tag "request_form[class_full]",  1, false
+                            =check_box_tag "request_form[class_full]",  1, RequestForm.isTrue(session["request_form"]["class_full"])
                     %ul
                         %li
                             Is this a core course ?
                             %span{ :style => "color: red" } *
                         %li.center
-                            =radio_button_tag :request_form,:core_yes,false
+                            =radio_button_tag "request_form[core_yes]",1,RequestForm.isTrue(session["request_form"]["core_yes"])
                             Yes
-                            =radio_button_tag :request_form,:core_no,false
+                            =radio_button_tag "request_form[core_no]",1,RequestForm.isTrue(session["request_form"]["core_no"])
                             No
                     %ul
                         %li Comments or Justification:
