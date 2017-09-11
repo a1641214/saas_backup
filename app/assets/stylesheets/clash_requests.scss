@@ -318,16 +318,17 @@
 }
 
 .logo-padding{
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 50px;
 }
 
 .hover_nav:hover {
-     background-color: darken( #d40000, 10%) !important;
+     background-color: darken( #d40000, 10%);
 }
 
 .active{
-    background-color: darken( #d40000, 10%) !important;
+    background-color: darken( #d40000, 10%);
 }
 
 .create{
