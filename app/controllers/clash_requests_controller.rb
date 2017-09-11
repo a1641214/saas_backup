@@ -40,21 +40,27 @@ class ClashRequestsController < ApplicationController
         clash_faculty = 'ECMS'
         clash_sessions = []
         comps_to_get = clash_course.components
+        invalid_course = false
         comps_to_get.each do |comp|
             type = comp.class_type
             session_form_id = params[:clash_resolution][type]
 
             if session_form_id.eql?('-1')
                 flash[:notice] = 'The form was filled out incorrectly. Please try again'
-                redirect_to clash_requests_path
-                return
+                invalid_course = true
             end
+            next if invalid_course
             clash_session = Session.find(session_form_id)
             session_component_code = clash_session.component_code
             same_sessions = comp.sessions.where(component_code: session_component_code)
             same_sessions.each do |sess|
                 clash_sessions << sess
             end
+        end
+
+        if invalid_course
+            redirect_to clash_requests_path
+            return
         end
 
         @clash_request = ClashRequest.create!(student_id: clash_student.id, course_id: clash_course.id, sessions: clash_sessions, comments: clash_comments, faculty: clash_faculty)
