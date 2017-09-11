@@ -27,12 +27,45 @@ class ClashRequestsController < ApplicationController
         @clash_request = ClashRequest.find params[:id]
 
         # Load serialised data into nicer format
-        @old_student_sessions = @clash_request.preserve_student_sessions.map do |session|
+        old_student_sessions = @clash_request.preserve_student_sessions.map do |session|
             Session.find(session)
         end
 
-        @old_clash_sessions = @clash_request.preserve_clash_sessions.map do |session|
+        old_clash_sessions = @clash_request.preserve_clash_sessions.map do |session|
             Session.find(session)
+        end
+
+        @enrol_info = { enrolment: {}, request: {} }
+
+        # Current Enrolment (with proposed changes)
+        @clash_request.student.courses.each do |course|
+            @enrol_info[:enrolment][course] = {}
+            course.components.each do |component|
+                details = {}
+                old_session = (old_student_sessions & component.sessions).first
+                new_session = (@clash_request.student.sessions & component.sessions).first
+                details[:type] = component.class_type
+                details[:org_code] = old_session.component_code
+                details[:org_nbr] = old_session.component.class_numbers[details[:org_code]]
+                details[:new_code] = new_session.component_code
+                details[:new_nbr] = old_session.component.class_numbers[details[:new_code]]
+
+                @enrol_info[:enrolment][course][component] = details
+            end
+        end
+
+        # Requested course
+        @clash_request.course.components.each do |component|
+            details = {}
+            old_session = (@clash_request.sessions & component.sessions).first
+            new_session = (old_clash_sessions & component.sessions).first
+            details[:type] = component.class_type
+            details[:org_code] = old_session.component_code
+            details[:org_nbr] = old_session.component.class_numbers[details[:org_code]]
+            details[:new_code] = new_session.component_code
+            details[:new_nbr] = old_session.component.class_numbers[details[:new_code]]
+
+            @enrol_info[:request][component] = details
         end
     end
 
