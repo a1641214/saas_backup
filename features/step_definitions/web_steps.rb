@@ -347,6 +347,19 @@ Then /^the "([^"]*)" field should have the error "([^"]*)"$/ do |field, error_me
     end
 end
 
+Given(/^I click on "([^"]*)"$/) do |navbar_link|
+    click_on(navbar_link)
+end
+
+Given(/^I search with "([^"]*)"$/) do |student_id|
+    fill_in('Search', with: student_id)
+end
+
+Then(/^I should not see any student$/) do
+    content = find('tbody').text
+    expect(content).to eq('')
+end
+
 Then /^the "([^"]*)" field should have no error$/ do |field|
     element = find_field(field)
     classes = element.find(:xpath, '..')[:class].split(' ')

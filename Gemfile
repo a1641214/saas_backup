@@ -126,6 +126,9 @@ gem 'andand', '~> 1.3', '>= 1.3.3'
 # Enables pretty console (ap)
 gem 'awesome_print', '~> 1.6', '>= 1.6.1', require: 'ap'
 
+# bootstrap material design
+gem 'bootstrap-material-design'
+
 # Bootstrap
 gem 'twitter-bootstrap-rails'
 

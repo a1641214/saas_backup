@@ -70,6 +70,9 @@ class ClashRequestsController < ApplicationController
 
     def index
         @clash_requests = ClashRequest.all
+        @clash_requests = @clash_requests.search(params[:search]) if params[:search]
+        @clash_requests = @clash_requests.where('inactive = ?', false) if params[:order] == 'active'
+        @clash_requests = @clash_requests.where('inactive = ?', true) if params[:order] == 'inactive'
     end
 
     def show
@@ -120,8 +123,8 @@ class ClashRequestsController < ApplicationController
 
     def destroy
         @clash_request = ClashRequest.find(params[:id])
-        @request.update!(inactive: !@request.inactive)
-        flash[:notice] = "Clash Request from student #{@request.studentId} was made #{@request.inactive ? 'inactive' : 'active'}"
+        @clash_request.update!(inactive: !@clash_request.inactive)
+        flash[:notice] = "Clash Request from student #{@clash_request.studentId} was made #{@clash_request.inactive ? 'inactive' : 'active'}"
         redirect_to clash_requests_path
     end
 
