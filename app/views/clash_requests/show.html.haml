@@ -37,17 +37,16 @@
                     %tr
                         %td{:colspan => 6}
                             %h4= "#{course.catalogue_number} | #{course.name}"
-                    - course.components.each do |component|
-                        %tr{:class => ("warning" unless ((@clash_request.student.sessions & component.sessions).first.id == (@old_student_sessions & component.sessions).first.id))}
-                            %div{:id => "#{course.catalogue_number.tr(' ','_').tr('&','_')}_#{component.class_type}" }
-                                %td.cell_indent= component.class_type
-                                %td= (@old_student_sessions & component.sessions).first.component_code
-                                %td= (@old_student_sessions & component.sessions).first.id
-                                %td.cell_indent= component.class_type
-                                %td= (@clash_request.student.sessions & component.sessions).first.component_code
-                                %td= (@clash_request.student.sessions & component.sessions).first.id
-                            
-                
+                    - @enrol_info[:enrolment][course].each do |key,component|
+                        %tr{:class => ("warning" unless (component[:org_nbr] == component[:new_nbr]))}
+                            %div{:id => "#{course.catalogue_number.tr(' ','_').tr('&','_')}_#{component[:type]}"}
+                                %td.cell_indent= component[:type]
+                                %td= component[:org_code]
+                                %td= component[:org_nbr]
+                                %td.cell_indent= component[:type]
+                                %td= component[:new_code]
+                                %td= component[:new_nbr]
+
                 %tr
                     %th{:colspan => 6}
                         %h3 Requested Class
@@ -55,13 +54,13 @@
                     %td{:colspan => 6}
                         %h4= "#{@clash_request.course.catalogue_number} | #{@clash_request.course.name}"
 
-                - @clash_request.course.components.each do |component|
-                    %tr{:class => ("warning" unless (@clash_request.sessions & component.sessions).first.id == (@old_clash_sessions & component.sessions).first.id)}
-                        %div{:id => "#{@clash_request.course.catalogue_number.tr(' ','_').tr('&','_')}_#{component.class_type}" }
-                            %td.cell_indent= component.class_type
-                            %td= (@clash_request.sessions & component.sessions).first.component_code
-                            %td= (@clash_request.sessions & component.sessions).first.id
-                            %td.cell_indent= component.class_type
-                            %td= (@old_clash_sessions & component.sessions).first.component_code
-                            %td= (@old_clash_sessions & component.sessions).first.id
+                - @enrol_info[:request].each do |key,component|
+                    %tr{:class => ("warning" unless (component[:org_nbr] == component[:new_nbr]))}
+                        %div{:id => "#{@clash_request.course.catalogue_number.tr(' ','_').tr('&','_')}_#{component[:type]}"}
+                            %td.cell_indent= component[:type]
+                            %td= component[:org_code]
+                            %td= component[:org_nbr]
+                            %td.cell_indent= component[:type]
+                            %td= component[:new_code]
+                            %td= component[:new_nbr]
 

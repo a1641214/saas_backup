@@ -92,17 +92,21 @@ module ImportFile
     end
 
     class Class
-        def initialize(term, course_id, class_nbr, section)
+        def initialize(term, course_id, class_nbr, section, associated, enrol)
             @term = term
             @course_id = course_id
             @class_nbr = class_nbr
             @section = section
+            @associated = associated
+            @enrol = enrol
         end
 
         attr_reader :term
         attr_reader :course_id
         attr_reader :class_nbr
         attr_reader :section
+        attr_reader :associated
+        attr_reader :enrol
     end
 
     class Session
@@ -130,7 +134,7 @@ module ImportFile
     def self.import_courses(filename)
         courses = {}
         CSV.foreach(filename, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
-            id = row[1]
+            id = row[1].to_i
             name = row[4]
             course = Course.new(id, name, nil)
             courses[id] = course
@@ -155,7 +159,7 @@ module ImportFile
     # fill offering cataglog numbers from the offerings csv
     def self.fill_course_offerings(filename, courses)
         CSV.foreach(filename, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
-            id = row[1]
+            id = row[1].to_i
             if courses.key?(id)
                 # COMPSCI 3005
                 courses[id].assign_catalog_number(row[4] + ' ' + row[5])
@@ -167,7 +171,7 @@ module ImportFile
     def self.import_components_and_link(filename, courses)
         components = {}
         CSV.foreach(filename, headers: true) do |row|
-            id = row[1]
+            id = row[1].to_i
             type = row[9]
             component = Component.new(id, type)
             components[type] = component
@@ -196,11 +200,12 @@ module ImportFile
             days_array = (0...days_bin.bit_length).map { |n| days_bin[n] }
             time_array = (0...time_bin.bit_length).map { |n| time_bin[n] }
             weeks_array = (0...weeks_bin.bit_length).map { |n| weeks_bin[n] }.reverse
-            course_id = row[6][2, 6]
+            course_id = row[6][2, 6].to_i
             length = row[12] # duration of class in minutes
             component_code = row[1][-8..-1]
             component_code = component_code[0, 2] + component_code[-2, 2]
             capacity = row[5].to_i
+
             # determine time
             start_hours = -1
             start_minutes = -30
@@ -254,7 +259,9 @@ module ImportFile
             course_id = row[1].to_i
             class_nbr = row[3].to_i
             section = row[4]
-            class1 = Class.new(term, course_id, class_nbr, section)
+            associated = row[8].to_i
+            enrol = row[11]
+            class1 = Class.new(term, course_id, class_nbr, section, associated, enrol)
             classes.append(class1)
         end
         classes
