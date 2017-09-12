@@ -29,4 +29,32 @@ class Course < ActiveRecord::Base
     def long_name
         "#{catalogue_number} #{name}"
     end
+
+    def self.all_subject_areas
+        all_courses = Course.all
+        subject_areas = []
+        all_courses.each do |course|
+            code = course.catalogue_number
+            code_parts = code.split
+            subject_string = ''
+            code_parts.each do |part|
+                subject_string += (' ' + part) unless part[0] =~ /[0-9]/
+            end
+            subject_string[0] = ''
+            unless subject_areas.include?(subject_string)
+                subject_areas << subject_string
+            end
+        end
+        subject_areas.sort!
+    end
+
+    def self.search_by_area(area)
+        select_courses = Course.where('catalogue_number LIKE ?', "#{area}%").order(:catalogue_number)
+        select_courses
+    end
+
+    def self.search_components_by_course_and_get_sessions(in_id)
+        course = Course.where(id: in_id).first
+        course.components
+    end
 end

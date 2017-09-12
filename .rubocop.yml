@@ -18,6 +18,9 @@ Style/Documentation:
 Metrics/CyclomaticComplexity:
     Enabled: false
 
+Metrics/ClassLength:
+    Enabled: false
+
 Metrics/MethodLength:
     Enabled: false
 
@@ -34,6 +37,12 @@ Metrics/ModuleLength:
 Metrics/ParameterLists:
   Max: 8
   CountKeywordArgs: true
+
+Metrics/ClassLength:
+    Enabled: false
+
+Metrics/PerceivedComplexity:
+    Enabled: false
 
 # Ignore all
 AllCops:

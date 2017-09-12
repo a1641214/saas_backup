@@ -2,7 +2,7 @@ class ClashRequest < ActiveRecord::Base
     has_and_belongs_to_many :sessions
     belongs_to :course
     belongs_to :student
-
+    # validates_uniqueness_of :student_id
     after_create :preserve_initial
 
     # Serialize to use as integer array
@@ -42,5 +42,9 @@ class ClashRequest < ActiveRecord::Base
 
         # Commit changes
         clash_request.save
+    end
+
+    def self.search(search)
+        where('enrolment_request_id LIKE ? OR student_id LIKE ? OR date_submitted LIKE ? OR faculty LIKE ? OR comments LIKE ?', "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%", "%#{search}%")
     end
 end

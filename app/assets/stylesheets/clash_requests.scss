@@ -227,6 +227,7 @@
     opacity: 0;
 }
 
+.cr-timetable .class-number,
 .cr-timetable .event-date,
 .cr-timetable .event-name {
     display: block;
@@ -297,6 +298,51 @@
     border-bottom: 5px solid red;
 }
 
+.smaller-class {
+    z-index: 50!important;
+    opacity: 0.5;
+    width: calc(50% + 2px)!important;
+    margin-left: 50%;
+}
+
+.larger-class {
+    width: calc(90% + 2px)!important;
+}
+
 #style-override .cell_indent {
     padding-left: 40px;
+}
+
+.red{
+  background: #d40000 !important;
+  background-image: none;
+  background-repeat: no-repeat;
+}
+
+.navbar-blue{
+    background: #005a9c !important;
+    background-image: none;
+    background-repeat: no-repeat;
+}
+
+.white{
+  color: white !important;
+}
+
+.logo-padding{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 50px;
+}
+
+.hover_nav:hover {
+     background-color: darken( #d40000, 10%);
+}
+
+.active{
+    background-color: darken( #d40000, 10%);
+}
+
+.create{
+    margin-top: 22px;
 }

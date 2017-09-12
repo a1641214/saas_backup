@@ -57,3 +57,5 @@ end
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
 World(FactoryGirl::Syntax::Methods)
+
+Capybara.javascript_driver = :webkit

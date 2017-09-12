@@ -92,17 +92,21 @@ module ImportFile
     end
 
     class Class
-        def initialize(term, course_id, class_nbr, section)
+        def initialize(term, course_id, class_nbr, section, associated, enrol)
             @term = term
             @course_id = course_id
             @class_nbr = class_nbr
             @section = section
+            @associated = associated
+            @enrol = enrol
         end
 
         attr_reader :term
         attr_reader :course_id
         attr_reader :class_nbr
         attr_reader :section
+        attr_reader :associated
+        attr_reader :enrol
     end
 
     class Session
@@ -201,6 +205,7 @@ module ImportFile
             component_code = row[1][-8..-1]
             component_code = component_code[0, 2] + component_code[-2, 2]
             capacity = row[5].to_i
+
             # determine time
             start_hours = -1
             start_minutes = -30
@@ -254,7 +259,9 @@ module ImportFile
             course_id = row[1].to_i
             class_nbr = row[3].to_i
             section = row[4]
-            class1 = Class.new(term, course_id, class_nbr, section)
+            associated = row[8].to_i
+            enrol = row[11]
+            class1 = Class.new(term, course_id, class_nbr, section, associated, enrol)
             classes.append(class1)
         end
         classes

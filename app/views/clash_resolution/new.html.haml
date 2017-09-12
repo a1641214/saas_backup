@@ -1,0 +1,14 @@
+= form_tag clash_requests_path do
+    %h3 What is your ID
+    = text_field :clash_resolution, :student, :class => "input_box"
+    %h3 What is the degree
+    = select_tag("clash_resolution[degree]",options_for_select(@degrees), :multiple =>false,:class => "select_box", :id => 'degree_select' )
+    %h3 What is the offering time
+    = select_tag("clash_resolution[semester]",options_for_select(@semester), :multiple =>false,:class => "select_box", :id => 'semester_select' )
+    %h3 What is the subject area
+    = select_tag("clash_resolution[subject]",options_for_select(@subjects), :multiple =>false,:class => "select_box", :id => 'subject_select' )
+    %h3 What is the course
+    = select_tag("clash_resolution[course]",options_for_select(@courses), :multiple =>false,:class => "select_box", :id => 'course_select' )
+    #component_div
+
+    = submit_tag 'Create', class: 'btn btn-primary'

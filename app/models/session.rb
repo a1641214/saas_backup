@@ -47,7 +47,7 @@ class Session < ActiveRecord::Base
         false
     end
 
-    def self.detect_clashes(session_array)
+    def self.detect_clashes_weeks(session_array)
         clash_hash = {}
 
         session_array.each do |sess|
@@ -65,6 +65,27 @@ class Session < ActiveRecord::Base
                 updated_clashes_two = clash_hash[session_two].join.to_i(2) | clash_integer
                 clash_hash[session_one] = (0...updated_clashes_one.bit_length).map { |n| updated_clashes_one[n] }.reverse
                 clash_hash[session_two] = (0...updated_clashes_two.bit_length).map { |n| updated_clashes_two[n] }.reverse
+            end
+        end
+        clash_hash
+    end
+
+    def self.detect_clashes(session_array)
+        clash_hash = {}
+        session_array.each do |session_one|
+            session_array.each do |session_two|
+                next if session_one == session_two
+                next unless two_session_clash(session_one, session_two)
+                clash_hash[session_one] = if clash_hash[session_one].nil?
+                                              [session_two]
+                                          else
+                                              clash_hash[session_one].concat [session_two]
+                                          end
+                clash_hash[session_two] = if clash_hash[session_two].nil?
+                                              [session_one]
+                                          else
+                                              clash_hash[session_two].concat [session_one]
+                                          end
             end
         end
         clash_hash

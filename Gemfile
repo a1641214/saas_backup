@@ -8,8 +8,6 @@ gem 'sqlite3', group: %i[development test]
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
-# Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -33,6 +31,10 @@ gem 'activerecord-import', github: 'zdennis/activerecord-import' # https://githu
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+
+# Sprockets to transpile ES6
+gem 'sprockets', '>= 3.0.0'
+gem 'sprockets-es6'
 
 group :development, :test do
     # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -89,6 +91,7 @@ group :development, :test do
 end
 
 group :test do
+    gem 'capybara-webkit'
     gem 'cucumber-rails', require: false
     gem 'cucumber-rails-training-wheels'
     gem 'simplecov', require: false
@@ -123,5 +126,10 @@ gem 'andand', '~> 1.3', '>= 1.3.3'
 # Enables pretty console (ap)
 gem 'awesome_print', '~> 1.6', '>= 1.6.1', require: 'ap'
 
+# bootstrap material design
+gem 'bootstrap-material-design'
+
 # Bootstrap
 gem 'twitter-bootstrap-rails'
+
+gem 'selenium-webdriver', '~> 2.53', '>= 2.53.4'

@@ -18,32 +18,117 @@ class ClashRequestsController < ApplicationController
     def new; end
 
     def create
-        @clash_request = ClashRequest.create!(request_params)
+        if Student.where(id: params[:clash_resolution]['student']).empty?
+            flash[:notice] = 'The form was filled out incorrectly. Please try again'
+            redirect_to clash_requests_path
+            return
+        end
+        if params[:clash_resolution]['subject'].eql?('Select a Subject')
+            flash[:notice] = 'The form was filled out incorrectly. Please try again'
+            redirect_to clash_requests_path
+            return
+        end
+
+        if params[:clash_resolution]['course'].eql?('-1')
+            flash[:notice] = 'The form was filled out incorrectly. Please try again'
+            redirect_to clash_requests_path
+            return
+        end
+
+        # clash_degree = params[:clash_resolution]['degree']
+        # clash_semester = params[:clash_resolution]['semester']
+        # clash_subject = params[:clash_resolution]['subject']
+        clash_course = Course.find(params[:clash_resolution]['course'])
+        clash_student = Student.find(params[:clash_resolution]['student'])
+        clash_comments = params[:clash_resolution]['comments']
+        clash_faculty = 'ECMS'
+        clash_sessions = []
+        comps_to_get = clash_course.components
+        invalid_course = false
+        comps_to_get.each do |comp|
+            type = comp.class_type
+            session_form_id = params[:clash_resolution][type]
+
+            if session_form_id.eql?('-1')
+                flash[:notice] = 'The form was filled out incorrectly. Please try again'
+                invalid_course = true
+            end
+            next if invalid_course
+            clash_session = Session.find(session_form_id)
+            session_component_code = clash_session.component_code
+            same_sessions = comp.sessions.where(component_code: session_component_code)
+            same_sessions.each do |sess|
+                clash_sessions << sess
+            end
+        end
+
+        if invalid_course
+            redirect_to clash_requests_path
+            return
+        end
+
+        @clash_request = ClashRequest.create!(student_id: clash_student.id, course_id: clash_course.id, sessions: clash_sessions, comments: clash_comments, faculty: clash_faculty)
         flash[:notice] = "Clash request from student #{@clash_request.student_id} was created"
         redirect_to clash_requests_path
     end
 
     def index
         @clash_requests = ClashRequest.all
+        @clash_requests = @clash_requests.search(params[:search]) if params[:search]
+        @clash_requests = @clash_requests.where('inactive = ?', false) if params[:order] == 'active'
+        @clash_requests = @clash_requests.where('inactive = ?', true) if params[:order] == 'inactive'
     end
 
     def show
         @clash_request = ClashRequest.find params[:id]
 
         # Load serialised data into nicer format
-        @old_student_sessions = @clash_request.preserve_student_sessions.map do |session|
+        old_student_sessions = @clash_request.preserve_student_sessions.map do |session|
             Session.find(session)
         end
 
-        @old_clash_sessions = @clash_request.preserve_clash_sessions.map do |session|
+        old_clash_sessions = @clash_request.preserve_clash_sessions.map do |session|
             Session.find(session)
+        end
+
+        @enrol_info = { enrolment: {}, request: {} }
+
+        # Current Enrolment (with proposed changes)
+        @clash_request.student.courses.each do |course|
+            @enrol_info[:enrolment][course] = {}
+            course.components.each do |component|
+                details = {}
+                old_session = (old_student_sessions & component.sessions).first
+                new_session = (@clash_request.student.sessions & component.sessions).first
+                details[:type] = component.class_type
+                details[:org_code] = old_session.component_code
+                details[:org_nbr] = old_session.component.class_numbers[details[:org_code]]
+                details[:new_code] = new_session.component_code
+                details[:new_nbr] = old_session.component.class_numbers[details[:new_code]]
+
+                @enrol_info[:enrolment][course][component] = details
+            end
+        end
+
+        # Requested course
+        @clash_request.course.components.each do |component|
+            details = {}
+            old_session = (@clash_request.sessions & component.sessions).first
+            new_session = (old_clash_sessions & component.sessions).first
+            details[:type] = component.class_type
+            details[:org_code] = old_session.component_code
+            details[:org_nbr] = old_session.component.class_numbers[details[:org_code]]
+            details[:new_code] = new_session.component_code
+            details[:new_nbr] = old_session.component.class_numbers[details[:new_code]]
+
+            @enrol_info[:request][component] = details
         end
     end
 
     def destroy
         @clash_request = ClashRequest.find(params[:id])
-        @request.update!(inactive: !@request.inactive)
-        flash[:notice] = "Clash Request from student #{@request.studentId} was made #{@request.inactive ? 'inactive' : 'active'}"
+        @clash_request.update!(inactive: !@clash_request.inactive)
+        flash[:notice] = "Clash Request from student #{@clash_request.studentId} was made #{@clash_request.inactive ? 'inactive' : 'active'}"
         redirect_to clash_requests_path
     end
 
@@ -54,6 +139,23 @@ class ClashRequestsController < ApplicationController
         @map_session_by_day = {}
         return unless @student
 
+        # find clashes
+        all_sessions = Session.all_request_student_sessions(@clash_request, @student)
+        clash_hash = Session.detect_clashes(all_sessions)
+        @clashes = {}
+        clash_hash.each do |clash_session, clashes_with|
+            next if clashes_with.nil?
+            clash = { max_class: clash_session, max_length: clash_session.length, other_sessions: [] }
+            clashes_with.each do |a_clash|
+                next unless a_clash.length > clash[:max_length]
+                clash[:other_sessions].concat [clash[:max_class]]
+                clash[:max_class] = a_clash
+                clash[:max_length] = a_clash.length
+            end
+            @clashes[clash_session] = clash
+        end
+
+        # map sessions to day
         index = 0
         map_course_id_by_index = {}
 
@@ -66,7 +168,8 @@ class ClashRequestsController < ApplicationController
             by_day[session.day.downcase] << {
                 session: session,
                 id: id,
-                requested: false
+                requested: false,
+                clashes: @clashes[session]
             }
         end
 
@@ -79,12 +182,10 @@ class ClashRequestsController < ApplicationController
             by_day[session.day.downcase] << {
                 session: session,
                 id: id,
-                requested: true
+                requested: true,
+                clashes: @clashes[session]
             }
         end
-
-        all_sessions = Session.all_request_student_sessions(@clash_request, @student)
-        @clash_hash = Session.detect_clashes(all_sessions)
     end
 
     def update
