@@ -19,6 +19,7 @@ class RequestFormController < ApplicationController
             :core,
             :request_type,
             :date_submitted,
+            :email
         )
     end
 

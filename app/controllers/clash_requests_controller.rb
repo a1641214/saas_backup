@@ -1,13 +1,17 @@
 require 'mail'
 class ClashRequestsController < ApplicationController
     def request_params
-        params.require(:clash_request).permit(
+            Time.zone = 'Adelaide'
+            time = Time.zone.now
+            params[:clash_request] = params[:clash_request].merge(:date_submitted => time.to_date)
+            params.require(:clash_request).permit(
             :enrolment_request_id,
-            :studentId,
             :date_submitted,
             :faculty,
             :comments,
-            :student_id
+            :student_id,
+            :request_type,
+            :email
         )
     end
 

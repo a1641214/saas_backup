@@ -11,6 +11,7 @@
             %th Comments
             %th Core Course
             %th Request Type
+            %th Email
             %th
     %tbody
         - @clash_requests.each do |clash_request|
@@ -22,4 +23,5 @@
                 %td= clash_request.comments
                 %td= clash_request.core
                 %td= clash_request.request_type
+                %td= clash_request.email
                 %td= link_to 'View', clash_request_path(clash_request), class: 'btn btn-default'
