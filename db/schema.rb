@@ -11,7 +11,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20170912012847) do
 
   create_table "clash_requests", force: :cascade do |t|
@@ -38,31 +37,6 @@ ActiveRecord::Schema.define(version: 20170912012847) do
   add_index "clash_requests", ["course_id"], name: "index_clash_requests_on_course_id"
   add_index "clash_requests", ["student_id"], name: "index_clash_requests_on_student_id"
 
-=======
-ActiveRecord::Schema.define(version: 20170830013352) do
-
-  create_table "clash_requests", force: :cascade do |t|
-    t.string   "studentId"
-    t.text     "comments"
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
-    t.integer  "enrolment_request_id"
-    t.date     "date_submitted"
-    t.string   "faculty"
-    t.boolean  "inactive",                  default: false
-    t.boolean  "resolved",                  default: false
-    t.integer  "course_id"
-    t.integer  "student_id"
-    t.text     "preserve_clash_sessions"
-    t.integer  "preserve_clash_course"
-    t.text     "preserve_student_sessions"
-    t.text     "preserve_student_courses"
-  end
-
-  add_index "clash_requests", ["course_id"], name: "index_clash_requests_on_course_id"
-  add_index "clash_requests", ["student_id"], name: "index_clash_requests_on_student_id"
-
->>>>>>> master
   create_table "clash_requests_sessions", id: false, force: :cascade do |t|
     t.integer "clash_request_id", null: false
     t.integer "session_id",       null: false
@@ -114,11 +88,8 @@ ActiveRecord::Schema.define(version: 20170830013352) do
   create_table "students", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-<<<<<<< HEAD
     t.string   "name"
     t.string   "email"
-=======
->>>>>>> master
   end
 
 end

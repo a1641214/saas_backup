@@ -1,10 +1,10 @@
-class RequestForm < ActiveRecord::Base
+class ClashResolution < ActiveRecord::Base
     def self.get_session_data(current_session)
         return current_session if current_session
         # create an empty hash and return
         result = {}
         hash = {}
-        result['request_form'] = hash
+        result['clash_resolution'] = hash
         result
     end
 
@@ -33,7 +33,7 @@ class RequestForm < ActiveRecord::Base
     end
 
     def self.check_parameters(parameters)
-        form = parameters[:request_form]
+        form = parameters[:clash_resolution]
         unless parameters[:agree]
             return 'You have to confirm you approve and understand all conditions.'
         end
@@ -57,13 +57,13 @@ class RequestForm < ActiveRecord::Base
 
     def self.convertType(parameters)
         type = ""
-        if parameters[:request_form]["clash_resolution"]
+        if parameters[:clash_resolution]["clash_resolution"]
             type = type + "Timetable Clash";
         end
-        if parameters[:request_form]["unit_overload"]
+        if parameters[:clash_resolution]["unit_overload"]
             type = type + ", Unit Overload";
         end
-        if parameters[:request_form]["class_full"]
+        if parameters[:clash_resolution]["class_full"]
             type = type + ", Class Full";
         end
         return type

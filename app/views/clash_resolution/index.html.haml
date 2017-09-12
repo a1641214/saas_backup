@@ -1,64 +1,74 @@
 - content_for(:head) do
     = stylesheet_link_tag "clash_resolution"
+
 %div.body
+    %div.link
+        %ul.link_menu
+            %li
+                %a{href: "clash_resolution"} Resolution Form
     %div.main_form
         %div.intro
-            %h1 Timetable Clash Resolution
-            %h2 Please complete the Timetable Clash Resolution Form below if you are unable to enrol due to a timetable clash.
+            %h1 Timetable Clash, Unit Overload and Course Full Resolution Form
+            %h2 Please complete the request form below if you have timetable clash or unit overload or course full resolution problem.
             %ul
-                %li This form has been designed for students who have attempted to enrol through Access Adelaide but due to timetable clashes (i.e. two contact hours scheduled for the same time), the addition of courses has not been successful.
-                %li If you have experienced an error as outlined above, an Enrolment Request ID Number will be generated in Access Adelaide. This Enrolment Request ID Number must be recorded in the form below for your form to be processed.
-                %li
-                    %span Please note:
-                    Please fill out a separate form for each timetable clash.
-                %li While every attempt will be made to action your requests as soon as possible, please allow up to five working days for processing.
-                %li
-                    %span Please note:
-                    if your Timetable clash enquiry relates to other courses outside the Faculty of Engineering Computer and Mathematical Sciences such as ENTREP, ECON, ACCTING, COMMERCE, PHYSICS, BIOLOGY, ARTS etc., please forward your enquiry to the relevant Faculty office.
-                %li For e.g PHYSICS course enquiry should be forwarded to the Faculty of Sciences and ENTREP course should be forwarded to the Faculty of the Professions.
-        = form_tag clash_requests_path  do
+        %li This form has been designed for students who have attempted to enrol through Access Adelaide but due to Timetable Clash, Course full or unit overload problem.
+        %li If you have experienced an error as outlined above, an Enrolment Request ID Number will be generated in Access Adelaide. This Enrolment Request ID Number must be recorded in the form below for your form to be processed.
+        %li
+            %span Please note:
+            Please fill out a separate form for each request form.
+        %li While every attempt will be made to action your requests as soon as possible, please allow up to five working days for processing.
+        %li
+            %span Please note:
+            if your Timetable clash enquiry relates to other courses outside the Faculty of Engineering Computer and Mathematical Sciences such as ENTREP, ECON, ACCTING, COMMERCE, PHYSICS, BIOLOGY, ARTS etc., please forward your enquiry to the relevant Faculty office.
+            %li For e.g PHYSICS course enquiry should be forwarded to the Faculty of Sciences and ENTREP course should be forwarded to the Faculty of the Professions.
+        =form_tag "/clash_resolution" , method: :post  do
+            %div.form_title
+                %div.form_title_collision
+                %div.form_title_background1
+                    %p Resolution Form
+                %div.form_title_background2
             %div.form
-                %h1 Timetable Clash Resolution Form
-                %ul.sub_title
-                    %li Enrolment Request ID Number
-                    %li.form_error=flash[:form_error]
-                    %li.extra_info
+                %div.sub_title
+                    %h1 Enrolment Request ID Number
+                    %h2
                         %span{ :style => "color: red" } *
                         INDICATES REQUIRED INFORMATION
+                    %div
+                        %div=flash[:form_error]
                 %div.input_boxes
                     %ul
                         %li.label_down
                             Enrolment Request ID Number: (found in the top right-hand corner in Access Adelaide on the screen displaying the error)
                             %span{ :style => "color: red" } *
-                        %li.no_float= text_field :clash_resolution, :enrolment_request_id, :class => "input_box"
-                %ul.sub_title
-                    %li Personal Details
+                        %li.no_float= text_field :clash_resolution, :enrolment_request_id,:value => session[:clash_resolution]["enrolment_request_id"], :class => "input_box"
+                %div.sub_title
+                    %h1 Personal Details
                 %div.input_boxes
                     %ul
                         %li.label_down
                             Name:
                             %span{ :style => "color: red" } *
-                        %li= text_field :clash_resolution, :name, :class => "input_box"
+                        %li= text_field :clash_resolution, :name,:value => session[:clash_resolution]["name"], :class => "input_box"
                     %ul
                         %li.label_down
                             Student ID:
                             %span{ :style => "color: red" } *
-                        %li=text_field :clash_resolution, :student, :class => "input_box"
+                        %li= text_field :clash_resolution, :student_id,:value => session[:clash_resolution]["student_id"], :class => "input_box"
                     %ul
                         %li.label_down
                             Email:
                             %span{ :style => "color: red" } *
-                        %li= text_field :clash_resolution, :email, :class => "input_box"
-                %ul.sub_title
-                    %li The Degree Program for this enrolment
+                        %li= text_field :clash_resolution, :email,:value => session[:clash_resolution]["email"], :class => "input_box"
+                %div.sub_title
+                    %h1 The Degree Program for this enrolment
                 %div.input_boxes
                     %ul
                         %li.label_down
                             Degree Program:
                             %span{ :style => "color: red" } *
-                        %li=select_tag("clash_resolution[degree]",options_for_select(@degrees), :multiple =>false,:class => "select_box", :id => 'degree_select' )
-                %ul.sub_title
-                    %li The Course you wish to enrol into
+                        %li= select_tag("clash_resolution[faculty]",options_for_select(@degrees), :multiple =>false,:class => "select_box", :id => 'degree_select' )
+                %div.sub_title
+                    %h1 The Course you wish to enrol into
                 %div.input_boxes
                     %ul
                         %li.label_down
@@ -69,20 +79,49 @@
                         %li.label_down
                             Subject Area:
                             %span{ :style => "color: red" } *
-                        %li= select_tag("clash_resolution[subject]",options_for_select(@subjects), :multiple =>false,:class => "select_box", :id => 'subject_select' )
+                        %li=select_tag("clash_resolution[subject]",options_for_select(@subjects), :multiple =>false,:class => "select_box", :id => 'subject_select' )
                     %ul
                         %li.label_down
                             Course:
                             %span{ :style => "color: red" } *
                         %li= select_tag("clash_resolution[course]",options_for_select(@courses), :multiple =>false,:class => "select_box", :id => 'course_select' )
-                %ul.sub_title
-                    %li The Classes you wish to enrol into
-                %div.input_boxes
-                    %ul
                         #component_div
                     %ul
-                        %li Additional Comments(if required):
+                        %li.label_down
+                            Course Name:
+                        %li= text_field :clash_resolution, :course_name,:value => session[:clash_resolution]["course_name"], :class => "input_box"
+                %div.sub_title
+                    %h1 The Classes you would prefer to enrol into
+                %div.input_boxes
+                    %ul
+                        %li
+                            Timetable Clash:
+                        %li.center
+                            =check_box_tag "clash_resolution[clash_resolution]",1, ClashResolution.isTrue(session["clash_resolution"]["clash_resolution"])
+                    %ul
+                        %li
+                            Course Full:
+                        %li.center
+                            =check_box_tag "clash_resolution[unit_overload]",  1, ClashResolution.isTrue(session["clash_resolution"]["unit_overload"])
+                    %ul
+                        %li
+                            Unit Overload:
+                        %li.center
+                            =check_box_tag "clash_resolution[class_full]",  1, ClashResolution.isTrue(session["clash_resolution"]["class_full"])
+                    %ul
+                        %li
+                            Is this a core course ?
+                            %span{ :style => "color: red" } *
+                        %li.center
+                            =radio_button_tag "clash_resolution[core_yes]",1,ClashResolution.isTrue(session["clash_resolution"]["core_yes"])
+                            Yes
+                            =radio_button_tag "clash_resolution[core_no]",1,ClashResolution.isTrue(session["clash_resolution"]["core_no"])
+                            No
+                    %ul
+                        %li Comments or Justification:
                         %li=text_area_tag "clash_resolution[comments]",session[:clash_resolution]["comments"],:class => "text_area"
+
+
                 %div.approval
                     %h1 Approval and Understanding for Overriding Clashes/Overload for Enrolment
                     %ul
@@ -94,6 +133,5 @@
                         Select to confirm you approve and understand:
                         %span{ :style => "color: red" } *
                     %li=radio_button_tag :agree,true,false
-                //=hidden_field_tag 'clash_resolution[date_submitted]', "Time should be recorded on controller side."
                 %div.submit_button
                     =submit_tag 'Submit'

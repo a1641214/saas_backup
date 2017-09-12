@@ -1,17 +1,17 @@
 #xvfb-run cucumber
 Feature: Clash Resolution
-#     Scenario: View clash resolution page #77
-#         Given I am on the clash resolution page
-#         Then I should see "Enrolment Request ID Number"
-#         Then I should see "Name"
-#         Then I should see "Student ID"
-#         Then I should see "Email"
-#         Then I should see "Degree Program"
-#         Then I should see "Semester"
-#         Then I should see "Subject Area"
-#         Then I should see "Course"
-#         Then I should see "Course Name"
-#         Then I should see "Additional Comments"
+    Scenario: View request form page #77
+        Given I am visiting clash_resolution
+        Then I should see "Enrolment Request ID Number"
+        Then I should see "Name"
+        Then I should see "Student ID"
+        Then I should see "Email"
+        Then I should see "Degree Program"
+        Then I should see "Semester"
+        Then I should see "Subject Area"
+        Then I should see "Course"
+        Then I should see "Course Name"
+        Then I should see "Comments or Justification"
 
 
 #     # General case
@@ -157,4 +157,4 @@ Feature: Clash Resolution
         And I should see "Lecture"
         And I should see "LE01"
         And I should see "Tutorial"
-        And I should see "TU02"
+    And I should see "TU02"

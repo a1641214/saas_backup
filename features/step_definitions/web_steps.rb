@@ -33,6 +33,7 @@ Given /^(?:|I )am on (.+)$/ do |page_name|
     visit path_to(page_name)
 end
 
+# visit a page by url
 Given /^(?:|I )am visiting (.+)$/ do |url|
     visit "/#{url}"
 end
