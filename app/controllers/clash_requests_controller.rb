@@ -1,10 +1,10 @@
 require 'mail'
 class ClashRequestsController < ApplicationController
     def request_params
-            Time.zone = 'Adelaide'
-            time = Time.zone.now
-            params[:clash_request] = params[:clash_request].merge(:date_submitted => time.to_date)
-            params.require(:clash_request).permit(
+        Time.zone = 'Adelaide'
+        time = Time.zone.now
+        params[:clash_request] = params[:clash_request].merge(date_submitted: time.to_date)
+        params.require(:clash_request).permit(
             :enrolment_request_id,
             :date_submitted,
             :faculty,
@@ -18,36 +18,36 @@ class ClashRequestsController < ApplicationController
     def new; end
 
     def create
-        if Student.where(id: params[:clash_resolution]['student']).empty?
+        if Student.where(id: params[:clash_request]['student']).empty?
             flash[:notice] = 'The form was filled out incorrectly. Please try again'
             redirect_to clash_requests_path
             return
         end
-        if params[:clash_resolution]['subject'].eql?('Select a Subject')
-            flash[:notice] = 'The form was filled out incorrectly. Please try again'
-            redirect_to clash_requests_path
-            return
-        end
-
-        if params[:clash_resolution]['course'].eql?('-1')
+        if params[:clash_request]['subject'].eql?('Select a Subject')
             flash[:notice] = 'The form was filled out incorrectly. Please try again'
             redirect_to clash_requests_path
             return
         end
 
-        # clash_degree = params[:clash_resolution]['degree']
-        # clash_semester = params[:clash_resolution]['semester']
-        # clash_subject = params[:clash_resolution]['subject']
-        clash_course = Course.find(params[:clash_resolution]['course'])
-        clash_student = Student.find(params[:clash_resolution]['student'])
-        clash_comments = params[:clash_resolution]['comments']
+        if params[:clash_request]['course'].eql?('-1')
+            flash[:notice] = 'The form was filled out incorrectly. Please try again'
+            redirect_to clash_requests_path
+            return
+        end
+
+        # clash_degree = params[:clash_request]['degree']
+        # clash_semester = params[:clash_request]['semester']
+        # clash_subject = params[:clash_request]['subject']
+        clash_course = Course.find(params[:clash_request]['course'])
+        clash_student = Student.find(params[:clash_request]['student'])
+        clash_comments = params[:clash_request]['comments']
         clash_faculty = 'ECMS'
         clash_sessions = []
         comps_to_get = clash_course.components
         invalid_course = false
         comps_to_get.each do |comp|
             type = comp.class_type
-            session_form_id = params[:clash_resolution][type]
+            session_form_id = params[:clash_request][type]
 
             if session_form_id.eql?('-1')
                 flash[:notice] = 'The form was filled out incorrectly. Please try again'

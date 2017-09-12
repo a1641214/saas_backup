@@ -9,7 +9,6 @@ Rails.application.routes.draw do
     resources :clash_requests
     resources :clash_resolution
 
-    resources :request_form
     root to: 'clash_requests#index'
 
     get 'clash_resolution/update_classes', as: 'update_classes'

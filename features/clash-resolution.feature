@@ -1,7 +1,7 @@
 #xvfb-run cucumber
 Feature: Clash Resolution
     Scenario: View request form page #77
-        Given I am visiting clash_resolution
+        Given I am on the clash resolution page
         Then I should see "Enrolment Request ID Number"
         Then I should see "Name"
         Then I should see "Student ID"
@@ -157,4 +157,4 @@ Feature: Clash Resolution
         And I should see "Lecture"
         And I should see "LE01"
         And I should see "Tutorial"
-    And I should see "TU02"
+        And I should see "TU02"

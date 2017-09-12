@@ -19,7 +19,7 @@
         %li While every attempt will be made to action your requests as soon as possible, please allow up to five working days for processing.
         %li
             %span Please note:
-            if your Timetable clash enquiry relates to other courses outside the Faculty of Engineering Computer and Mathematical Sciences such as ENTREP, ECON, ACCTING, COMMERCE, PHYSICS, BIOLOGY, ARTS etc., please forward your enquiry to the relevant Faculty office.
+            if you Timetable clash enquiry relates to other courses outside the Faculty of Engineering Computer and Mathematical Sciences such as ENTREP, ECON, ACCTING, COMMERCE, PHYSICS, BIOLOGY, ARTS etc., please forward your enquiry to the relevant Faculty office.
             %li For e.g PHYSICS course enquiry should be forwarded to the Faculty of Sciences and ENTREP course should be forwarded to the Faculty of the Professions.
         =form_tag "/clash_resolution" , method: :post  do
             %div.form_title
@@ -97,25 +97,25 @@
                         %li
                             Timetable Clash:
                         %li.center
-                            =check_box_tag "clash_resolution[clash_resolution]",1, ClashResolution.isTrue(session["clash_resolution"]["clash_resolution"])
+                            =check_box_tag "clash_resolution[clash_resolution]",1, ClashResolution.box_selected?(session["clash_resolution"]["clash_resolution"])
                     %ul
                         %li
                             Course Full:
                         %li.center
-                            =check_box_tag "clash_resolution[unit_overload]",  1, ClashResolution.isTrue(session["clash_resolution"]["unit_overload"])
+                            =check_box_tag "clash_resolution[unit_overload]",  1, ClashResolution.box_selected?(session["clash_resolution"]["unit_overload"])
                     %ul
                         %li
                             Unit Overload:
                         %li.center
-                            =check_box_tag "clash_resolution[class_full]",  1, ClashResolution.isTrue(session["clash_resolution"]["class_full"])
+                            =check_box_tag "clash_resolution[class_full]",  1, ClashResolution.box_selected?(session["clash_resolution"]["class_full"])
                     %ul
                         %li
                             Is this a core course ?
                             %span{ :style => "color: red" } *
                         %li.center
-                            =radio_button_tag "clash_resolution[core_yes]",1,ClashResolution.isTrue(session["clash_resolution"]["core_yes"])
+                            =radio_button_tag "clash_resolution[core_yes]",1,ClashResolution.box_selected?(session["clash_resolution"]["core_yes"])
                             Yes
-                            =radio_button_tag "clash_resolution[core_no]",1,ClashResolution.isTrue(session["clash_resolution"]["core_no"])
+                            =radio_button_tag "clash_resolution[core_no]",1,ClashResolution.box_selected?(session["clash_resolution"]["core_no"])
                             No
                     %ul
                         %li Comments or Justification:

@@ -2,14 +2,12 @@ class ClashResolutionController < ApplicationController
     def form_params
         Time.zone = 'Adelaide'
         time = Time.zone.now
-        params[:clash_resolution] = params[:clash_resolution].merge(:date_submitted => time.to_date)
+        params[:clash_resolution] = params[:clash_resolution].merge(date_submitted: time.to_date)
         core = false
-        if params[:clash_resolution]["core_yes"]
-            core = true
-        end
-        type = ClashResolution.convertType(params)
-        params[:clash_resolution] = params[:clash_resolution].merge(:core => core)
-        params[:clash_resolution] = params[:clash_resolution].merge(:request_type => type)
+        core = true if params[:clash_resolution]['core_yes']
+        type = ClashResolution.convert_request_type(params)
+        params[:clash_resolution] = params[:clash_resolution].merge(core: core)
+        params[:clash_resolution] = params[:clash_resolution].merge(request_type: type)
         params.require(:clash_resolution).permit(
             :enrolment_request_id,
             :faculty,

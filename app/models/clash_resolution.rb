@@ -48,24 +48,20 @@ class ClashResolution < ActiveRecord::Base
         nil
     end
 
-    def self.isTrue(value)
-        if value == 1
-            return true
-        end
-        return false
+    def self.box_selected?(value)
+        return true if value == 1
+        false
     end
 
-    def self.convertType(parameters)
-        type = ""
-        if parameters[:clash_resolution]["clash_resolution"]
-            type = type + "Timetable Clash";
+    def self.convert_request_type(parameters)
+        type = ''
+        if parameters[:clash_resolution]['clash_resolution']
+            type += 'Timetable Clash'
         end
-        if parameters[:clash_resolution]["unit_overload"]
-            type = type + ", Unit Overload";
+        if parameters[:clash_resolution]['unit_overload']
+            type += ', Unit Overload'
         end
-        if parameters[:clash_resolution]["class_full"]
-            type = type + ", Class Full";
-        end
-        return type
+        type += ', Class Full' if parameters[:clash_resolution]['class_full']
+        type
     end
 end
