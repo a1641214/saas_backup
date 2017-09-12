@@ -91,6 +91,7 @@ group :development, :test do
 end
 
 group :test do
+    gem 'capybara-webkit'
     gem 'cucumber-rails', require: false
     gem 'cucumber-rails-training-wheels'
     gem 'simplecov', require: false
@@ -127,3 +128,5 @@ gem 'awesome_print', '~> 1.6', '>= 1.6.1', require: 'ap'
 
 # Bootstrap
 gem 'twitter-bootstrap-rails'
+
+gem 'selenium-webdriver', '~> 2.53', '>= 2.53.4'

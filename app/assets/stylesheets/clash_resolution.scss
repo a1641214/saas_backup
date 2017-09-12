@@ -1,0 +1,230 @@
+ul{
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+}
+
+select {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.body{
+    width: 100%;
+    min-width: 1000px;
+}
+
+
+.select_box{
+    width: 300px;
+    border-radius: 3px 3px 3px 3px;
+    outline: 0 none;
+    padding: 5px;
+    background-image:
+    linear-gradient(45deg, transparent 50%, gray 50%),
+    linear-gradient(135deg, gray 50%, transparent 50%),
+    linear-gradient(to right, #ccc, #ccc);
+    background-position:
+        280px 12px,
+        285px 12px,
+        270px;
+    background-size:
+        5px 5px,
+        5px 5px,
+        1px 1.5em;
+    background-repeat: no-repeat;
+}
+
+.select_box:focus {
+    background-image:
+    linear-gradient(45deg, transparent 50%, red 50%),
+    linear-gradient(135deg, red 50%, transparent 50%),
+    linear-gradient(to right, #ccc, #ccc);
+}
+
+
+
+.input_box{
+    width: 300px;
+    border-radius: 3px 3px 3px 3px;
+    outline: 0 none;
+    padding: 5px;
+}
+
+.text_area{
+    width: 300px;
+    height: 100px;
+    border-radius: 3px 3px 3px 3px;
+    outline: 0 none;
+    padding: 5px;
+}
+
+
+.main_form{
+    width: 1000px;
+    margin: 0 auto;
+}
+
+.intro{
+    padding-bottom: 5px;
+}
+
+.intro h1{
+    color: #b38808;
+    font-family: Georgia,Times,serif;
+    padding-bottom: 15px;
+}
+
+
+.intro h2{
+    font-family: Georgia,Times,serif;
+    font-size: 1.308em;
+    font-weight: 400;
+    padding-bottom: 20px;
+    margin: 0;
+    color: #666;
+}
+
+.intro ul li{
+    color: #666;
+    padding-bottom: 20px;
+}
+
+.intro ul li span{
+    font-weight: bold;
+    color: #000;
+}
+
+.form{
+    border: 1px solid #C7DAEA;
+    background-color: #EAF1F8;
+    padding-top: 35px;
+    padding: 15px 14px;
+    font: 13px/1.3 Arial,Helvetica,sans-serif;
+    color: #666;
+    width: 100%;
+}
+
+.form h1{
+    margin: 0;
+    padding: 5px 0 15px 0;
+    font-size: 12px;
+}
+
+.sub_title{
+    width: 100%;
+    border-bottom: 1px solid #C7DAEA;
+    position: relative;
+}
+
+.sub_title li{
+    color: #005A9C;
+    font-size: 1.1em;
+    font-weight: bold;
+    display:inline-block;
+}
+
+.sub_title li.form_error{
+    font-size: 10px;
+    color: #F00;
+    width: 572px;
+    text-align: center;
+}
+
+.sub_title li.extra_info{
+    font-size: 10px;
+    color: #000;
+    font-weight: normal;
+    position: absolute;
+    right:0;
+}
+
+
+.input_boxes{
+    width: 515px;
+    margin: 0 auto;
+    display: block;
+}
+
+.input_boxes ul{
+    width: 100%;
+    padding-top:10px;
+    padding-bottom: 10px;
+    display: block;
+}
+
+
+.input_boxes ul li{
+    width: 215px;
+    padding-right: 20px;
+    color: #000;
+    text-align: right;
+    display: inline-block;
+    vertical-align: text-top;
+}
+
+.label_down{
+    padding-top: 5px;
+}
+
+
+.approval{
+    padding-top: 10px;
+}
+.approval h1{
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    color: #666;
+    font-size: 1.1em;
+    font-weight: bold;
+    padding: 15px 0 10px 0;
+    font-family: Arial,Helvetica,sans-serif;
+    margin-bottom: 15px;
+}
+
+.approval ul li{
+    color: rgb(102, 102, 102);
+    padding-bottom: 20px;
+}
+
+.agree{
+    width: 310px;
+    margin: 0 auto;
+    display: block;
+    padding-top: 10px;
+}
+
+.agree li{
+    float: left;
+    padding-right: 5px;
+    color: #369;
+}
+
+.submit_button{
+    width: 110px;
+    margin: 0 auto;
+    padding-top: 50px;
+}
+
+.submit_button input{
+    color: #fff;
+    background: none repeat scroll 0 0 #CE0B1B;
+    border: 1px solid #CE0B1B;
+    font: 700 16px/25px Arial,sans-serif;
+    padding: 9px 18px 9px 18px;
+    text-align: center;
+    text-shadow: 1px 1px 1px rgba(255,255,255,.22);
+    border-radius: 4px;
+    box-shadow: 1px 1px 1px rgba(0,0,0,.29),inset 1px 1px 1px rgba(255,255,255,.44);
+    transition: all .15s ease;
+}
+
+.submit_button input:hover{
+    background: none repeat scroll 0 0 #DF0C2C;
+    box-shadow: none;
+}
+
