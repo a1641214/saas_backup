@@ -133,4 +133,3 @@ function make_component_select_boxes(component_data) {
 
     }
 };
-

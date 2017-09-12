@@ -41,6 +41,9 @@ Metrics/ParameterLists:
 Metrics/ClassLength:
     Enabled: false
 
+Metrics/PerceivedComplexity:
+    Enabled: false
+
 # Ignore all
 AllCops:
   Exclude:
