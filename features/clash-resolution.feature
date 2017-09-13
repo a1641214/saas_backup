@@ -152,7 +152,8 @@ Feature: Clash Resolution
         And I am on the clash resolution page
         And I have filled out the clash request form and pressed submit
         Then I should see "ECMS"
-        When I press View for the clash request for "1705"
+        When I press "More"
+        Given I click on "View request"
         Then I should see "Requested Class"
         And I should see "Lecture"
         And I should see "LE01"

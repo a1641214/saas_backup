@@ -1,52 +1,50 @@
-%script{:src => "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js", :type => "text/javascript"}
-
 =link_to 'Create' , new_clash_request_path, class: 'btn btn-primary pull-right create red'
 %h1 Clash Requests 
    
-
-%div{class:"navbar red"}
-    %ul.nav.navbar-nav.hover_nav
-        %li{:class=>(params[:order] == nil)?'active':""}
-            = link_to 'All', clash_requests_path
-    %ul.nav.navbar-nav.hover_nav
-        %li{:class=>(params[:order] == 'active')?'active':""}
-            = link_to 'Active', clash_requests_path(order: 'active')
-    %ul.nav.navbar-nav.hover_nav        
-        %li{:class=>(params[:order] == 'inactive')?'active':""}
-            = link_to 'Inactive', clash_requests_path(order: 'inactive')
-            
-    = form_tag(clash_requests_path, method: 'get', class: 'form form-inline pull-right white') do
-        = search_field_tag 'search', nil, class: 'form-control white', placeholder: 'Search'
-        %button{type: 'submit', class: 'btn btn-default white', id: 'search_icon'}
-            %span{class: 'glyphicon glyphicon-search'}
-
-%table.table.table-hover#clash-clash_requests
-    %thead
-        %tr
-            %th Enrolment Requests ID
-            %th Student ID
-            %th Date Submitted
-            %th Faculty
-            %th Comments
-            %th
-    %tbody
-        - @clash_requests.each do |clash_request|
-            %tr
-                %td= clash_request.enrolment_request_id
-                %td= clash_request.student_id
-                %td= clash_request.date_submitted
-                %td= clash_request.faculty
-                %td= clash_request.comments
-                %td
-                    %div.dropdown
-                        %button.btn.btn-default.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :type => "button"} 
-                            More
-                            %span{class: 'glyphicon glyphicon-chevron-down'}
-                        %ul.dropdown-menu
-                            %li.dropdown-item
-                                =link_to  'View request', clash_request_path(clash_request)
-                            %li.dropdown-item
-                                =link_to 'Edit', edit_clash_request_path(clash_request)
-                            %li.dropdown-item
-                                =link_to "Make #{clash_request.inactive ? 'Active' : 'Inactive'}", clash_request_path(clash_request), method: :delete
-                                
+.row
+    .col-md-12
+        %div{class:"navbar red"}
+            %ul.nav.navbar-nav.hover_nav
+                %li{:class=>(params[:order] == nil)?'active':""}
+                    = link_to 'All', clash_requests_path
+            %ul.nav.navbar-nav.hover_nav
+                %li{:class=>(params[:order] == 'active')?'active':""}
+                    = link_to 'Active', clash_requests_path(order: 'active')
+            %ul.nav.navbar-nav.hover_nav        
+                %li{:class=>(params[:order] == 'inactive')?'active':""}
+                    = link_to 'Inactive', clash_requests_path(order: 'inactive')
+                    
+            = form_tag(clash_requests_path, method: 'get', class: 'form form-inline pull-right white') do
+                = search_field_tag 'search', nil, class: 'form-control white', placeholder: 'Search'
+                %button{type: 'submit', class: 'btn btn-default white', id: 'search_icon'}
+                    %span{class: 'glyphicon glyphicon-search'}
+        
+        %table.table.table-hover#clash-clash_requests
+            %thead
+                %tr
+                    %th Enrolment Requests ID
+                    %th Student ID
+                    %th Date Submitted
+                    %th Faculty
+                    %th Comments
+                    %th
+            %tbody
+                - @clash_requests.each do |clash_request|
+                    %tr
+                        %td= clash_request.enrolment_request_id
+                        %td= clash_request.student_id
+                        %td= clash_request.date_submitted
+                        %td= clash_request.faculty
+                        %td= clash_request.comments
+                        %td
+                            %div.dropdown
+                                %button.btn.btn-default.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :type => "button"} 
+                                    More
+                                    %span{class: 'glyphicon glyphicon-chevron-down'}
+                                %ul.dropdown-menu
+                                    %li.dropdown-item
+                                        =link_to  'View request', clash_request_path(clash_request)
+                                    %li.dropdown-item
+                                        =link_to 'Edit', edit_clash_request_path(clash_request)
+                                    %li.dropdown-item
+                                        =link_to "Make #{clash_request.inactive ? 'Active' : 'Inactive'}", clash_request_path(clash_request), method: :delete
