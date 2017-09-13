@@ -21,3 +21,6 @@
 
 # Rails
 .byebug_history
+
+# local heroku debugging
+/Procfile
