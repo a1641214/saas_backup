@@ -54,14 +54,34 @@ class ClashResolution < ActiveRecord::Base
     end
 
     def self.convert_request_type(parameters)
-        type = ''
-        if parameters[:clash_resolution]['clash_resolution']
-            type += 'Timetable Clash'
+        type = Array.new
+        if parameters['clash_resolution']
+            type.append('Timetable Clash')
         end
-        if parameters[:clash_resolution]['unit_overload']
-            type += ', Unit Overload'
+        if parameters['unit_overload']
+            type.append('Unit Overload' )
         end
-        type += ', Class Full' if parameters[:clash_resolution]['class_full']
+        if parameters['class_full']
+            type.append('Clash Full' )
+        end
         type
+    end
+
+    def self.extend_to_full_request(parameters)
+        # add submit date
+        Time.zone = 'Adelaide'
+        time = Time.zone.now
+        parameters = parameters.merge(date_submitted: time.to_date)
+        ## add "is core course" boolean type
+        core = false
+        core = true if parameters['core_yes']
+        parameters = parameters.merge(core: core)
+        # add request type
+        type = convert_request_type(parameters)
+        parameters = parameters.merge(request_type: type)
+        # link course with clash request
+        id = Course.where(catalogue_number: parameters[:course]).first.id
+        parameters = parameters.merge(course_id: id)
+        return parameters
     end
 end

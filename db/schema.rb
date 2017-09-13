@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 20170912012847) do
     t.integer  "preserve_clash_course"
     t.text     "preserve_student_sessions"
     t.text     "preserve_student_courses"
-    t.string   "core"
+    t.boolean  "core"
     t.string   "request_type"
     t.string   "email"
   end

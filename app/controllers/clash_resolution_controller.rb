@@ -1,22 +1,18 @@
 class ClashResolutionController < ApplicationController
     def form_params
-        Time.zone = 'Adelaide'
-        time = Time.zone.now
-        params[:clash_resolution] = params[:clash_resolution].merge(date_submitted: time.to_date)
-        core = false
-        core = true if params[:clash_resolution]['core_yes']
-        type = ClashResolution.convert_request_type(params)
-        params[:clash_resolution] = params[:clash_resolution].merge(core: core)
-        params[:clash_resolution] = params[:clash_resolution].merge(request_type: type)
+        params[:clash_resolution] = ClashResolution.extend_to_full_request(params[:clash_resolution])
         params.require(:clash_resolution).permit(
             :enrolment_request_id,
             :faculty,
             :comments,
             :student_id,
+            :email,
+            # extend part
+            :course_id,
             :core,
-            :request_type,
             :date_submitted,
-            :email
+            :request_type => [],
+            # we need to extend seesions as well
         )
     end
 
@@ -59,8 +55,15 @@ class ClashResolutionController < ApplicationController
             redirect_to '/clash_resolution'
             return
         end
+
+        ## simple debug, need to be modified later.
+        unless Course.where(catalogue_number: params[:clash_resolution][:course]).first
+            flash[:form_error] = "The course does not exist."
+        end
+        ## above need to be modified
+
         @clash_request = ClashRequest.create!(form_params)
-        flash[:notice] = "Clash request from student #{params[:clash_resolution][:student_id]} was created"
+        flash[:notice] = "Clash request from student #{@clash_request[:student_id]} was created"
         redirect_to clash_requests_path
     end
 

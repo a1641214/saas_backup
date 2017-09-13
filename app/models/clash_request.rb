@@ -8,6 +8,7 @@ class ClashRequest < ActiveRecord::Base
     # Serialize to use as integer array
     serialize :preserve_clash_sessions
     serialize :preserve_student_sessions
+    serialize :request_type
 
     def current_clash_session(taking_component)
         offered_session = sessions.where(component: taking_component).first

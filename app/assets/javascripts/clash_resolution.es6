@@ -82,7 +82,7 @@ function change_courses_options(data) {
     reset_course_selector();
 
     for(var i = 0;i<data.length;i++){
-        var newOption = $("<option/>").attr("value", data[i].id);
+        var newOption = $("<option/>").attr("value", data[i].catalogue_number);
         newOption.text(data[i].catalogue_number);
         $("#course_select").append(newOption);
     }
