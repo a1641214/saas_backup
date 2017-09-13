@@ -143,8 +143,8 @@ Feature: Clash Resolution
         And I select "TU02:4" from "clash_resolution[Tutorial]"
         And I choose "agree"
         And I press "Submit"
-        Then I should see "Clash request from student 1705 was created"
-
+        Then I should see "Clash request from student 1705 was created
+        
     @javascript
     Scenario: Form persisting in clash request page
         Given two comp sci and one soil and water course exsist
