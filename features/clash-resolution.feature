@@ -144,3 +144,18 @@ Feature: Clash Resolution
         And I choose "agree"
         And I press "Submit"
         Then I should see "Clash request from student 1705 was created"
+        
+    @javascript
+    Scenario: Form persisting in clash request page
+        Given two comp sci and one soil and water course exsist
+        And "1705" is a student wanting to make a clash request
+        And I am on the clash resolution page
+        And I have filled out the clash request form and pressed submit
+        Then I should see "ECMS"
+        When I press "More"
+        Given I click on "View request"
+        Then I should see "Requested Class"
+        And I should see "Lecture"
+        And I should see "LE01"
+        And I should see "Tutorial"
+        And I should see "TU02"
