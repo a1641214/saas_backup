@@ -114,7 +114,7 @@ function make_component_select_boxes(component_data) {
     for(var i = 0;i<component_data.length;i++){
         var selectList = document.createElement("select");
 
-        attvalue = "clash_resolution[" + component_data[i].component_name + "]";
+        var attvalue = "clash_resolution[" + component_data[i].component_name + "]";
         selectList.setAttribute("name", attvalue);
 
 
