@@ -10,7 +10,6 @@ class ClashRequestsController < ApplicationController
             :faculty,
             :comments,
             :student_id,
-            :request_type,
             :email
         )
     end
